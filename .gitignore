@@ -79,3 +79,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+*.md
+!README.md

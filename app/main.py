@@ -1,10 +1,13 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Optional
 import httpx
 import time
 import asyncio
 import random
 from .db import supabase
+from .auth import auth_router, get_current_user, require_tenant_access, get_optional_user
 from .evolve_parse import (
     extract_chat_id, extract_message_id, extract_from_me,
     extract_text, extract_message_type
@@ -36,6 +39,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register auth routes
+app.include_router(auth_router)
 
 # Log application startup
 logger.info("HybridFlow Control Plane starting up")
@@ -920,10 +926,102 @@ async def cron_auto_resume(request: Request):
 # TENANT MANAGEMENT APIs
 # ============================================================================
 
-@app.get("/api/tenants")
-def list_tenants():
+# Pydantic model for tenant creation
+class TenantCreate(BaseModel):
+    """Request model for creating a new tenant."""
+    instance_name: str
+    evo_server_url: str
+    evo_api_key: Optional[str] = None
+    system_prompt: Optional[str] = None
+    llm_provider: Optional[str] = "openai"
+
+
+@app.post("/api/tenants")
+async def create_tenant(
+    data: TenantCreate,
+    user: dict = Depends(get_current_user)
+):
     """
-    List all tenants.
+    Create a new tenant (WhatsApp instance) for the current user.
+
+    The authenticated user becomes the owner of the new tenant.
+
+    Request body:
+        {
+            "instance_name": "my-business",
+            "evo_server_url": "https://evolution-api.example.com",
+            "evo_api_key": "optional-api-key",
+            "system_prompt": "Optional custom AI prompt",
+            "llm_provider": "openai"  // or "anthropic"
+        }
+
+    Returns:
+        The created tenant object
+    """
+    try:
+        # Check if instance_name already exists
+        existing = supabase.table("tenants").select("id").eq(
+            "instance_name", data.instance_name
+        ).limit(1).execute()
+
+        if existing.data:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Instance name '{data.instance_name}' already exists"
+            )
+
+        # Create tenant
+        tenant_data = {
+            "instance_name": data.instance_name,
+            "evo_server_url": data.evo_server_url,
+            "evo_api_key": data.evo_api_key,
+            "system_prompt": data.system_prompt or DEFAULT_SYSTEM_PROMPT,
+            "llm_provider": data.llm_provider or "openai",
+            "owner_user_id": user["id"],
+        }
+
+        tenant_result = supabase.table("tenants").insert(tenant_data).execute()
+
+        if not tenant_result.data:
+            raise HTTPException(status_code=500, detail="Failed to create tenant")
+
+        tenant = tenant_result.data[0]
+
+        # Create user_tenants relationship (owner role)
+        supabase.table("user_tenants").insert({
+            "user_id": user["id"],
+            "tenant_id": tenant["id"],
+            "role": "owner",
+        }).execute()
+
+        log_info(
+            "Tenant created",
+            action="create_tenant",
+            tenant_id=tenant["id"],
+            instance_name=data.instance_name,
+            user_id=user["id"],
+        )
+
+        return tenant
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        log_error(
+            "Failed to create tenant",
+            action="create_tenant_failed",
+            instance_name=data.instance_name,
+            user_id=user["id"],
+            error_type=type(e).__name__,
+            exc_info=True,
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to create tenant: {str(e)}")
+
+
+@app.get("/api/tenants")
+def list_tenants(user: dict = Depends(get_current_user)):
+    """
+    List tenants the authenticated user has access to.
 
     Returns:
         {
@@ -939,16 +1037,30 @@ def list_tenants():
             ]
         }
 
-    Note: In production, add authentication and filter by user_id.
+    Requires: Valid access token in Authorization header
     """
     try:
+        # Get tenant IDs user has access to
+        user_tenants = user.get("user_tenants", [])
+        tenant_ids = [ut["tenant_id"] for ut in user_tenants]
+
+        if not tenant_ids:
+            log_info(
+                "Listed tenants (user has no tenants)",
+                action="list_tenants",
+                user_id=user["id"],
+                tenant_count=0,
+            )
+            return {"tenants": []}
+
         result = supabase.table("tenants").select(
             "id, instance_name, evo_server_url, llm_provider, created_at, updated_at"
-        ).execute()
+        ).in_("id", tenant_ids).execute()
 
         log_info(
             "Listed tenants",
             action="list_tenants",
+            user_id=user["id"],
             tenant_count=len(result.data) if result.data else 0,
         )
 
@@ -958,6 +1070,7 @@ def list_tenants():
         log_error(
             "Failed to list tenants",
             action="list_tenants_failed",
+            user_id=user.get("id"),
             error_type=type(e).__name__,
             exc_info=True,
         )
@@ -965,7 +1078,11 @@ def list_tenants():
 
 
 @app.get("/api/tenants/{tenant_id}")
-def get_tenant(tenant_id: int):
+def get_tenant(
+    tenant_id: int,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
+):
     """
     Get detailed information about a specific tenant.
 
@@ -982,6 +1099,8 @@ def get_tenant(tenant_id: int):
             "created_at": "2026-01-23T...",
             "updated_at": "2026-01-23T..."
         }
+
+    Requires: Valid access token with member access to the tenant
     """
     try:
         result = supabase.table("tenants").select(
@@ -992,7 +1111,7 @@ def get_tenant(tenant_id: int):
             log_warning("Tenant not found", action="get_tenant_not_found", tenant_id=tenant_id)
             raise HTTPException(status_code=404, detail=f"Tenant with id {tenant_id} not found")
 
-        log_info("Retrieved tenant details", action="get_tenant", tenant_id=tenant_id)
+        log_info("Retrieved tenant details", action="get_tenant", tenant_id=tenant_id, user_id=user["id"])
 
         return result.data[0]
 
@@ -1014,7 +1133,11 @@ def get_tenant(tenant_id: int):
 # ============================================================================
 
 @app.get("/api/instances")
-def list_instances(tenant_id: int):
+def list_instances(
+    tenant_id: int,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
+):
     """
     List WhatsApp instances for a tenant.
 
@@ -1065,7 +1188,12 @@ def list_instances(tenant_id: int):
 
 
 @app.get("/api/instances/{instance_name}")
-def get_instance(instance_name: str, tenant_id: int):
+def get_instance(
+    instance_name: str,
+    tenant_id: int,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
+):
     """
     Get details about a specific WhatsApp instance.
 
@@ -1125,7 +1253,12 @@ def get_instance(instance_name: str, tenant_id: int):
 
 
 @app.post("/api/instances/{instance_name}/test-webhook")
-async def test_instance_webhook(instance_name: str, tenant_id: int):
+async def test_instance_webhook(
+    instance_name: str,
+    tenant_id: int,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
+):
     """
     Test webhook connectivity by checking Evolution API connection status.
 
@@ -1261,7 +1394,9 @@ def list_sessions(
     state: str = None,  # "active", "paused"
     q: str = None,  # search chat_id
     page: int = 1,
-    limit: int = 50
+    limit: int = 50,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
 ):
     """
     List sessions with filters and pagination.
@@ -1359,7 +1494,12 @@ def list_sessions(
 
 
 @app.get("/api/sessions/{session_id}")
-def get_session_by_id(session_id: int, tenant_id: int):
+def get_session_by_id(
+    session_id: int,
+    tenant_id: int,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
+):
     """
     Get detailed information about a specific session.
 
@@ -1421,7 +1561,12 @@ def get_session_by_id(session_id: int, tenant_id: int):
 
 
 @app.post("/api/sessions/{session_id}/pause")
-def pause_session(session_id: int, tenant_id: int):
+def pause_session(
+    session_id: int,
+    tenant_id: int,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
+):
     """
     Manually pause a session.
 
@@ -1492,7 +1637,12 @@ def pause_session(session_id: int, tenant_id: int):
 
 
 @app.post("/api/sessions/{session_id}/resume")
-def resume_session_by_id(session_id: int, tenant_id: int):
+def resume_session_by_id(
+    session_id: int,
+    tenant_id: int,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
+):
     """
     Manually resume a paused session.
 
@@ -1572,7 +1722,9 @@ def list_events(
     instance: str = None,
     session_id: int = None,
     chat_id: str = None,
-    limit: int = 100
+    limit: int = 100,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
 ):
     """
     Get event timeline (messages).

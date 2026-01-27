@@ -14,7 +14,17 @@
       "Bash(curl:*)",
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:doc.evolution-api.com)",
+      "Bash(pip install:*)",
+      "Bash(set WEBSOCKET_ENABLED=true)",
+      "Bash(set WEBSOCKET_MODE=instance)",
+      "Bash(set:*)",
+      "Bash(uvicorn:*)",
+      "Bash(timeout /t 5 /nobreak)",
+      "WebSearch"
     ]
   }
 }
