@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if [ -f README.md ])",
+      "Bash(then cat README.md)",
+      "Bash(else echo \"No README.md found\")",
+      "Bash(fi)",
+      "Bash(python -m py_compile:*)",
+      "Bash(python:*)",
+      "Bash(ping:*)",
+      "Bash(venv\\\\Scripts\\\\python.exe:*)",
+      "Bash(./venv/Scripts/python.exe:*)",
+      "Bash(./venv/Scripts/pip.exe:*)",
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)"
+    ]
+  }
+}

@@ -1,0 +1,404 @@
+Below is a **clean, implementation-ready engineering ticket breakdown** you can drop directly into Jira / Linear / GitHub Projects.
+Tickets are ordered **exactly in build sequence**, with clear acceptance criteria and no ambiguity.
+
+---
+
+# HybridFlow – Engineering Tickets (MVP)
+
+---
+
+## EPIC 0 — Project & Infrastructure Setup
+
+### HF-001 — Repository & Project Setup
+
+**Type:** Task
+**Owner:** Backend
+**Priority:** High
+
+**Description**
+Create the HybridFlow backend repository and base project structure.
+
+**Tasks**
+
+* Initialize Git repository
+* Create FastAPI project scaffold
+* Add requirements.txt
+* Configure environment loading
+* Add basic logging
+
+**Acceptance Criteria**
+
+* App starts locally with `/health` returning `200 OK`
+* Repo structure matches agreed layout
+
+---
+
+### HF-002 — Railway Deployment (FastAPI)
+
+**Type:** Task
+**Owner:** Backend / DevOps
+**Priority:** High
+
+**Description**
+Deploy FastAPI service to Railway.
+
+**Tasks**
+
+* Create Railway project
+* Add environment variables
+* Expose service publicly
+* Confirm HTTPS endpoint
+
+**Acceptance Criteria**
+
+* `/health` reachable from public URL
+* No secrets committed to repo
+
+---
+
+## EPIC 1 — Database & Persistence
+
+### HF-010 — Supabase Schema Setup
+
+**Type:** Task
+**Owner:** Backend
+**Priority:** High
+
+**Description**
+Create initial Postgres schema.
+
+**Tables**
+
+* tenants
+* sessions
+* messages
+
+**Acceptance Criteria**
+
+* Tables created with indexes
+* Unique constraints enforced
+* Test insert/select works
+
+---
+
+### HF-011 — Tenant Seed & Lookup
+
+**Type:** Task
+**Owner:** Backend
+**Priority:** High
+
+**Description**
+Seed at least one tenant and enable lookup by `instance_name`.
+
+**Acceptance Criteria**
+
+* Given `instance_name`, tenant is resolved correctly
+* Unknown instance returns 404
+
+---
+
+## EPIC 2 — Webhook Ingestion (Core)
+
+### HF-020 — Evolution Webhook Endpoint
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** Critical
+
+**Description**
+Implement webhook receiver for Evolution API.
+
+**Endpoint**
+
+* `POST /webhooks/evolution`
+
+**Acceptance Criteria**
+
+* Accepts JSON payloads
+* Validates presence of `event` and `instance`
+* Returns 2xx quickly (<1s)
+
+---
+
+### HF-021 — Message Parsing & Normalization
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** High
+
+**Description**
+Extract required fields from Evolution payload.
+
+**Fields**
+
+* event
+* instance
+* remoteJid
+* message_id
+* fromMe
+* message text
+* message type
+
+**Acceptance Criteria**
+
+* Handles conversation text
+* Safe fallback if message type is unsupported
+* Does not crash on missing fields
+
+---
+
+### HF-022 — Message Persistence
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** High
+
+**Description**
+Store inbound messages in database.
+
+**Acceptance Criteria**
+
+* Messages saved with raw payload
+* Deduplicated by message_id + tenant
+* No duplicate rows on webhook retries
+
+---
+
+## EPIC 3 — Session State Machine (Core Value)
+
+### HF-030 — Session Upsert Logic
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** Critical
+
+**Description**
+Create or update session on every inbound message.
+
+**Acceptance Criteria**
+
+* Session created on first message
+* `last_message_at` updated on each message
+
+---
+
+### HF-031 — Invisible Mute (Pause on Human Takeover)
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** Critical
+
+**Description**
+Pause automation when business owner sends a message.
+
+**Rule**
+
+* `event=messages.upsert`
+* `fromMe=true`
+
+**Acceptance Criteria**
+
+* `is_paused=true` set immediately
+* `last_human_at` updated
+* AI reply is blocked
+
+---
+
+### HF-032 — Gate AI Replies When Paused
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** Critical
+
+**Description**
+Block AI replies when session is paused.
+
+**Acceptance Criteria**
+
+* Inbound messages during pause do not trigger AI
+* System returns `ignored_paused` action
+
+---
+
+### HF-033 — Auto-Resume Logic
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** High
+
+**Description**
+Automatically resume sessions after inactivity.
+
+**Rule**
+
+* Resume after 2 hours since `last_human_at`
+
+**Acceptance Criteria**
+
+* Paused sessions resume automatically
+* Does not affect manually resumed sessions
+
+---
+
+## EPIC 4 — Outbound Messaging
+
+### HF-040 — Evolution Send Message Client
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** High
+
+**Description**
+Implement client for sending WhatsApp messages via Evolution API.
+
+**Acceptance Criteria**
+
+* Text message successfully delivered
+* Errors handled gracefully
+* Logs outbound attempts
+
+---
+
+### HF-041 — AI Reply Pipeline (Synchronous MVP)
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** High
+
+**Description**
+Generate AI replies and send them back to WhatsApp.
+
+**Flow**
+
+* Receive inbound message
+* Generate LLM response
+* Send via Evolution API
+
+**Acceptance Criteria**
+
+* Replies only sent when `is_paused=false`
+* Response includes tenant prompt
+* Latency acceptable (<5s for MVP)
+
+---
+
+## EPIC 5 — Control & Debug APIs
+
+### HF-050 — Session Status Endpoint
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** Medium
+
+**Endpoint**
+
+* `GET /sessions/{instance}/{chat_id}`
+
+**Acceptance Criteria**
+
+* Returns correct pause state
+* Used for debugging and dashboard
+
+---
+
+### HF-051 — Manual Resume Endpoint
+
+**Type:** Feature
+**Owner:** Backend
+**Priority:** Medium
+
+**Endpoint**
+
+* `POST /sessions/{instance}/{chat_id}/resume`
+
+**Acceptance Criteria**
+
+* Resets pause state
+* Effective immediately
+
+---
+
+## EPIC 6 — Reliability & Observability
+
+### HF-060 — Idempotency & Retry Safety
+
+**Type:** Task
+**Owner:** Backend
+**Priority:** High
+
+**Description**
+Ensure webhook retries do not cause duplicate behavior.
+
+**Acceptance Criteria**
+
+* Duplicate messages ignored safely
+* No double replies
+
+---
+
+### HF-061 — Structured Logging
+
+**Type:** Task
+**Owner:** Backend
+**Priority:** Medium
+
+**Description**
+Add structured logs for:
+
+* Webhook receipt
+* Pause/resume events
+* Outbound sends
+
+---
+
+## EPIC 7 — Hardening (Post-MVP)
+
+### HF-070 — Webhook Authentication
+
+**Type:** Security
+**Priority:** Medium
+
+**Description**
+Verify Evolution webhook authenticity.
+
+---
+
+### HF-071 — Secrets Encryption
+
+**Type:** Security
+**Priority:** Medium
+
+**Description**
+Encrypt API keys at rest.
+
+---
+
+## Suggested Sprint Breakdown
+
+**Sprint 1**
+
+* HF-001 → HF-022
+  (Webhooks + persistence)
+
+**Sprint 2**
+
+* HF-030 → HF-033
+  (Core collision logic)
+
+**Sprint 3**
+
+* HF-040 → HF-041
+  (AI replies end-to-end)
+
+**Sprint 4**
+
+* HF-050 → HF-061
+  (Control + reliability)
+
+---
+
+## What I Recommend Next
+
+Choose one:
+
+
