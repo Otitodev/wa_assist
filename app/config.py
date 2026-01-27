@@ -38,3 +38,9 @@ DEFAULT_SYSTEM_PROMPT = os.getenv(
 N8N_ENABLED = os.getenv("N8N_ENABLED", "false").lower() == "true"
 N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL", "")
 N8N_API_KEY = os.getenv("N8N_API_KEY", "")
+
+# WebSocket Configuration (alternative to webhooks)
+WEBSOCKET_ENABLED = os.getenv("WEBSOCKET_ENABLED", "false").lower() == "true"
+WEBSOCKET_MODE = os.getenv("WEBSOCKET_MODE", "global")  # "global" or "instance"
+EVOLUTION_SERVER_URL = os.getenv("EVOLUTION_SERVER_URL", "")  # For global WebSocket mode
+EVOLUTION_API_KEY = os.getenv("EVOLUTION_API_KEY", "")  # Global API key for WebSocket auth

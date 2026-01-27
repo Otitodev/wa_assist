@@ -12,9 +12,12 @@ from .services.llm_client import get_llm_provider
 from .services.evolution_client import EvolutionClient, EvolutionAPIError
 from .config import (
     N8N_ENABLED, N8N_WEBHOOK_URL, N8N_API_KEY,
-    DEFAULT_SYSTEM_PROMPT, LLM_PROVIDER, LOG_LEVEL, CRON_SECRET, CORS_ORIGINS
+    DEFAULT_SYSTEM_PROMPT, LLM_PROVIDER, LOG_LEVEL, CRON_SECRET, CORS_ORIGINS,
+    WEBSOCKET_ENABLED, WEBSOCKET_MODE, EVOLUTION_SERVER_URL, EVOLUTION_API_KEY
 )
 from .logger import logger, log_info, log_warning, log_error, configure_logger_from_config
+from .services.evolution_websocket import EvolutionWebSocket, EvolutionWebSocketManager
+from .services.websocket_handler import handle_websocket_message, handle_websocket_connection_update
 
 # Configure logger with settings from config
 configure_logger_from_config()
@@ -33,6 +36,81 @@ app.add_middleware(
 # Log application startup
 logger.info("HybridFlow Control Plane starting up")
 logger.info(f"CORS enabled for origins: {', '.join(CORS_ORIGINS)}")
+
+# Global WebSocket manager (initialized on startup if enabled)
+websocket_manager: EvolutionWebSocketManager = None
+
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize WebSocket connection on startup if enabled."""
+    global websocket_manager
+
+    if not WEBSOCKET_ENABLED:
+        log_info("WebSocket mode disabled, using webhooks", action="websocket_disabled")
+        return
+
+    if not EVOLUTION_SERVER_URL:
+        log_warning(
+            "WEBSOCKET_ENABLED=true but EVOLUTION_SERVER_URL not set",
+            action="websocket_config_error"
+        )
+        return
+
+    log_info(
+        "Initializing WebSocket connection to Evolution API",
+        mode=WEBSOCKET_MODE,
+        server_url=EVOLUTION_SERVER_URL,
+        action="websocket_init_start",
+    )
+
+    websocket_manager = EvolutionWebSocketManager()
+    websocket_manager.set_message_handler(handle_websocket_message)
+    websocket_manager.set_connection_handler(handle_websocket_connection_update)
+
+    try:
+        if WEBSOCKET_MODE == "global":
+            # Global mode - receive events from all instances
+            await websocket_manager.connect_global(
+                server_url=EVOLUTION_SERVER_URL,
+                api_key=EVOLUTION_API_KEY or None,
+            )
+            log_info(
+                "WebSocket connected in global mode",
+                server_url=EVOLUTION_SERVER_URL,
+                action="websocket_connected_global",
+            )
+        else:
+            # Instance mode - would need to connect per tenant
+            # For now, just log that this mode requires per-tenant setup
+            log_info(
+                "WebSocket instance mode enabled - connect instances via API",
+                action="websocket_instance_mode",
+            )
+    except Exception as e:
+        log_error(
+            f"Failed to connect WebSocket: {e}",
+            action="websocket_connect_failed",
+            error_type=type(e).__name__,
+        )
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Disconnect WebSocket connections on shutdown."""
+    global websocket_manager
+
+    if websocket_manager:
+        log_info("Disconnecting WebSocket connections", action="websocket_shutdown_start")
+        try:
+            await websocket_manager.disconnect_all()
+            log_info("WebSocket connections closed", action="websocket_shutdown_complete")
+        except Exception as e:
+            log_error(
+                f"Error during WebSocket shutdown: {e}",
+                action="websocket_shutdown_error",
+                error_type=type(e).__name__,
+            )
 
 
 # Helper function to record processed events for idempotency
@@ -173,6 +251,28 @@ async def health():
         health_status["checks"]["n8n"] = {
             "status": "ok",
             "message": "n8n integration disabled (direct mode)"
+        }
+
+    # Check WebSocket status
+    if WEBSOCKET_ENABLED:
+        if websocket_manager:
+            connected_count = sum(1 for ws in websocket_manager.connections.values() if ws.connected)
+            total_count = len(websocket_manager.connections)
+            health_status["checks"]["websocket"] = {
+                "status": "ok" if connected_count > 0 else "warning",
+                "message": f"WebSocket enabled ({connected_count}/{total_count} connections active)",
+                "mode": WEBSOCKET_MODE,
+                "connections": list(websocket_manager.connections.keys())
+            }
+        else:
+            health_status["checks"]["websocket"] = {
+                "status": "warning",
+                "message": "WebSocket enabled but manager not initialized"
+            }
+    else:
+        health_status["checks"]["websocket"] = {
+            "status": "ok",
+            "message": "WebSocket disabled (using webhooks)"
         }
 
     return health_status
@@ -1469,3 +1569,273 @@ def list_events(
             exc_info=True,
         )
         raise HTTPException(status_code=500, detail=f"Failed to list events: {str(e)}")
+
+
+# ============================================================================
+# WEBSOCKET MANAGEMENT APIs
+# ============================================================================
+
+@app.get("/api/websocket/status")
+async def get_websocket_status():
+    """
+    Get WebSocket connection status.
+
+    Returns:
+        {
+            "enabled": true,
+            "mode": "global",
+            "connections": {
+                "global": {"connected": true, "server_url": "https://..."},
+                ...
+            }
+        }
+    """
+    if not WEBSOCKET_ENABLED:
+        return {
+            "enabled": False,
+            "mode": None,
+            "message": "WebSocket mode is disabled. Set WEBSOCKET_ENABLED=true to enable.",
+            "connections": {}
+        }
+
+    if not websocket_manager:
+        return {
+            "enabled": True,
+            "mode": WEBSOCKET_MODE,
+            "message": "WebSocket manager not initialized",
+            "connections": {}
+        }
+
+    connections_status = {}
+    for name, ws in websocket_manager.connections.items():
+        connections_status[name] = {
+            "connected": ws.connected,
+            "server_url": ws.server_url,
+            "instance_name": ws.instance_name,
+        }
+
+    return {
+        "enabled": True,
+        "mode": WEBSOCKET_MODE,
+        "server_url": EVOLUTION_SERVER_URL,
+        "connections": connections_status
+    }
+
+
+@app.post("/api/websocket/connect")
+async def connect_websocket(data: dict):
+    """
+    Connect to Evolution API via WebSocket.
+
+    For global mode (receives all instances):
+        {
+            "mode": "global"
+        }
+
+    For instance mode (specific instance):
+        {
+            "mode": "instance",
+            "instance_name": "test-02",
+            "server_url": "https://evolution-api.example.com",  # optional, uses tenant config
+            "api_key": "xxx"  # optional
+        }
+
+    Returns:
+        {
+            "ok": true,
+            "connected": true,
+            "mode": "global"
+        }
+    """
+    global websocket_manager
+
+    if not WEBSOCKET_ENABLED:
+        raise HTTPException(
+            status_code=400,
+            detail="WebSocket mode is disabled. Set WEBSOCKET_ENABLED=true to enable."
+        )
+
+    mode = data.get("mode", "global")
+
+    if websocket_manager is None:
+        websocket_manager = EvolutionWebSocketManager()
+        websocket_manager.set_message_handler(handle_websocket_message)
+        websocket_manager.set_connection_handler(handle_websocket_connection_update)
+
+    try:
+        if mode == "global":
+            server_url = data.get("server_url") or EVOLUTION_SERVER_URL
+            api_key = data.get("api_key") or EVOLUTION_API_KEY
+
+            if not server_url:
+                raise HTTPException(
+                    status_code=400,
+                    detail="server_url required for global mode (or set EVOLUTION_SERVER_URL)"
+                )
+
+            await websocket_manager.connect_global(
+                server_url=server_url,
+                api_key=api_key or None,
+            )
+
+            log_info(
+                "WebSocket connected via API",
+                mode="global",
+                server_url=server_url,
+                action="websocket_api_connect",
+            )
+
+            return {
+                "ok": True,
+                "connected": True,
+                "mode": "global",
+                "server_url": server_url
+            }
+
+        elif mode == "instance":
+            instance_name = data.get("instance_name")
+            if not instance_name:
+                raise HTTPException(
+                    status_code=400,
+                    detail="instance_name required for instance mode"
+                )
+
+            # Get server URL from tenant config if not provided
+            server_url = data.get("server_url")
+            api_key = data.get("api_key")
+
+            if not server_url:
+                # Look up tenant config
+                tenant_resp = supabase.table("tenants").select(
+                    "evo_server_url, evo_api_key"
+                ).eq("instance_name", instance_name).limit(1).execute()
+
+                if tenant_resp.data:
+                    server_url = tenant_resp.data[0].get("evo_server_url")
+                    api_key = api_key or tenant_resp.data[0].get("evo_api_key")
+
+            if not server_url:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"server_url required (not found in tenant config for {instance_name})"
+                )
+
+            await websocket_manager.connect_instance(
+                server_url=server_url,
+                instance_name=instance_name,
+                api_key=api_key or None,
+            )
+
+            log_info(
+                "WebSocket connected via API",
+                mode="instance",
+                instance=instance_name,
+                server_url=server_url,
+                action="websocket_api_connect",
+            )
+
+            return {
+                "ok": True,
+                "connected": True,
+                "mode": "instance",
+                "instance_name": instance_name,
+                "server_url": server_url
+            }
+
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid mode: {mode}. Use 'global' or 'instance'."
+            )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        log_error(
+            f"WebSocket connect failed: {e}",
+            mode=mode,
+            action="websocket_api_connect_failed",
+            error_type=type(e).__name__,
+        )
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to connect WebSocket: {str(e)}"
+        )
+
+
+@app.post("/api/websocket/disconnect")
+async def disconnect_websocket(data: dict = None):
+    """
+    Disconnect WebSocket connections.
+
+    To disconnect all:
+        {}
+
+    To disconnect specific instance:
+        {
+            "instance_name": "test-02"
+        }
+
+    Returns:
+        {
+            "ok": true,
+            "disconnected": ["global"] or ["test-02"]
+        }
+    """
+    global websocket_manager
+
+    if not websocket_manager:
+        return {
+            "ok": True,
+            "disconnected": [],
+            "message": "No active WebSocket connections"
+        }
+
+    data = data or {}
+    instance_name = data.get("instance_name")
+
+    try:
+        if instance_name:
+            # Disconnect specific instance
+            if instance_name in websocket_manager.connections:
+                await websocket_manager.disconnect_instance(instance_name)
+                log_info(
+                    "WebSocket disconnected via API",
+                    instance=instance_name,
+                    action="websocket_api_disconnect",
+                )
+                return {
+                    "ok": True,
+                    "disconnected": [instance_name]
+                }
+            else:
+                return {
+                    "ok": True,
+                    "disconnected": [],
+                    "message": f"No connection found for instance: {instance_name}"
+                }
+        else:
+            # Disconnect all
+            disconnected = list(websocket_manager.connections.keys())
+            await websocket_manager.disconnect_all()
+            log_info(
+                "All WebSocket connections disconnected via API",
+                disconnected=disconnected,
+                action="websocket_api_disconnect_all",
+            )
+            return {
+                "ok": True,
+                "disconnected": disconnected
+            }
+
+    except Exception as e:
+        log_error(
+            f"WebSocket disconnect failed: {e}",
+            instance=instance_name,
+            action="websocket_api_disconnect_failed",
+            error_type=type(e).__name__,
+        )
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to disconnect WebSocket: {str(e)}"
+        )

@@ -83,11 +83,12 @@ class EvolutionClient:
         else:
             number = chat_id
 
+        # Evolution API v2 sendText payload format
+        # Some instances expect "text" at root, others expect "textMessage.text"
+        # Using the simple format which is more widely supported
         payload = {
             "number": number,
-            "textMessage": {
-                "text": text
-            }
+            "text": text
         }
 
         # Send request - use short timeout since Evolution API may not respond
