@@ -505,6 +505,31 @@ async def evolution_webhook(req: Request):
             # Direct LLM call (MVP mode)
             llm_start_time = time.time()
             try:
+                # Mark message as read before processing (show blue checkmarks)
+                try:
+                    evolution_client = EvolutionClient()
+                    await evolution_client.mark_as_read(
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        message_id=msg_id
+                    )
+                    log_info(
+                        "Message marked as read",
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        message_id=msg_id,
+                        action="mark_read_success",
+                    )
+                except Exception as e:
+                    log_warning(
+                        "Failed to mark message as read",
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        message_id=msg_id,
+                        error=str(e),
+                        action="mark_read_failed",
+                    )
+
                 # Get tenant's system prompt and LLM provider
                 system_prompt = tenant.get("system_prompt") or DEFAULT_SYSTEM_PROMPT
                 provider_name = tenant.get("llm_provider") or LLM_PROVIDER

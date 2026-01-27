@@ -173,3 +173,80 @@ class EvolutionClient:
                 raise EvolutionAPIError(
                     f"Failed to get instance status: {str(e)}"
                 ) from e
+
+    async def mark_as_read(
+        self,
+        tenant_id: int,
+        chat_id: str,
+        message_id: str,
+        instance_name: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        Mark a message as read (send read receipt / blue checkmarks).
+
+        Args:
+            tenant_id: Tenant ID for configuration lookup
+            chat_id: WhatsApp chat ID (remoteJid)
+            message_id: Message ID to mark as read
+            instance_name: Override instance name (uses tenant's if not provided)
+
+        Returns:
+            Evolution API response dict
+        """
+        tenant_config = await self._get_tenant_config(tenant_id)
+        evo_url = tenant_config["evo_server_url"]
+        evo_api_key = tenant_config.get("evo_api_key")
+        instance = instance_name or tenant_config["instance_name"]
+
+        endpoint = f"{evo_url}/chat/markMessageAsRead/{instance}"
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        if evo_api_key:
+            headers["apikey"] = evo_api_key
+
+        payload = {
+            "readMessages": [
+                {
+                    "remoteJid": chat_id,
+                    "fromMe": False,
+                    "id": message_id
+                }
+            ]
+        }
+
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            try:
+                response = await client.post(
+                    endpoint,
+                    json=payload,
+                    headers=headers
+                )
+                response.raise_for_status()
+                return response.json()
+
+            except httpx.HTTPStatusError as e:
+                # Don't raise error for mark as read - it's not critical
+                error_detail = "Unknown error"
+                try:
+                    error_body = e.response.json()
+                    error_detail = error_body.get("message", str(error_body))
+                except:
+                    error_detail = e.response.text
+                return {
+                    "status": "failed",
+                    "error": f"HTTP {e.response.status_code}: {error_detail}"
+                }
+
+            except httpx.TimeoutException:
+                return {
+                    "status": "timeout",
+                    "message": "Mark as read request timed out"
+                }
+
+            except httpx.RequestError as e:
+                return {
+                    "status": "failed",
+                    "error": str(e)
+                }

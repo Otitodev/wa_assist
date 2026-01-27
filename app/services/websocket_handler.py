@@ -207,6 +207,31 @@ async def handle_websocket_message(data: Dict[str, Any]):
     # 7) Generate AI reply for inbound messages
     if from_me is False:
         try:
+            # Mark message as read before processing (show blue checkmarks)
+            evolution_client = EvolutionClient()
+            try:
+                await evolution_client.mark_as_read(
+                    tenant_id=tenant_id,
+                    chat_id=chat_id,
+                    message_id=msg_id
+                )
+                log_info(
+                    "Message marked as read (WebSocket)",
+                    tenant_id=tenant_id,
+                    chat_id=chat_id,
+                    message_id=msg_id,
+                    action="ws_mark_read_success",
+                )
+            except Exception as e:
+                log_warning(
+                    "Failed to mark message as read",
+                    tenant_id=tenant_id,
+                    chat_id=chat_id,
+                    message_id=msg_id,
+                    error=str(e),
+                    action="ws_mark_read_failed",
+                )
+
             system_prompt = tenant.get("system_prompt") or DEFAULT_SYSTEM_PROMPT
             provider_name = tenant.get("llm_provider") or LLM_PROVIDER
 
@@ -234,7 +259,6 @@ async def handle_websocket_message(data: Dict[str, Any]):
             )
 
             # Send reply via Evolution API
-            evolution_client = EvolutionClient()
             await evolution_client.send_text_message(
                 tenant_id=tenant_id,
                 chat_id=reply_to,
