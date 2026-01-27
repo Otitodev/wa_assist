@@ -7,6 +7,7 @@ and processes them using the same logic as the webhook handler.
 
 import asyncio
 import time
+import random
 from typing import Optional, Dict, Any
 
 from ..db import supabase
@@ -17,7 +18,11 @@ from ..evolve_parse import (
 from ..services.collision import should_pause_on_event, now_utc
 from ..services.llm_client import get_llm_provider
 from ..services.evolution_client import EvolutionClient, EvolutionAPIError
-from ..config import DEFAULT_SYSTEM_PROMPT, LLM_PROVIDER
+from ..config import (
+    DEFAULT_SYSTEM_PROMPT, LLM_PROVIDER,
+    MESSAGE_DELAY_ENABLED, MESSAGE_DELAY_MIN_MS, MESSAGE_DELAY_MAX_MS,
+    TYPING_INDICATOR_ENABLED
+)
 from ..logger import log_info, log_warning, log_error
 
 
@@ -232,6 +237,30 @@ async def handle_websocket_message(data: Dict[str, Any]):
                     action="ws_mark_read_failed",
                 )
 
+            # Send typing indicator (composing) before generating reply
+            if TYPING_INDICATOR_ENABLED:
+                try:
+                    await evolution_client.send_presence(
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        presence="composing",
+                        delay=5000  # Keep typing for 5 seconds initially
+                    )
+                    log_info(
+                        "Typing indicator sent (WebSocket)",
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        action="ws_typing_start",
+                    )
+                except Exception as e:
+                    log_warning(
+                        "Failed to send typing indicator",
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        error=str(e),
+                        action="ws_typing_failed",
+                    )
+
             system_prompt = tenant.get("system_prompt") or DEFAULT_SYSTEM_PROMPT
             provider_name = tenant.get("llm_provider") or LLM_PROVIDER
 
@@ -258,12 +287,49 @@ async def handle_websocket_message(data: Dict[str, Any]):
                 action="ws_ai_generate_success",
             )
 
+            # Add human-like delay before sending (to avoid WhatsApp bans)
+            if MESSAGE_DELAY_ENABLED:
+                delay_ms = random.randint(MESSAGE_DELAY_MIN_MS, MESSAGE_DELAY_MAX_MS)
+                delay_seconds = delay_ms / 1000.0
+
+                # Refresh typing indicator during delay
+                if TYPING_INDICATOR_ENABLED:
+                    try:
+                        await evolution_client.send_presence(
+                            tenant_id=tenant_id,
+                            chat_id=chat_id,
+                            presence="composing",
+                            delay=delay_ms
+                        )
+                    except Exception:
+                        pass  # Non-critical
+
+                log_info(
+                    "Adding human-like delay before sending (WebSocket)",
+                    tenant_id=tenant_id,
+                    chat_id=chat_id,
+                    delay_ms=delay_ms,
+                    action="ws_delay_start",
+                )
+                await asyncio.sleep(delay_seconds)
+
             # Send reply via Evolution API
             await evolution_client.send_text_message(
                 tenant_id=tenant_id,
                 chat_id=reply_to,
                 text=reply_text
             )
+
+            # Stop typing indicator after sending
+            if TYPING_INDICATOR_ENABLED:
+                try:
+                    await evolution_client.send_presence(
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        presence="paused"
+                    )
+                except Exception:
+                    pass  # Non-critical
 
             log_info(
                 "Reply sent via Evolution API (WebSocket)",

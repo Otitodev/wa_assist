@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
 import time
+import asyncio
+import random
 from .db import supabase
 from .evolve_parse import (
     extract_chat_id, extract_message_id, extract_from_me,
@@ -13,7 +15,9 @@ from .services.evolution_client import EvolutionClient, EvolutionAPIError
 from .config import (
     N8N_ENABLED, N8N_WEBHOOK_URL, N8N_API_KEY,
     DEFAULT_SYSTEM_PROMPT, LLM_PROVIDER, LOG_LEVEL, CRON_SECRET, CORS_ORIGINS,
-    WEBSOCKET_ENABLED, WEBSOCKET_MODE, EVOLUTION_SERVER_URL, EVOLUTION_API_KEY
+    WEBSOCKET_ENABLED, WEBSOCKET_MODE, EVOLUTION_SERVER_URL, EVOLUTION_API_KEY,
+    MESSAGE_DELAY_ENABLED, MESSAGE_DELAY_MIN_MS, MESSAGE_DELAY_MAX_MS,
+    TYPING_INDICATOR_ENABLED
 )
 from .logger import logger, log_info, log_warning, log_error, configure_logger_from_config
 from .services.evolution_websocket import EvolutionWebSocket, EvolutionWebSocketManager
@@ -530,6 +534,30 @@ async def evolution_webhook(req: Request):
                         action="mark_read_failed",
                     )
 
+                # Send typing indicator (composing) before generating reply
+                if TYPING_INDICATOR_ENABLED:
+                    try:
+                        await evolution_client.send_presence(
+                            tenant_id=tenant_id,
+                            chat_id=chat_id,
+                            presence="composing",
+                            delay=5000  # Keep typing for 5 seconds initially
+                        )
+                        log_info(
+                            "Typing indicator sent",
+                            tenant_id=tenant_id,
+                            chat_id=chat_id,
+                            action="typing_start",
+                        )
+                    except Exception as e:
+                        log_warning(
+                            "Failed to send typing indicator",
+                            tenant_id=tenant_id,
+                            chat_id=chat_id,
+                            error=str(e),
+                            action="typing_failed",
+                        )
+
                 # Get tenant's system prompt and LLM provider
                 system_prompt = tenant.get("system_prompt") or DEFAULT_SYSTEM_PROMPT
                 provider_name = tenant.get("llm_provider") or LLM_PROVIDER
@@ -565,6 +593,33 @@ async def evolution_webhook(req: Request):
                 )
 
                 # Send reply via Evolution API
+                # Add human-like delay before sending (to avoid WhatsApp bans)
+                if MESSAGE_DELAY_ENABLED:
+                    delay_ms = random.randint(MESSAGE_DELAY_MIN_MS, MESSAGE_DELAY_MAX_MS)
+                    delay_seconds = delay_ms / 1000.0
+
+                    # Refresh typing indicator during delay
+                    if TYPING_INDICATOR_ENABLED:
+                        try:
+                            await evolution_client.send_presence(
+                                tenant_id=tenant_id,
+                                chat_id=chat_id,
+                                presence="composing",
+                                delay=delay_ms
+                            )
+                        except Exception:
+                            pass  # Non-critical
+
+                    log_info(
+                        "Adding human-like delay before sending",
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        message_id=msg_id,
+                        delay_ms=delay_ms,
+                        action="delay_start",
+                    )
+                    await asyncio.sleep(delay_seconds)
+
                 log_info(
                     "Sending reply via Evolution API",
                     tenant_id=tenant_id,
@@ -573,12 +628,22 @@ async def evolution_webhook(req: Request):
                     action="evolution_send_start",
                 )
 
-                evolution_client = EvolutionClient()
                 await evolution_client.send_text_message(
                     tenant_id=tenant_id,
                     chat_id=reply_to,  # Use reply_to (sender) for LID format
                     text=reply_text
                 )
+
+                # Stop typing indicator after sending
+                if TYPING_INDICATOR_ENABLED:
+                    try:
+                        await evolution_client.send_presence(
+                            tenant_id=tenant_id,
+                            chat_id=chat_id,
+                            presence="paused"
+                        )
+                    except Exception:
+                        pass  # Non-critical
 
                 log_info(
                     "Reply sent successfully via Evolution API",

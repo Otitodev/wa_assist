@@ -250,3 +250,86 @@ class EvolutionClient:
                     "status": "failed",
                     "error": str(e)
                 }
+
+    async def send_presence(
+        self,
+        tenant_id: int,
+        chat_id: str,
+        presence: str = "composing",
+        delay: int = 1000,
+        instance_name: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        Send presence status (typing indicator).
+
+        Args:
+            tenant_id: Tenant ID for configuration lookup
+            chat_id: WhatsApp chat ID (remoteJid)
+            presence: Presence type - "composing", "recording", "available", "unavailable", "paused"
+            delay: Delay in milliseconds for the presence
+            instance_name: Override instance name (uses tenant's if not provided)
+
+        Returns:
+            Evolution API response dict
+        """
+        tenant_config = await self._get_tenant_config(tenant_id)
+        evo_url = tenant_config["evo_server_url"]
+        evo_api_key = tenant_config.get("evo_api_key")
+        instance = instance_name or tenant_config["instance_name"]
+
+        endpoint = f"{evo_url}/chat/sendPresence/{instance}"
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        if evo_api_key:
+            headers["apikey"] = evo_api_key
+
+        # Handle different chat_id formats
+        if chat_id.endswith("@lid"):
+            number = chat_id
+        elif "@" in chat_id:
+            number = chat_id.split("@")[0]
+        else:
+            number = chat_id
+
+        payload = {
+            "number": number,
+            "delay": delay,
+            "presence": presence
+        }
+
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            try:
+                response = await client.post(
+                    endpoint,
+                    json=payload,
+                    headers=headers
+                )
+                response.raise_for_status()
+                return response.json()
+
+            except httpx.HTTPStatusError as e:
+                # Don't raise error for presence - it's not critical
+                error_detail = "Unknown error"
+                try:
+                    error_body = e.response.json()
+                    error_detail = error_body.get("message", str(error_body))
+                except:
+                    error_detail = e.response.text
+                return {
+                    "status": "failed",
+                    "error": f"HTTP {e.response.status_code}: {error_detail}"
+                }
+
+            except httpx.TimeoutException:
+                return {
+                    "status": "timeout",
+                    "message": "Send presence request timed out"
+                }
+
+            except httpx.RequestError as e:
+                return {
+                    "status": "failed",
+                    "error": str(e)
+                }

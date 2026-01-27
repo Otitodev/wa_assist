@@ -44,3 +44,10 @@ WEBSOCKET_ENABLED = os.getenv("WEBSOCKET_ENABLED", "false").lower() == "true"
 WEBSOCKET_MODE = os.getenv("WEBSOCKET_MODE", "global")  # "global" or "instance"
 EVOLUTION_SERVER_URL = os.getenv("EVOLUTION_SERVER_URL", "")  # For global WebSocket mode
 EVOLUTION_API_KEY = os.getenv("EVOLUTION_API_KEY", "")  # Global API key for WebSocket auth
+
+# Message Delay Configuration (to avoid WhatsApp bans)
+# Adds human-like delays before sending messages
+MESSAGE_DELAY_ENABLED = os.getenv("MESSAGE_DELAY_ENABLED", "true").lower() == "true"
+MESSAGE_DELAY_MIN_MS = int(os.getenv("MESSAGE_DELAY_MIN_MS", "1000"))  # Minimum delay in ms
+MESSAGE_DELAY_MAX_MS = int(os.getenv("MESSAGE_DELAY_MAX_MS", "3000"))  # Maximum delay in ms
+TYPING_INDICATOR_ENABLED = os.getenv("TYPING_INDICATOR_ENABLED", "true").lower() == "true"
