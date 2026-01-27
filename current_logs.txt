@@ -1,0 +1,1001 @@
+2026-01-27T04:37:27.655671506Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.655676721Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.update [0m
+2026-01-27T04:37:27.655680588Z [inf]    data: [
+2026-01-27T04:37:27.655685425Z [inf]      {
+2026-01-27T04:37:27.655689779Z [inf]        id: '170166654656630@lid',
+2026-01-27T04:37:27.655694117Z [inf]        pushName: undefined,
+2026-01-27T04:37:27.655698229Z [inf]        profilePictureUrl: 'https://pps.whatsapp.net/v/t61.24694-24/464390666_563384056274008_3383816475815434617_n.jpg?ccb=11-4&oh=01_Q5Aa3gEr6xPhgn1mEKGjOzUYPywFLOUYJ1MjQXblYwXbB4dLnw&oe=69855279&_nc_sid=5e03e0&_nc_cat=105',
+2026-01-27T04:37:27.655702607Z [inf]        owner: 'test-02'
+2026-01-27T04:37:27.655707694Z [inf]      }
+2026-01-27T04:37:27.655711738Z [inf]    ],
+2026-01-27T04:37:27.655715931Z [inf]    destination: undefined,
+2026-01-27T04:37:27.655720557Z [inf]    date_time: '2026-01-27T01:37:18.412Z',
+2026-01-27T04:37:27.655724782Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.655729574Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.655766420Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.655771434Z [inf]  } 
+2026-01-27T04:37:27.655775996Z [inf]  
+2026-01-27T04:37:27.657610606Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:37:27.657619477Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.657626672Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:37:27.657632016Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:37:27.657639179Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:37:27.657647321Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:37:27.657653515Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:37:27.659440882Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:37:27.659447636Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:37:27.659451877Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:37:27.659455980Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:37:27.659460206Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:37:27.659464320Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: messages.update [0m
+2026-01-27T04:37:27.659468102Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.update [0m
+2026-01-27T04:37:27.661517331Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Message update is valid [0m
+2026-01-27T04:37:27.661528269Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [object][0m [37m  [0m
+2026-01-27T04:37:27.661534613Z [inf]  {
+2026-01-27T04:37:27.661541583Z [inf]    remoteJid: '262792540078211@lid',
+2026-01-27T04:37:27.661546792Z [inf]    id: '3EB07136B11209AFBE944D',
+2026-01-27T04:37:27.661552747Z [inf]    fromMe: true,
+2026-01-27T04:37:27.661560681Z [inf]    participant: undefined,
+2026-01-27T04:37:27.661567924Z [inf]    status: 'SERVER_ACK',
+2026-01-27T04:37:27.661575512Z [inf]    datetime: 1769488643520,
+2026-01-27T04:37:27.661581880Z [inf]    owner: 'test-02',
+2026-01-27T04:37:27.661589089Z [inf]    pollUpdates: undefined
+2026-01-27T04:37:27.661596005Z [inf]  } 
+2026-01-27T04:37:27.661602757Z [inf]  
+2026-01-27T04:37:27.661609586Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event MESSAGES_UPDATE [0m
+2026-01-27T04:37:27.661616608Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.661623571Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.663020540Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.663026877Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Inserting message in database [0m
+2026-01-27T04:37:27.663031959Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m inserting message up [0m
+2026-01-27T04:37:27.663036211Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m saving message up to db [0m
+2026-01-27T04:37:27.663040703Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.update [0m
+2026-01-27T04:37:27.663044810Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:37:27.663049138Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.665189099Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:37:27.665199904Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:37:27.665206818Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.665213897Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.665218885Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.665225647Z [inf]  {
+2026-01-27T04:37:27.665232039Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.665236902Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:37:27.665242264Z [inf]    event: 'messages.update',
+2026-01-27T04:37:27.665247621Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.665254426Z [inf]    data: {
+2026-01-27T04:37:27.665259954Z [inf]      remoteJid: '262792540078211@lid',
+2026-01-27T04:37:27.665269627Z [inf]      id: '3EB07136B11209AFBE944D',
+2026-01-27T04:37:27.666946387Z [inf]      fromMe: true,
+2026-01-27T04:37:27.666958694Z [inf]      participant: undefined,
+2026-01-27T04:37:27.666966853Z [inf]      status: 'SERVER_ACK',
+2026-01-27T04:37:27.666974479Z [inf]      datetime: 1769488643520,
+2026-01-27T04:37:27.666981779Z [inf]      owner: 'test-02',
+2026-01-27T04:37:27.666989350Z [inf]      pollUpdates: undefined
+2026-01-27T04:37:27.666996796Z [inf]    },
+2026-01-27T04:37:27.667006374Z [inf]    destination: undefined,
+2026-01-27T04:37:27.667013591Z [inf]    date_time: '2026-01-27T01:37:23.520Z',
+2026-01-27T04:37:27.667021221Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.667027985Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.667037692Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.667045125Z [inf]  } 
+2026-01-27T04:37:27.667062794Z [inf]  
+2026-01-27T04:37:27.667069977Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:37:27.667076304Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:37:27.667083159Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:37:27.667092047Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:37:27.668519361Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:37:27.668526697Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:37:27.668532033Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:37:27.668537690Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:37:27.668543459Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: messages.update [0m
+2026-01-27T04:37:27.668549235Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.update [0m
+2026-01-27T04:37:27.668554869Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Message update is valid [0m
+2026-01-27T04:37:27.670484302Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [object][0m [37m  [0m
+2026-01-27T04:37:27.670490566Z [inf]  {
+2026-01-27T04:37:27.670496141Z [inf]    remoteJid: '262792540078211@lid',
+2026-01-27T04:37:27.670500728Z [inf]    id: '3EB0BFDAF09B8A27AC26E2',
+2026-01-27T04:37:27.670505750Z [inf]    fromMe: true,
+2026-01-27T04:37:27.670510194Z [inf]    participant: undefined,
+2026-01-27T04:37:27.670514302Z [inf]    status: 'SERVER_ACK',
+2026-01-27T04:37:27.670518960Z [inf]    datetime: 1769488643542,
+2026-01-27T04:37:27.670523179Z [inf]    owner: 'test-02',
+2026-01-27T04:37:27.670527510Z [inf]    pollUpdates: undefined
+2026-01-27T04:37:27.670532265Z [inf]  } 
+2026-01-27T04:37:27.670537034Z [inf]  
+2026-01-27T04:37:27.670541359Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event MESSAGES_UPDATE [0m
+2026-01-27T04:37:27.670545195Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.670549857Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.670554158Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.672543711Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Inserting message in database [0m
+2026-01-27T04:37:27.672550673Z [inf]    participant: undefined,
+2026-01-27T04:37:27.672553900Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m inserting message up [0m
+2026-01-27T04:37:27.672561389Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m saving message up to db [0m
+2026-01-27T04:37:27.672562968Z [inf]    status: 'SERVER_ACK',
+2026-01-27T04:37:27.672567303Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Message update is valid [0m
+2026-01-27T04:37:27.672570319Z [inf]    datetime: 1769488643542,
+2026-01-27T04:37:27.672574187Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [object][0m [37m  [0m
+2026-01-27T04:37:27.672577277Z [inf]    owner: 'test-02',
+2026-01-27T04:37:27.672582843Z [inf]    pollUpdates: undefined
+2026-01-27T04:37:27.672596215Z [inf]  {
+2026-01-27T04:37:27.672602936Z [inf]    remoteJid: '170166654656630@lid',
+2026-01-27T04:37:27.672608777Z [inf]    id: '3EB08F63C12744AC0FCD1D',
+2026-01-27T04:37:27.672617325Z [inf]    fromMe: true,
+2026-01-27T04:37:27.674499869Z [inf]  } 
+2026-01-27T04:37:27.674507723Z [inf]  
+2026-01-27T04:37:27.674512781Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event MESSAGES_UPDATE [0m
+2026-01-27T04:37:27.674517575Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.674521903Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.674526592Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.674541969Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Inserting message in database [0m
+2026-01-27T04:37:27.674546812Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m inserting message up [0m
+2026-01-27T04:37:27.674551585Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m saving message up to db [0m
+2026-01-27T04:37:27.677186033Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Message update is valid [0m
+2026-01-27T04:37:27.677199045Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [object][0m [37m  [0m
+2026-01-27T04:37:27.677205448Z [inf]  {
+2026-01-27T04:37:27.677211038Z [inf]    remoteJid: '170166654656630@lid',
+2026-01-27T04:37:27.677216200Z [inf]    id: '3EB03D3C43054E636A5168',
+2026-01-27T04:37:27.677221782Z [inf]    fromMe: true,
+2026-01-27T04:37:27.677226563Z [inf]    participant: undefined,
+2026-01-27T04:37:27.677231673Z [inf]    status: 'SERVER_ACK',
+2026-01-27T04:37:27.677237363Z [inf]    datetime: 1769488643543,
+2026-01-27T04:37:27.677243218Z [inf]    owner: 'test-02',
+2026-01-27T04:37:27.677248450Z [inf]    pollUpdates: undefined
+2026-01-27T04:37:27.677253829Z [inf]  } 
+2026-01-27T04:37:27.677258760Z [inf]  
+2026-01-27T04:37:27.677264109Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event MESSAGES_UPDATE [0m
+2026-01-27T04:37:27.677269502Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.677274746Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.679914205Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.679924285Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Inserting message in database [0m
+2026-01-27T04:37:27.679932654Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m inserting message up [0m
+2026-01-27T04:37:27.679949289Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m saving message up to db [0m
+2026-01-27T04:37:27.679955681Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.679962627Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.679969675Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.682423202Z [inf]    },
+2026-01-27T04:37:27.682434123Z [inf]    destination: undefined,
+2026-01-27T04:37:27.682440400Z [inf]    date_time: '2026-01-27T01:37:23.542Z',
+2026-01-27T04:37:27.682445442Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.682451024Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.682457542Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.682463495Z [inf]  } 
+2026-01-27T04:37:27.682470652Z [inf]  
+2026-01-27T04:37:27.682480506Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m message up saved to db: 1 message up [0m
+2026-01-27T04:37:27.682482746Z [inf]  {
+2026-01-27T04:37:27.682489380Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.682497524Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.682504697Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:37:27.682510510Z [inf]    event: 'messages.update',
+2026-01-27T04:37:27.682515490Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.682521305Z [inf]    data: {
+2026-01-27T04:37:27.682530038Z [inf]      remoteJid: '262792540078211@lid',
+2026-01-27T04:37:27.682535646Z [inf]      id: '3EB0BFDAF09B8A27AC26E2',
+2026-01-27T04:37:27.682542329Z [inf]      fromMe: true,
+2026-01-27T04:37:27.682548457Z [inf]      participant: undefined,
+2026-01-27T04:37:27.682553769Z [inf]      status: 'SERVER_ACK',
+2026-01-27T04:37:27.682558154Z [inf]      datetime: 1769488643542,
+2026-01-27T04:37:27.682563980Z [inf]      owner: 'test-02',
+2026-01-27T04:37:27.682569491Z [inf]      pollUpdates: undefined
+2026-01-27T04:37:27.684068462Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.684070978Z [inf]      status: 'SERVER_ACK',
+2026-01-27T04:37:27.684086414Z [inf]      datetime: 1769488643543,
+2026-01-27T04:37:27.684087983Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.684095138Z [inf]  {
+2026-01-27T04:37:27.684101063Z [inf]      owner: 'test-02',
+2026-01-27T04:37:27.684103886Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.684115595Z [inf]      pollUpdates: undefined
+2026-01-27T04:37:27.684121814Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:37:27.684129474Z [inf]    },
+2026-01-27T04:37:27.684133321Z [inf]    event: 'messages.update',
+2026-01-27T04:37:27.684141707Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.684142253Z [inf]    destination: undefined,
+2026-01-27T04:37:27.684149208Z [inf]    data: {
+2026-01-27T04:37:27.684157442Z [inf]    date_time: '2026-01-27T01:37:23.543Z',
+2026-01-27T04:37:27.684166639Z [inf]      remoteJid: '170166654656630@lid',
+2026-01-27T04:37:27.684168822Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.684173637Z [inf]      id: '3EB03D3C43054E636A5168',
+2026-01-27T04:37:27.684182968Z [inf]      fromMe: true,
+2026-01-27T04:37:27.684183820Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.684194790Z [inf]      participant: undefined,
+2026-01-27T04:37:27.684196350Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.686098666Z [inf]    },
+2026-01-27T04:37:27.686100297Z [inf]      fromMe: true,
+2026-01-27T04:37:27.686102342Z [inf]  } 
+2026-01-27T04:37:27.686112241Z [inf]      participant: undefined,
+2026-01-27T04:37:27.686120220Z [inf]  
+2026-01-27T04:37:27.686126407Z [inf]      status: 'SERVER_ACK',
+2026-01-27T04:37:27.686130903Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.686133066Z [inf]  {
+2026-01-27T04:37:27.686143613Z [inf]      datetime: 1769488643542,
+2026-01-27T04:37:27.686143816Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.686148465Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.686161857Z [inf]      owner: 'test-02',
+2026-01-27T04:37:27.686162328Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.686165120Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:37:27.686171899Z [inf]      pollUpdates: undefined
+2026-01-27T04:37:27.686183277Z [inf]    event: 'messages.update',
+2026-01-27T04:37:27.686191608Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.686199096Z [inf]    data: {
+2026-01-27T04:37:27.686207818Z [inf]      remoteJid: '170166654656630@lid',
+2026-01-27T04:37:27.686216300Z [inf]      id: '3EB08F63C12744AC0FCD1D',
+2026-01-27T04:37:27.688085087Z [inf]    destination: undefined,
+2026-01-27T04:37:27.688090921Z [inf]    date_time: '2026-01-27T01:37:23.543Z',
+2026-01-27T04:37:27.688095056Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.688099638Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.688104842Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.688108778Z [inf]  } 
+2026-01-27T04:37:27.688112580Z [inf]  
+2026-01-27T04:37:27.688116321Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.update [0m
+2026-01-27T04:37:27.688120224Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:37:27.688124614Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.688129070Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:37:27.688133817Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:37:27.688138087Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m message up saved to db: 1 message up [0m
+2026-01-27T04:37:27.690315764Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m message up saved to db: 1 message up [0m
+2026-01-27T04:37:27.690323119Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m message up saved to db: 1 message up [0m
+2026-01-27T04:37:27.690329107Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:37:27.690335360Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:37:27.690341329Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:37:27.690347352Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:37:27.690352728Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:37:27.695461774Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:37:27.695468203Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:37:27.695472780Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:37:27.695477368Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: messages.update [0m
+2026-01-27T04:37:27.695482040Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.update [0m
+2026-01-27T04:37:27.695486783Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Message update is valid [0m
+2026-01-27T04:37:27.695491520Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [object][0m [37m  [0m
+2026-01-27T04:37:27.697811131Z [inf]  {
+2026-01-27T04:37:27.697817627Z [inf]    remoteJid: '262792540078211@lid',
+2026-01-27T04:37:27.697824786Z [inf]    id: '3EB095226945482E556D2E',
+2026-01-27T04:37:27.697830941Z [inf]    fromMe: true,
+2026-01-27T04:37:27.697835370Z [inf]    participant: undefined,
+2026-01-27T04:37:27.697839773Z [inf]    status: 'SERVER_ACK',
+2026-01-27T04:37:27.697844218Z [inf]    datetime: 1769488643563,
+2026-01-27T04:37:27.697848020Z [inf]    owner: 'test-02',
+2026-01-27T04:37:27.697853313Z [inf]    pollUpdates: undefined
+2026-01-27T04:37:27.697857618Z [inf]  } 
+2026-01-27T04:37:27.697862978Z [inf]  
+2026-01-27T04:37:27.697867045Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event MESSAGES_UPDATE [0m
+2026-01-27T04:37:27.697870898Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.697875138Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.697879541Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.697883767Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Inserting message in database [0m
+2026-01-27T04:37:27.699501212Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m inserting message up [0m
+2026-01-27T04:37:27.699508732Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m saving message up to db [0m
+2026-01-27T04:37:27.699514509Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.699519651Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.699524707Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.699529569Z [inf]  {
+2026-01-27T04:37:27.699534450Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.699541120Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:37:27.699547121Z [inf]    event: 'messages.update',
+2026-01-27T04:37:27.699555411Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.699564052Z [inf]    data: {
+2026-01-27T04:37:27.699569309Z [inf]      remoteJid: '262792540078211@lid',
+2026-01-27T04:37:27.699574260Z [inf]      id: '3EB095226945482E556D2E',
+2026-01-27T04:37:27.703216123Z [inf]      fromMe: true,
+2026-01-27T04:37:27.703226746Z [inf]      participant: undefined,
+2026-01-27T04:37:27.703234173Z [inf]      status: 'SERVER_ACK',
+2026-01-27T04:37:27.703243563Z [inf]      datetime: 1769488643563,
+2026-01-27T04:37:27.703251409Z [inf]      owner: 'test-02',
+2026-01-27T04:37:27.703258191Z [inf]      pollUpdates: undefined
+2026-01-27T04:37:27.703264357Z [inf]    },
+2026-01-27T04:37:27.703271060Z [inf]    destination: undefined,
+2026-01-27T04:37:27.703276985Z [inf]    date_time: '2026-01-27T01:37:23.563Z',
+2026-01-27T04:37:27.703284526Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.703290924Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.703297946Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.703304313Z [inf]  } 
+2026-01-27T04:37:27.703310384Z [inf]  
+2026-01-27T04:37:27.703317684Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageUpRepository][0m [37m[1m [string][0m [37m message up saved to db: 1 message up [0m
+2026-01-27T04:37:27.703324104Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: chats.update [0m
+2026-01-27T04:37:27.703330121Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:37:27.703336772Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.705214060Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:37:27.705223394Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:37:27.705230459Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:37:27.705239176Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:37:27.705246771Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:37:27.705254057Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:37:27.705261579Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:37:27.707162556Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:37:27.707174739Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:37:27.707181066Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:37:27.707186684Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: chats.update [0m
+2026-01-27T04:37:27.707203572Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: chats.update [0m
+2026-01-27T04:37:27.707213663Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event CHATS_UPDATE [0m
+2026-01-27T04:37:27.707218850Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.708921520Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.708932841Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.708940391Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.708947108Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.708957763Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:23   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.708964793Z [inf]  {
+2026-01-27T04:37:27.708971632Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.708977473Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:37:27.708984260Z [inf]    event: 'chats.update',
+2026-01-27T04:37:27.708992594Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.708998825Z [inf]    data: [
+2026-01-27T04:37:27.709004806Z [inf]      {
+2026-01-27T04:37:27.709011696Z [inf]        id: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.709017337Z [inf]        owner: '2348127052315@s.whatsapp.net'
+2026-01-27T04:37:27.710598155Z [inf]      }
+2026-01-27T04:37:27.710604990Z [inf]    ],
+2026-01-27T04:37:27.710610607Z [inf]    destination: undefined,
+2026-01-27T04:37:27.710616165Z [inf]    date_time: '2026-01-27T01:37:23.660Z',
+2026-01-27T04:37:27.710621363Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.710629002Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.710811892Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.710821086Z [inf]  } 
+2026-01-27T04:37:27.710826642Z [inf]  
+2026-01-27T04:37:27.710832799Z [inf]  failed to decrypt message
+2026-01-27T04:37:27.710838535Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: creds.update [0m
+2026-01-27T04:37:27.710843965Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:37:27.710849434Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.712441248Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:37:27.712451714Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:37:27.712458604Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.upsert, contacts.update [0m
+2026-01-27T04:37:27.712465161Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:37:27.712471521Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.712477315Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:37:27.712483718Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:37:27.714867343Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:37:27.714876510Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:37:27.714882822Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:37:27.714889002Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:37:27.714894970Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:37:27.714902207Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:37:27.714907939Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:37:27.716708339Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:37:27.716715635Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: creds.update [0m
+2026-01-27T04:37:27.716724629Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:37:27.716732831Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:37:27.716737320Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:37:27.716741234Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:37:27.716744947Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:37:27.718959242Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:37:27.718967624Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:37:27.718973883Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:37:27.718990637Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: messages.upsert [0m
+2026-01-27T04:37:27.718996916Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.upsert [0m
+2026-01-27T04:37:27.719002719Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: contacts.update [0m
+2026-01-27T04:37:27.719009215Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: contacts.update [0m
+2026-01-27T04:37:27.720421931Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Verifying if contacts exists in database to update [0m
+2026-01-27T04:37:27.720428388Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m message rejected [0m
+2026-01-27T04:37:27.720433208Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Creating jid with number: 170166654656630@lid [0m
+2026-01-27T04:37:27.720437109Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Number already contains @g.us or @s.whatsapp.net or @lid [0m
+2026-01-27T04:37:27.720440932Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture with jid: 170166654656630@lid [0m
+2026-01-27T04:37:27.720444889Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture url [0m
+2026-01-27T04:37:27.720449068Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event CONTACTS_UPDATE [0m
+2026-01-27T04:37:27.723199444Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.723208134Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.723216300Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.723222783Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Updating contacts in database [0m
+2026-01-27T04:37:27.723229542Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m updating contacts [0m
+2026-01-27T04:37:27.723235631Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m updating contacts in db [0m
+2026-01-27T04:37:27.723242015Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m contacts updated in db: 0 contacts [0m
+2026-01-27T04:37:27.725250929Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.725263109Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.725270957Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:24   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.725278663Z [inf]  {
+2026-01-27T04:37:27.725286269Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.725300160Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:37:27.725306486Z [inf]    event: 'contacts.update',
+2026-01-27T04:37:27.725311454Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.725490908Z [inf]    data: [
+2026-01-27T04:37:27.725500850Z [inf]      {
+2026-01-27T04:37:27.725506387Z [inf]        id: '170166654656630@lid',
+2026-01-27T04:37:27.725510991Z [inf]        pushName: undefined,
+2026-01-27T04:37:27.725515138Z [inf]        profilePictureUrl: 'https://pps.whatsapp.net/v/t61.24694-24/464390666_563384056274008_3383816475815434617_n.jpg?ccb=11-4&oh=01_Q5Aa3gEr6xPhgn1mEKGjOzUYPywFLOUYJ1MjQXblYwXbB4dLnw&oe=69855279&_nc_sid=5e03e0&_nc_cat=105',
+2026-01-27T04:37:27.725520652Z [inf]        owner: 'test-02'
+2026-01-27T04:37:27.725530404Z [inf]      }
+2026-01-27T04:37:27.725537615Z [inf]    ],
+2026-01-27T04:37:27.725544285Z [inf]    destination: undefined,
+2026-01-27T04:37:27.725549569Z [inf]    date_time: '2026-01-27T01:37:24.446Z',
+2026-01-27T04:37:27.727231490Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.727240464Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.727247252Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.727253711Z [inf]  } 
+2026-01-27T04:37:27.727259755Z [inf]  
+2026-01-27T04:37:27.727265870Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: chats.update, messages.upsert, contacts.update [0m
+2026-01-27T04:37:27.727273091Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:37:27.727279416Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.727284814Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:37:27.727291030Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:37:27.727296930Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:37:27.730754050Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:37:27.730767324Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:37:27.730774295Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:37:27.730781358Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:37:27.730788922Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:37:27.730795526Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:37:27.730802275Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:37:27.736294279Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: messages.upsert [0m
+2026-01-27T04:37:27.736301518Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.upsert [0m
+2026-01-27T04:37:27.736307425Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: chats.update [0m
+2026-01-27T04:37:27.736312828Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: chats.update [0m
+2026-01-27T04:37:27.736318292Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event CHATS_UPDATE [0m
+2026-01-27T04:37:27.736324561Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.736332923Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.739928422Z [inf]      participant: undefined
+2026-01-27T04:37:27.739939758Z [inf]    },
+2026-01-27T04:37:27.739946961Z [inf]    pushName: '0T!T0',
+2026-01-27T04:37:27.739953240Z [inf]    message: {
+2026-01-27T04:37:27.739979433Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.739984025Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: contacts.update [0m
+2026-01-27T04:37:27.739988648Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: contacts.update [0m
+2026-01-27T04:37:27.739992747Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Verifying if contacts exists in database to update [0m
+2026-01-27T04:37:27.739998020Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.740002672Z [inf]  {
+2026-01-27T04:37:27.740007237Z [inf]    key: {
+2026-01-27T04:37:27.740011725Z [inf]      remoteJid: '170166654656630@lid',
+2026-01-27T04:37:27.740015544Z [inf]      fromMe: false,
+2026-01-27T04:37:27.740019518Z [inf]      id: 'AC283678981E7966F425DC7CF3D86393',
+2026-01-27T04:37:27.741902729Z [inf]      conversation: 'Hi',
+2026-01-27T04:37:27.741910155Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event MESSAGES_UPSERT [0m
+2026-01-27T04:37:27.741915815Z [inf]      messageContextInfo: MessageContextInfo {
+2026-01-27T04:37:27.741922628Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:37:27.741926046Z [inf]        deviceListMetadata: [DeviceListMetadata],
+2026-01-27T04:37:27.741934260Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.741938386Z [inf]        deviceListMetadataVersion: 2,
+2026-01-27T04:37:27.741947129Z [inf]        messageSecret: [Uint8Array]
+2026-01-27T04:37:27.741950460Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.741955808Z [inf]      }
+2026-01-27T04:37:27.741962236Z [inf]    },
+2026-01-27T04:37:27.741967399Z [inf]    contextInfo: undefined,
+2026-01-27T04:37:27.741972882Z [inf]    messageType: 'conversation',
+2026-01-27T04:37:27.741980813Z [inf]    messageTimestamp: 1769488644,
+2026-01-27T04:37:27.742016649Z [inf]    owner: 'test-02',
+2026-01-27T04:37:27.742021993Z [inf]    source: 'android'
+2026-01-27T04:37:27.742032333Z [inf]  } 
+2026-01-27T04:37:27.742038486Z [inf]  
+2026-01-27T04:37:27.743617221Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Inserting message in database [0m
+2026-01-27T04:37:27.743627894Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRepository][0m [37m[1m [string][0m [37m inserting messages [0m
+2026-01-27T04:37:27.743635130Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRepository][0m [37m[1m [string][0m [37m saving messages to db [0m
+2026-01-27T04:37:27.743642202Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Creating jid with number: 170166654656630@lid [0m
+2026-01-27T04:37:27.743649037Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Number already contains @g.us or @s.whatsapp.net or @lid [0m
+2026-01-27T04:37:27.743658441Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture with jid: 170166654656630@lid [0m
+2026-01-27T04:37:27.743665178Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture url [0m
+2026-01-27T04:37:27.745536372Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.745545235Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.745551584Z [inf]        owner: '2348127052315@s.whatsapp.net'
+2026-01-27T04:37:27.745552599Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.745560017Z [inf]  {
+2026-01-27T04:37:27.745564148Z [inf]      }
+2026-01-27T04:37:27.745568331Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.745576232Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:37:27.745576368Z [inf]    ],
+2026-01-27T04:37:27.745583735Z [inf]    event: 'chats.update',
+2026-01-27T04:37:27.745584717Z [inf]    destination: undefined,
+2026-01-27T04:37:27.745592548Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.745595948Z [inf]    date_time: '2026-01-27T01:37:25.079Z',
+2026-01-27T04:37:27.745599238Z [inf]    data: [
+2026-01-27T04:37:27.745604462Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.745607877Z [inf]      {
+2026-01-27T04:37:27.745613919Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.745615728Z [inf]        id: '170166654656630@lid',
+2026-01-27T04:37:27.745621263Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.748114350Z [inf]  } 
+2026-01-27T04:37:27.748122424Z [inf]  
+2026-01-27T04:37:27.748134403Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.748139138Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.748148034Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:37:27.748152544Z [inf]  {
+2026-01-27T04:37:27.748156693Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.748161903Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:37:27.748165627Z [inf]    event: 'messages.upsert',
+2026-01-27T04:37:27.748169965Z [inf]    instance: 'test-02',
+2026-01-27T04:37:27.748174330Z [inf]    data: {
+2026-01-27T04:37:27.748178231Z [inf]      key: {
+2026-01-27T04:37:27.748182282Z [inf]        remoteJid: '170166654656630@lid',
+2026-01-27T04:37:27.748186254Z [inf]        fromMe: false,
+2026-01-27T04:37:27.748190290Z [inf]        id: 'AC283678981E7966F425DC7CF3D86393',
+2026-01-27T04:37:27.748194785Z [inf]        participant: undefined
+2026-01-27T04:37:27.748202030Z [inf]      },
+2026-01-27T04:37:27.748206095Z [inf]      pushName: '0T!T0',
+2026-01-27T04:37:27.748210445Z [inf]      message: { conversation: 'Hi', messageContextInfo: [MessageContextInfo] },
+2026-01-27T04:37:27.748214111Z [inf]      contextInfo: undefined,
+2026-01-27T04:37:27.749418377Z [inf]  } 
+2026-01-27T04:37:27.749427372Z [inf]  
+2026-01-27T04:37:27.749434963Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRepository][0m [37m[1m [string][0m [37m messages saved to db: 1 messages [0m
+2026-01-27T04:37:27.749444175Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Verifying contact from message [0m
+2026-01-27T04:37:27.749446345Z [inf]      messageType: 'conversation',
+2026-01-27T04:37:27.749460694Z [inf]      messageTimestamp: 1769488644,
+2026-01-27T04:37:27.749474272Z [inf]      owner: 'test-02',
+2026-01-27T04:37:27.749481872Z [inf]      source: 'android'
+2026-01-27T04:37:27.749489007Z [inf]    },
+2026-01-27T04:37:27.749496520Z [inf]    destination: undefined,
+2026-01-27T04:37:27.749503303Z [inf]    date_time: '2026-01-27T01:37:25.080Z',
+2026-01-27T04:37:27.749510163Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:37:27.749517180Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:37:27.749524802Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:37:27.750909617Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Number already contains @g.us or @s.whatsapp.net or @lid [0m
+2026-01-27T04:37:27.752662741Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:37:27.755168450Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:37:27.757431035Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Message update is valid [0m
+2026-01-27T04:37:27.758926047Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:37:27.761604474Z [inf]  {
+2026-01-27T04:37:27.763278422Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.765694594Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.765704382Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:37:27.769356049Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:37:27.771320413Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:37:27.773191053Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.upsert [0m
+2026-01-27T04:37:27.776537775Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:37:27.776544073Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:37:27.778899565Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.upsert [0m
+2026-01-27T04:37:27.781245024Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event MESSAGES_UPSERT [0m
+2026-01-27T04:37:27.783525254Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:37:27.786268109Z [inf]      owner: 'test-02',
+2026-01-27T04:37:27.786280052Z [inf]      source: 'android'
+2026-01-27T04:37:27.789072493Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:25   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Number already contains @g.us or @s.whatsapp.net or @lid [0m
+2026-01-27T04:37:27.791653755Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:26   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture url [0m
+2026-01-27T04:37:27.793856741Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:26   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m updating contacts in db [0m
+2026-01-27T04:37:27.793866310Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:37:26   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m contacts updated in db: 1 contacts [0m
+2026-01-27T04:37:44.859993716Z [err]  Railway rate limit of 500 logs/sec reached for replica, update your application to reduce the logging rate. Messages dropped: 227
+2026-01-27T04:37:59.896388821Z [inf]  WiredTiger message
+2026-01-27T04:38:34.234777968Z [inf]  Listed tenants
+2026-01-27T04:38:34.234785844Z [inf]  INFO:     100.64.0.3:14674 - "GET /api/tenants HTTP/1.1" 200 OK
+2026-01-27T04:39:01.915372876Z [inf]  WiredTiger message
+2026-01-27T04:39:14.057171617Z [inf]  Listed events
+2026-01-27T04:39:14.057179310Z [inf]  INFO:     100.64.0.3:38654 - "GET /api/events?tenant_id=4&limit=100 HTTP/1.1" 200 OK
+2026-01-27T04:40:03.621118421Z [inf]  WiredTiger message
+2026-01-27T04:40:40.745319637Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: presence.update [0m
+2026-01-27T04:40:40.745323901Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:40:40.745327872Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:40:40.745331908Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:40:40.745336143Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:40:40.745340094Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:40:40.745345214Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:40:40.748501626Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:40:40.748506748Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:40:40.748510925Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:40:40.748515020Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:40:40.748519312Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:40:40.748536175Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:40:40.748541058Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: presence.update [0m
+2026-01-27T04:40:40.748563768Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:40:40.748568190Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:40:40.748573088Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:40:40.748577479Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:40:40.748582617Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:40:40.748588313Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:40:31   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:40:40.748592937Z [inf]  {
+2026-01-27T04:40:40.748598587Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:40:40.748603971Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:40:40.748609539Z [inf]    event: 'presence.update',
+2026-01-27T04:40:40.750571341Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:40:40.750581691Z [inf]    instance: 'test-02',
+2026-01-27T04:40:40.750582083Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:40:40.750593545Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:40:40.750593909Z [inf]    data: {
+2026-01-27T04:40:40.750604270Z [inf]      id: '170166654656630@lid',
+2026-01-27T04:40:40.750609644Z [inf]      presences: { '170166654656630@lid': [Object] }
+2026-01-27T04:40:40.750614894Z [inf]    },
+2026-01-27T04:40:40.750622550Z [inf]    destination: undefined,
+2026-01-27T04:40:40.750628688Z [inf]    date_time: '2026-01-27T01:40:31.165Z',
+2026-01-27T04:40:40.750659722Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:40:40.750665239Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:40:40.750671116Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:40:40.750675394Z [inf]  } 
+2026-01-27T04:40:40.750691528Z [inf]  
+2026-01-27T04:40:40.750696449Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: presence.update [0m
+2026-01-27T04:40:40.752505494Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:40:40.752515031Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:40:40.752521587Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:40:40.752528318Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:40:40.752534273Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:40:40.752540209Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:40:40.752546630Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:40:40.754333556Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:40:40.754340168Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:40:40.754344333Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: presence.update [0m
+2026-01-27T04:40:40.754348409Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:40:40.754352659Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:40:40.754357574Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:40:40.754362343Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:40:40.756575880Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:40:40.756584120Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:40:33   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:40:40.756589376Z [inf]  {
+2026-01-27T04:40:40.756593974Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:40:40.756598056Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:40:40.756602979Z [inf]    event: 'presence.update',
+2026-01-27T04:40:40.756607782Z [inf]    instance: 'test-02',
+2026-01-27T04:40:40.756614530Z [inf]    data: {
+2026-01-27T04:40:40.756619142Z [inf]      id: '170166654656630@lid',
+2026-01-27T04:40:40.756625382Z [inf]      presences: { '170166654656630@lid': [Object] }
+2026-01-27T04:40:40.756629745Z [inf]    },
+2026-01-27T04:40:40.756634305Z [inf]    destination: undefined,
+2026-01-27T04:40:40.756639014Z [inf]    date_time: '2026-01-27T01:40:33.581Z',
+2026-01-27T04:40:40.756644104Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:40:40.756651111Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:40:40.756656499Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:40:40.756661214Z [inf]  } 
+2026-01-27T04:40:40.756666922Z [inf]  
+2026-01-27T04:41:06.393323664Z [inf]  WiredTiger message
+2026-01-27T04:41:10.256889344Z [inf]    url: 'https://waassist-production.up.railway.app/webhooks/evolution',
+2026-01-27T04:41:10.256901354Z [inf]    webhook_by_events: false,
+2026-01-27T04:41:10.256909715Z [inf]    events: [ 'MESSAGES_UPSERT', 'CONNECTION_UPDATE' ]
+2026-01-27T04:41:10.256916654Z [inf]  } 
+2026-01-27T04:41:10.256926511Z [inf]  
+2026-01-27T04:41:10.256934951Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookRouter][0m [37m[1m [string][0m [37m request query:  [0m
+2026-01-27T04:41:10.256942319Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookRouter][0m [37m[1m [object][0m [37m  [0m
+2026-01-27T04:41:10.256948404Z [inf]  
+2026-01-27T04:41:10.256954779Z [inf]  
+2026-01-27T04:41:10.256963890Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookController][0m [37m[1m [string][0m [37m requested createWebhook from test-02 instance [0m
+2026-01-27T04:41:10.257069302Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookRouter][0m [37m[1m [string][0m [37m request received in setWebhook [0m
+2026-01-27T04:41:10.257073608Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookRouter][0m [37m[1m [string][0m [37m request body:  [0m
+2026-01-27T04:41:10.257078292Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookRouter][0m [37m[1m [object][0m [37m  [0m
+2026-01-27T04:41:10.257083212Z [inf]  {
+2026-01-27T04:41:10.260120033Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookService][0m [37m[1m [string][0m [37m create webhook: test-02 [0m
+2026-01-27T04:41:10.260127927Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Setting webhook [0m
+2026-01-27T04:41:10.260132888Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:41:10.260137333Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookRepository][0m [37m[1m [string][0m [37m creating webhook [0m
+2026-01-27T04:41:10.260142430Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookRepository][0m [37m[1m [string][0m [37m saving webhook to db [0m
+2026-01-27T04:41:10.260146881Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [WebhookRepository][0m [37m[1m [string][0m [37m webhook saved to db: 0 webhook [0m
+2026-01-27T04:41:10.260152178Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Webhook url: https://waassist-production.up.railway.app/webhooks/evolution [0m
+2026-01-27T04:41:10.260185182Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Webhook events: MESSAGES_UPSERT,CONNECTION_UPDATE [0m
+2026-01-27T04:41:10.260190027Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:09   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Webhook set [0m
+2026-01-27T04:41:49.855399138Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: presence.update [0m
+2026-01-27T04:41:49.855404421Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:41:49.855409404Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:41:49.855418935Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:41:49.855424279Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:41:49.855429048Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:41:49.855433687Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:41:49.859110628Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:41:49.859117451Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:41:49.859124246Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:41:49.859130984Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:41:49.859137658Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:41:49.859144061Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:41:49.859151199Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: presence.update [0m
+2026-01-27T04:41:49.859231903Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:41:49.859237418Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:41:49.859243586Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:41:49.859249270Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:41:49.859255845Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:41:49.859264312Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:41:43   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:41:49.859270440Z [inf]  {
+2026-01-27T04:41:49.859278398Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:41:49.859285520Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:41:49.859292974Z [inf]    event: 'presence.update',
+2026-01-27T04:41:49.860976932Z [inf]    instance: 'test-02',
+2026-01-27T04:41:49.860983793Z [inf]    data: {
+2026-01-27T04:41:49.860990493Z [inf]      id: '170166654656630@lid',
+2026-01-27T04:41:49.860995880Z [inf]      presences: { '170166654656630@lid': [Object] }
+2026-01-27T04:41:49.861002654Z [inf]    },
+2026-01-27T04:41:49.861007853Z [inf]    destination: 'https://waassist-production.up.railway.app/webhooks/evolution',
+2026-01-27T04:41:49.861015823Z [inf]    date_time: '2026-01-27T01:41:43.202Z',
+2026-01-27T04:41:49.861022061Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:41:49.861030004Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:41:49.861038135Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:41:49.861043892Z [inf]  } 
+2026-01-27T04:41:49.861049463Z [inf]  
+2026-01-27T04:41:49.861055281Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: chats.update, messages.upsert, contacts.update [0m
+2026-01-27T04:41:49.861060838Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:41:49.861067216Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:41:49.861072935Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:41:49.862345724Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:41:49.862352039Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:41:49.862356622Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:41:49.862360606Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:41:49.862365544Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:41:49.862370070Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:41:49.862373740Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:41:49.864422261Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:41:49.864430824Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:41:49.864437691Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: messages.upsert [0m
+2026-01-27T04:41:49.864444033Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: messages.upsert [0m
+2026-01-27T04:41:49.864448920Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: chats.update [0m
+2026-01-27T04:41:49.864455030Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: chats.update [0m
+2026-01-27T04:41:49.864460973Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event CHATS_UPDATE [0m
+2026-01-27T04:41:49.866407956Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:41:49.866417716Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:41:49.866425085Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:41:49.866431041Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: contacts.update [0m
+2026-01-27T04:41:49.866436496Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: contacts.update [0m
+2026-01-27T04:41:49.866442591Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Verifying if contacts exists in database to update [0m
+2026-01-27T04:41:49.866451060Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:41:49.868425926Z [inf]  {
+2026-01-27T04:41:49.868432999Z [inf]  
+2026-01-27T04:41:49.868439268Z [inf]    key: {
+2026-01-27T04:41:49.868447872Z [inf]      }
+2026-01-27T04:41:49.868449859Z [inf]      remoteJid: '170166654656630@lid',
+2026-01-27T04:41:49.868451973Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event MESSAGES_UPSERT [0m
+2026-01-27T04:41:49.868462422Z [inf]      fromMe: false,
+2026-01-27T04:41:49.868463390Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:41:49.868465686Z [inf]    },
+2026-01-27T04:41:49.868469618Z [inf]      id: 'AC16840F2B4C4F22C5CB4914B0D69F90',
+2026-01-27T04:41:49.868478265Z [inf]    contextInfo: undefined,
+2026-01-27T04:41:49.868481705Z [inf]    messageTimestamp: 1769488905,
+2026-01-27T04:41:49.868482867Z [inf]      participant: undefined
+2026-01-27T04:41:49.868483613Z [inf]    message: {
+2026-01-27T04:41:49.868494542Z [inf]    messageType: 'conversation',
+2026-01-27T04:41:49.868496657Z [inf]    },
+2026-01-27T04:41:49.868499842Z [inf]    owner: 'test-02',
+2026-01-27T04:41:49.868501976Z [inf]      conversation: 'Please call',
+2026-01-27T04:41:49.868512471Z [inf]    pushName: '0T!T0',
+2026-01-27T04:41:49.868514532Z [inf]      messageContextInfo: MessageContextInfo {
+2026-01-27T04:41:49.868515143Z [inf]    source: 'android'
+2026-01-27T04:41:49.868524544Z [inf]        deviceListMetadata: [DeviceListMetadata],
+2026-01-27T04:41:49.868528652Z [inf]  } 
+2026-01-27T04:41:49.868534293Z [inf]        deviceListMetadataVersion: 2,
+2026-01-27T04:41:49.868540581Z [inf]        messageSecret: [Uint8Array]
+2026-01-27T04:41:49.869848121Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:41:49.869855428Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:41:49.869861188Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Inserting message in database [0m
+2026-01-27T04:41:49.869867024Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRepository][0m [37m[1m [string][0m [37m inserting messages [0m
+2026-01-27T04:41:49.869873001Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRepository][0m [37m[1m [string][0m [37m saving messages to db [0m
+2026-01-27T04:41:49.869879159Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Creating jid with number: 170166654656630@lid [0m
+2026-01-27T04:41:49.869884558Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Number already contains @g.us or @s.whatsapp.net or @lid [0m
+2026-01-27T04:41:49.871609869Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture with jid: 170166654656630@lid [0m
+2026-01-27T04:41:49.871616727Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture url [0m
+2026-01-27T04:41:49.871621783Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:41:49.871625941Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:41:49.871630578Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:41:49.871635445Z [inf]  {
+2026-01-27T04:41:49.871639835Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:41:49.871644486Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:41:49.871649119Z [inf]    event: 'chats.update',
+2026-01-27T04:41:49.871655174Z [inf]    instance: 'test-02',
+2026-01-27T04:41:49.871659369Z [inf]    data: [
+2026-01-27T04:41:49.871663765Z [inf]      {
+2026-01-27T04:41:49.871668778Z [inf]        id: '170166654656630@lid',
+2026-01-27T04:41:49.873412150Z [inf]        owner: '2348127052315@s.whatsapp.net'
+2026-01-27T04:41:49.873420523Z [inf]      }
+2026-01-27T04:41:49.873426696Z [inf]    ],
+2026-01-27T04:41:49.873431798Z [inf]    destination: 'https://waassist-production.up.railway.app/webhooks/evolution',
+2026-01-27T04:41:49.873437776Z [inf]    date_time: '2026-01-27T01:41:45.540Z',
+2026-01-27T04:41:49.873444053Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:41:49.873452569Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:41:49.873457641Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:41:49.873462756Z [inf]  } 
+2026-01-27T04:41:49.873468441Z [inf]  
+2026-01-27T04:41:49.873473805Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook local [0m
+2026-01-27T04:41:49.873480135Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:41:49.873485495Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:41:49.873489983Z [inf]  {
+2026-01-27T04:41:49.873494781Z [inf]    local: 'ChannelStartupService.sendDataWebhook-local',
+2026-01-27T04:41:49.873501723Z [inf]    url: 'https://waassist-production.up.railway.app/webhooks/evolution',
+2026-01-27T04:41:49.873506913Z [inf]    event: 'messages.upsert',
+2026-01-27T04:41:49.873512571Z [inf]    instance: 'test-02',
+2026-01-27T04:41:49.875860322Z [inf]      },
+2026-01-27T04:41:49.875869461Z [inf]    data: {
+2026-01-27T04:41:49.875870438Z [inf]  
+2026-01-27T04:41:49.875871814Z [inf]      contextInfo: undefined,
+2026-01-27T04:41:49.875882614Z [inf]      messageType: 'conversation',
+2026-01-27T04:41:49.875883914Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:41:49.875887431Z [inf]      key: {
+2026-01-27T04:41:49.875894529Z [inf]      messageTimestamp: 1769488905,
+2026-01-27T04:41:49.875898053Z [inf]    destination: 'https://waassist-production.up.railway.app/webhooks/evolution',
+2026-01-27T04:41:49.875899769Z [inf]        remoteJid: '170166654656630@lid',
+2026-01-27T04:41:49.875904920Z [inf]      owner: 'test-02',
+2026-01-27T04:41:49.875913521Z [inf]    date_time: '2026-01-27T01:41:45.541Z',
+2026-01-27T04:41:49.875914457Z [inf]        fromMe: false,
+2026-01-27T04:41:49.875916042Z [inf]      source: 'android'
+2026-01-27T04:41:49.875925294Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:41:49.875926079Z [inf]    },
+2026-01-27T04:41:49.875928789Z [inf]        id: 'AC16840F2B4C4F22C5CB4914B0D69F90',
+2026-01-27T04:41:49.875941212Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:41:49.875941927Z [inf]        participant: undefined
+2026-01-27T04:41:49.875948505Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:41:49.875958895Z [inf]      },
+2026-01-27T04:41:49.875962014Z [inf]  } 
+2026-01-27T04:41:49.875968843Z [inf]      pushName: '0T!T0',
+2026-01-27T04:41:49.875976484Z [inf]      message: {
+2026-01-27T04:41:49.875984328Z [inf]        conversation: 'Please call',
+2026-01-27T04:41:49.875991914Z [inf]        messageContextInfo: [MessageContextInfo]
+2026-01-27T04:41:49.877792510Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRepository][0m [37m[1m [string][0m [37m messages saved to db: 1 messages [0m
+2026-01-27T04:41:49.877802460Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Verifying contact from message [0m
+2026-01-27T04:41:49.877809344Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m finding contacts [0m
+2026-01-27T04:41:49.877816107Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m finding contacts in db [0m
+2026-01-27T04:41:49.877822524Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Creating jid with number: 170166654656630@lid [0m
+2026-01-27T04:41:49.877829599Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Number already contains @g.us or @s.whatsapp.net or @lid [0m
+2026-01-27T04:41:49.877834898Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture with jid: 170166654656630@lid [0m
+2026-01-27T04:41:49.879122310Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture url [0m
+2026-01-27T04:41:49.879131585Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event CONTACTS_UPDATE [0m
+2026-01-27T04:41:49.879136495Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:41:49.879141169Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:41:49.879145000Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:41:49.879149443Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Updating contacts in database [0m
+2026-01-27T04:41:49.879153615Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m updating contacts [0m
+2026-01-27T04:41:49.881151699Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m updating contacts in db [0m
+2026-01-27T04:41:49.881161599Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m contacts updated in db: 0 contacts [0m
+2026-01-27T04:41:49.881166970Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:41:49.881171844Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:41:49.881176636Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:41:49.881182011Z [inf]  {
+2026-01-27T04:41:49.881187887Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:41:49.881193497Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:41:49.881198493Z [inf]    event: 'contacts.update',
+2026-01-27T04:41:49.881203514Z [inf]    instance: 'test-02',
+2026-01-27T04:41:49.881208488Z [inf]    data: [
+2026-01-27T04:41:49.881212832Z [inf]      {
+2026-01-27T04:41:49.881218687Z [inf]        id: '170166654656630@lid',
+2026-01-27T04:41:49.883624415Z [inf]        pushName: undefined,
+2026-01-27T04:41:49.883633787Z [inf]        profilePictureUrl: 'https://pps.whatsapp.net/v/t61.24694-24/464390666_563384056274008_3383816475815434617_n.jpg?ccb=11-4&oh=01_Q5Aa3gEr6xPhgn1mEKGjOzUYPywFLOUYJ1MjQXblYwXbB4dLnw&oe=69855279&_nc_sid=5e03e0&_nc_cat=105',
+2026-01-27T04:41:49.883641148Z [inf]        owner: 'test-02'
+2026-01-27T04:41:49.883647804Z [inf]      }
+2026-01-27T04:41:49.883653981Z [inf]    ],
+2026-01-27T04:41:49.883660792Z [inf]    destination: 'https://waassist-production.up.railway.app/webhooks/evolution',
+2026-01-27T04:41:49.883666984Z [inf]    date_time: '2026-01-27T01:41:45.890Z',
+2026-01-27T04:41:49.883671748Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:41:49.883677069Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:41:49.883681541Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:41:49.883686008Z [inf]  } 
+2026-01-27T04:41:49.883695080Z [inf]  
+2026-01-27T04:41:49.883699717Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Contact found in database [0m
+2026-01-27T04:41:49.883704181Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Creating jid with number: 170166654656630@lid [0m
+2026-01-27T04:41:49.883708157Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Number already contains @g.us or @s.whatsapp.net or @lid [0m
+2026-01-27T04:41:49.886175085Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture with jid: 170166654656630@lid [0m
+2026-01-27T04:41:49.886186451Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:45   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting profile picture url [0m
+2026-01-27T04:41:49.886193152Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook in event CONTACTS_UPDATE [0m
+2026-01-27T04:41:49.886200175Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:41:49.886206528Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth [0m
+2026-01-27T04:41:49.886216256Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [AuthRepository][0m [37m[1m [string][0m [37m finding auth in db [0m
+2026-01-27T04:41:49.886222104Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Updating contact in database [0m
+2026-01-27T04:41:49.888272749Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m updating contacts [0m
+2026-01-27T04:41:49.888285564Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m updating contacts in db [0m
+2026-01-27T04:41:49.888293956Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m contacts updated in db: 0 contacts [0m
+2026-01-27T04:41:49.888302032Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:41:49.888308243Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:41:49.888315920Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:41:46   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:41:49.888322443Z [inf]  {
+2026-01-27T04:41:49.888330115Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:41:49.888336167Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:41:49.888342934Z [inf]    event: 'contacts.update',
+2026-01-27T04:41:49.891401811Z [inf]  
+2026-01-27T04:41:49.891434989Z [inf]    instance: 'test-02',
+2026-01-27T04:41:49.891445631Z [inf]    data: {
+2026-01-27T04:41:49.891451501Z [inf]      id: '170166654656630@lid',
+2026-01-27T04:41:49.891458609Z [inf]      pushName: undefined,
+2026-01-27T04:41:49.891463662Z [inf]      profilePictureUrl: 'https://pps.whatsapp.net/v/t61.24694-24/464390666_563384056274008_3383816475815434617_n.jpg?ccb=11-4&oh=01_Q5Aa3gEr6xPhgn1mEKGjOzUYPywFLOUYJ1MjQXblYwXbB4dLnw&oe=69855279&_nc_sid=5e03e0&_nc_cat=105',
+2026-01-27T04:41:49.891469476Z [inf]      owner: 'test-02'
+2026-01-27T04:41:49.891475234Z [inf]    },
+2026-01-27T04:41:49.891481055Z [inf]    destination: 'https://waassist-production.up.railway.app/webhooks/evolution',
+2026-01-27T04:41:49.891488022Z [inf]    date_time: '2026-01-27T01:41:46.242Z',
+2026-01-27T04:41:49.891494524Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:41:49.891499759Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:41:49.891505523Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:41:49.891513375Z [inf]  } 
+2026-01-27T04:41:50.074060395Z [inf]  
+2026-01-27T04:41:50.074076971Z [inf]  
+2026-01-27T04:41:50.074173966Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRouter][0m [37m[1m [string][0m [37m request received in sendText [0m
+2026-01-27T04:41:50.074180452Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRouter][0m [37m[1m [string][0m [37m request body:  [0m
+2026-01-27T04:41:50.074186405Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRouter][0m [37m[1m [object][0m [37m  [0m
+2026-01-27T04:41:50.074196072Z [inf]  {
+2026-01-27T04:41:50.074203054Z [inf]    number: '170166654656630',
+2026-01-27T04:41:50.074209455Z [inf]    textMessage: {
+2026-01-27T04:41:50.074216026Z [inf]      text: "I'm unable to make phone calls, but I can help you with information, answering questions, or providing guidance on various topics. Let me know how I can assist you! 😊"
+2026-01-27T04:41:50.074223780Z [inf]    }
+2026-01-27T04:41:50.074231675Z [inf]  } 
+2026-01-27T04:41:50.074239767Z [inf]  
+2026-01-27T04:41:50.074248635Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRouter][0m [37m[1m [string][0m [37m request query:  [0m
+2026-01-27T04:41:50.074255927Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRouter][0m [37m[1m [object][0m [37m  [0m
+2026-01-27T04:41:50.075198646Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [MessageRouter][0m [37m[1m [string][0m [37m requested sendText from test-02 instance [0m
+2026-01-27T04:41:50.075204446Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending text message [0m
+2026-01-27T04:41:50.075211308Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending message with typing [0m
+2026-01-27T04:41:50.075217035Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Check if number "170166654656630" is WhatsApp [0m
+2026-01-27T04:41:50.077361097Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m finding contacts in db [0m
+2026-01-27T04:41:50.077378600Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Creating jid with number: 170166654656630 [0m
+2026-01-27T04:41:50.077390084Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Jid created is whatsapp: 170166654656630@s.whatsapp.net [0m
+2026-01-27T04:41:50.077397609Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ContactRepository][0m [37m[1m [string][0m [37m finding contacts [0m
+2026-01-27T04:41:50.077447282Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting whatsapp number [0m
+2026-01-27T04:41:50.869866443Z [inf]      <rejected> TypeError [ERR_INVALID_URL]: Invalid URL
+2026-01-27T04:41:50.869876335Z [inf]          at new NodeError (node:internal/errors:405:5)
+2026-01-27T04:41:50.869884696Z [inf]          at new URL (node:internal/url:778:13)
+2026-01-27T04:41:50.869892252Z [inf]    },
+2026-01-27T04:41:50.869903106Z [inf]    event: 'error',
+2026-01-27T04:41:50.869905806Z [inf]    date_time: '2026-01-27T01:41:50.319Z',
+2026-01-27T04:41:50.869912735Z [inf]    data: {
+2026-01-27T04:41:50.869916177Z [inf]    api_key: 'evolution_n8n2',
+2026-01-27T04:41:50.869919197Z [inf]      error: 'Bad Request',
+2026-01-27T04:41:50.869925448Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app'
+2026-01-27T04:41:50.869928522Z [inf]      message: [ [Object] ],
+2026-01-27T04:41:50.869934596Z [inf]  } 
+2026-01-27T04:41:50.869936482Z [inf]      status: 400,
+2026-01-27T04:41:50.869944634Z [inf]      response: { message: [Array] }
+2026-01-27T04:41:50.869947075Z [inf]  
+2026-01-27T04:41:50.869954913Z [inf]  [1m[31m[Evolution API][0m [1m[31m  [1m[31m v1.8.6 [1m[31m 1 [0m [1m[31m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [31m[41m[1m ERROR [0m [33m[1m [unhandledRejection][0m [31m[1m [object][0m [31m  [0m
+2026-01-27T04:41:50.869961946Z [inf]  {
+2026-01-27T04:41:50.869970576Z [inf]    origin: Promise {
+2026-01-27T04:41:50.870019543Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Exists: "false" | jid: 170166654656630@s.whatsapp.net [0m
+2026-01-27T04:41:50.870028349Z [inf]  [1m[31m[Evolution API][0m [1m[31m  [1m[31m v1.8.6 [1m[31m 1 [0m [1m[31m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [31m[41m[1m ERROR [0m [33m[1m [SERVER][0m [31m[1m [object][0m [31m  [0m
+2026-01-27T04:41:50.870034966Z [inf]  {
+2026-01-27T04:41:50.879012172Z [inf]          at dispatchHttpRequest (/evolution/node_modules/axios/dist/node/axios.cjs:2801:20)
+2026-01-27T04:41:50.879019662Z [inf]          at /evolution/node_modules/axios/dist/node/axios.cjs:2721:5
+2026-01-27T04:41:50.879026219Z [inf]          at new Promise (<anonymous>)
+2026-01-27T04:41:50.879031841Z [inf]          at wrapAsync (/evolution/node_modules/axios/dist/node/axios.cjs:2701:10)
+2026-01-27T04:41:50.879037951Z [inf]          at http (/evolution/node_modules/axios/dist/node/axios.cjs:2739:10)
+2026-01-27T04:41:50.879044164Z [inf]          at Axios.dispatchRequest (/evolution/node_modules/axios/dist/node/axios.cjs:4116:10)
+2026-01-27T04:41:50.879064699Z [inf]          at Axios._request (/evolution/node_modules/axios/dist/node/axios.cjs:4416:33)
+2026-01-27T04:41:50.879072934Z [inf]          at Axios.request (/evolution/node_modules/axios/dist/node/axios.cjs:4271:25)
+2026-01-27T04:41:50.879079625Z [inf]          at Axios.request (/evolution/node_modules/axios/dist/node/axios.cjs:4276:41)
+2026-01-27T04:41:50.879085658Z [inf]          at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+2026-01-27T04:41:50.879093894Z [inf]        input: 'true',
+2026-01-27T04:41:50.879099751Z [inf]        code: 'ERR_INVALID_URL'
+2026-01-27T04:41:50.879106490Z [inf]      }
+2026-01-27T04:41:50.879112941Z [inf]    },
+2026-01-27T04:41:50.879119671Z [inf]    stderr: 2,
+2026-01-27T04:41:50.879125909Z [inf]    error: TypeError [ERR_INVALID_URL]: Invalid URL
+2026-01-27T04:41:50.879131902Z [inf]        at new NodeError (node:internal/errors:405:5)
+2026-01-27T04:41:50.879137689Z [inf]        at new URL (node:internal/url:778:13)
+2026-01-27T04:41:50.879144643Z [inf]        at dispatchHttpRequest (/evolution/node_modules/axios/dist/node/axios.cjs:2801:20)
+2026-01-27T04:41:50.879150983Z [inf]        at /evolution/node_modules/axios/dist/node/axios.cjs:2721:5
+2026-01-27T04:41:50.879157140Z [inf]        at new Promise (<anonymous>)
+2026-01-27T04:41:50.879164037Z [inf]        at wrapAsync (/evolution/node_modules/axios/dist/node/axios.cjs:2701:10)
+2026-01-27T04:41:50.879172424Z [inf]        at http (/evolution/node_modules/axios/dist/node/axios.cjs:2739:10)
+2026-01-27T04:41:50.879178462Z [inf]        at Axios.dispatchRequest (/evolution/node_modules/axios/dist/node/axios.cjs:4116:10)
+2026-01-27T04:41:50.879184346Z [inf]        at Axios._request (/evolution/node_modules/axios/dist/node/axios.cjs:4416:33)
+2026-01-27T04:41:50.879190226Z [inf]        at Axios.request (/evolution/node_modules/axios/dist/node/axios.cjs:4271:25)
+2026-01-27T04:41:50.879196533Z [inf]        at Axios.request (/evolution/node_modules/axios/dist/node/axios.cjs:4276:41)
+2026-01-27T04:41:50.879208948Z [inf]        at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+2026-01-27T04:41:50.879214727Z [inf]      input: 'true',
+2026-01-27T04:41:50.879221214Z [inf]      code: 'ERR_INVALID_URL'
+2026-01-27T04:41:50.879227357Z [inf]    }
+2026-01-27T04:41:50.879233328Z [inf]  } 
+2026-01-27T04:41:50.879241401Z [inf]  
+2026-01-27T04:41:50.879247293Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Sending data to webhook global [0m
+2026-01-27T04:41:50.879253894Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting remoteJid of instance [0m
+2026-01-27T04:41:50.879262465Z [inf]  [1m[32m[Evolution API][0m [1m[32m [test-02] [1m[32m v1.8.6 [1m[32m 1 [0m [1m[32m - [1m[37m Tue Jan 27 2026 01:41:50   [0m [32m[42m[1m LOG [0m [33m[1m [ChannelStartupService][0m [32m[1m [object][0m [32m  [0m
+2026-01-27T04:41:50.879268977Z [inf]  {
+2026-01-27T04:41:50.879275712Z [inf]    local: 'ChannelStartupService.sendDataWebhook-global',
+2026-01-27T04:41:50.879281337Z [inf]    url: 'wa_assist.railway.internal/webhooks/evolution',
+2026-01-27T04:41:50.879286657Z [inf]    event: 'messages.upsert',
+2026-01-27T04:41:50.879293461Z [inf]    instance: 'test-02',
+2026-01-27T04:41:50.879321789Z [inf]    data: {
+2026-01-27T04:41:50.879328976Z [inf]      key: {
+2026-01-27T04:41:50.879335530Z [inf]        remoteJid: '170166654656630@lid',
+2026-01-27T04:41:50.879342483Z [inf]        fromMe: false,
+2026-01-27T04:41:50.879349085Z [inf]        id: 'AC16840F2B4C4F22C5CB4914B0D69F90',
+2026-01-27T04:41:50.879355699Z [inf]        participant: undefined
+2026-01-27T04:41:50.879363978Z [inf]      },
+2026-01-27T04:41:50.879369677Z [inf]      pushName: '0T!T0',
+2026-01-27T04:41:50.879376148Z [inf]      message: {
+2026-01-27T04:41:50.879381776Z [inf]        conversation: 'Please call',
+2026-01-27T04:41:50.879388175Z [inf]        messageContextInfo: [MessageContextInfo]
+2026-01-27T04:41:50.879394016Z [inf]      },
+2026-01-27T04:41:50.879399827Z [inf]      contextInfo: undefined,
+2026-01-27T04:41:50.879405838Z [inf]      messageType: 'conversation',
+2026-01-27T04:41:50.879411810Z [inf]      messageTimestamp: 1769488905,
+2026-01-27T04:41:50.879417710Z [inf]      owner: 'test-02',
+2026-01-27T04:41:50.879423184Z [inf]      source: 'android'
+2026-01-27T04:41:50.879429158Z [inf]    },
+2026-01-27T04:41:50.879435867Z [inf]    destination: 'https://waassist-production.up.railway.app/webhooks/evolution',
+2026-01-27T04:41:50.879442244Z [inf]    date_time: '2026-01-27T01:41:45.541Z',
+2026-01-27T04:41:50.879451420Z [inf]    sender: '2348127052315@s.whatsapp.net',
+2026-01-27T04:41:50.879459471Z [inf]    server_url: 'https://evolution-api-production-e4ab.up.railway.app',
+2026-01-27T04:41:50.879465312Z [inf]    apikey: 'evolution_n8n2'
+2026-01-27T04:41:50.879471530Z [inf]  } 
+2026-01-27T04:41:50.879477793Z [inf]  
+2026-01-27T04:41:54.562568062Z [inf]  Sending reply via Evolution API
+2026-01-27T04:41:54.562578806Z [err]  Evolution API send failed
+2026-01-27T04:41:54.562623939Z [inf]  Webhook received
+2026-01-27T04:41:54.562632823Z [inf]  Tenant resolved
+2026-01-27T04:41:54.562641585Z [inf]  Generating AI reply
+2026-01-27T04:41:54.562649840Z [inf]  AI reply generated successfully
+2026-01-27T04:41:54.563310691Z [inf]  INFO:     100.64.0.4:31432 - "POST /webhooks/evolution HTTP/1.1" 200 OK
+2026-01-27T04:42:06.879583190Z [inf]  WiredTiger message
+2026-01-27T04:42:14.337826526Z [inf]  INFO:     100.64.0.5:35182 - "GET /health HTTP/1.1" 200 OK
+2026-01-27T04:43:08.687352612Z [inf]  WiredTiger message
+2026-01-27T04:44:09.702364857Z [inf]  WiredTiger message
+2026-01-27T04:44:59.768664905Z [inf]  WiredTiger message
+2026-01-27T04:46:01.293855906Z [inf]  WiredTiger message
+2026-01-27T04:46:14.038974900Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Event received: creds.update [0m
+2026-01-27T04:46:14.038980650Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Finding settings [0m
+2026-01-27T04:46:14.038986505Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Getting instance name [0m
+2026-01-27T04:46:14.038991969Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings [0m
+2026-01-27T04:46:14.038998423Z [inf]  [1m[37m[Evolution API][0m [1m[37m  [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [SettingsRepository][0m [37m[1m [string][0m [37m finding settings in db [0m
+2026-01-27T04:46:14.039004497Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings url: false [0m
+2026-01-27T04:46:14.039009839Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings msg_call:  [0m
+2026-01-27T04:46:14.041614168Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings groups_ignore: true [0m
+2026-01-27T04:46:14.041830429Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings always_online: false [0m
+2026-01-27T04:46:14.041837873Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_messages: false [0m
+2026-01-27T04:46:14.041845902Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings read_status: false [0m
+2026-01-27T04:46:14.041852107Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings sync_full_history: false [0m
+2026-01-27T04:46:14.041858204Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Settings wavoipToken:  [0m
+2026-01-27T04:46:14.041864661Z [inf]  [1m[37m[Evolution API][0m [1m[37m [test-02] [1m[37m v1.8.6 [1m[37m 1 [0m [1m[37m - [1m[37m Tue Jan 27 2026 01:46:07   [0m [37m[47m[1m VERBOSE [0m [33m[1m [ChannelStartupService][0m [37m[1m [string][0m [37m Listening event: creds.update [0m
+2026-01-27T04:47:03.264322291Z [inf]  WiredTiger message
+2026-01-27T04:48:04.428504783Z [inf]  WiredTiger message

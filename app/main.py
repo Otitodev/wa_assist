@@ -239,10 +239,10 @@ async def evolution_webhook(req: Request):
     text = extract_text(payload)
     msg_type = extract_message_type(payload)
 
-    # Get sender for reply - use sender field if chat_id is LID format
-    # LID format (e.g., "170166654656630@lid") can't receive messages directly
-    sender = payload.get("sender")  # e.g., "2348127052315@s.whatsapp.net"
-    reply_to = sender if (chat_id and chat_id.endswith("@lid") and sender) else chat_id
+    # For replies, always use chat_id (remoteJid) which is the customer
+    # The "sender" field is actually the instance owner (business account), not the customer
+    # LID format (e.g., "170166654656630@lid") should work with Evolution API
+    reply_to = chat_id
 
     # connection.update doesn't have key/remoteJid in the same way
     if event == "connection.update":

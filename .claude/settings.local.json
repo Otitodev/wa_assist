@@ -13,7 +13,8 @@
       "Bash(./venv/Scripts/pip.exe:*)",
       "Bash(curl:*)",
       "Bash(netstat:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(git add:*)"
     ]
   }
 }

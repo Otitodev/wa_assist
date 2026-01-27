@@ -70,9 +70,15 @@ class EvolutionClient:
         if evo_api_key:
             headers["apikey"] = evo_api_key
 
-        # Clean chat_id - extract the number/identifier
-        # Handles: "5511999999999@s.whatsapp.net", "170166654656630@lid", or just "5511999999999"
-        if "@" in chat_id:
+        # Handle different chat_id formats
+        # - Phone format: "5511999999999@s.whatsapp.net" -> use just the number
+        # - LID format: "170166654656630@lid" -> use full ID with @lid suffix
+        # - Plain number: "5511999999999" -> use as-is
+        if chat_id.endswith("@lid"):
+            # LID format - use the full ID including @lid
+            number = chat_id
+        elif "@" in chat_id:
+            # Phone format - extract just the number
             number = chat_id.split("@")[0]
         else:
             number = chat_id
