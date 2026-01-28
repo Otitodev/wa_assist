@@ -72,13 +72,13 @@ class EvolutionClient:
 
         # Handle different chat_id formats
         # - Phone format: "5511999999999@s.whatsapp.net" -> use just the number
-        # - LID format: "170166654656630@lid" -> use full ID with @lid suffix
+        # - LID format: "170166654656630@lid" -> strip @lid, use just the ID
         # - Plain number: "5511999999999" -> use as-is
-        if chat_id.endswith("@lid"):
-            # LID format - use the full ID including @lid
-            number = chat_id
-        elif "@" in chat_id:
-            # Phone format - extract just the number
+        #
+        # Note: Evolution API doesn't support @lid format directly in the number field.
+        # For LID contacts, we strip the suffix and let Evolution API resolve it.
+        if "@" in chat_id:
+            # Strip any suffix (@s.whatsapp.net, @lid, @g.us, etc.)
             number = chat_id.split("@")[0]
         else:
             number = chat_id
@@ -286,9 +286,8 @@ class EvolutionClient:
             headers["apikey"] = evo_api_key
 
         # Handle different chat_id formats
-        if chat_id.endswith("@lid"):
-            number = chat_id
-        elif "@" in chat_id:
+        # Strip any suffix (@s.whatsapp.net, @lid, @g.us, etc.)
+        if "@" in chat_id:
             number = chat_id.split("@")[0]
         else:
             number = chat_id
