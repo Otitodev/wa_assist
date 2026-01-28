@@ -83,13 +83,10 @@ class EvolutionClient:
         else:
             number = chat_id
 
-        # Evolution API v2 sendText payload format
-        # Use textMessage.text format which works with LID contacts
+        # Evolution API v2 sendText payload format (flat structure)
         payload = {
             "number": number,
-            "textMessage": {
-                "text": text
-            }
+            "text": text
         }
 
         # Send request - use short timeout since Evolution API may not respond

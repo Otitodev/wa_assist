@@ -212,33 +212,40 @@ async def handle_websocket_message(data: Dict[str, Any]):
     # 7) Generate AI reply for inbound messages
     if from_me is False:
         try:
-            # Mark message as read before processing (show blue checkmarks)
             evolution_client = EvolutionClient()
-            try:
-                await evolution_client.mark_as_read(
-                    tenant_id=tenant_id,
-                    chat_id=chat_id,
-                    message_id=msg_id
-                )
-                log_info(
-                    "Message marked as read (WebSocket)",
-                    tenant_id=tenant_id,
-                    chat_id=chat_id,
-                    message_id=msg_id,
-                    action="ws_mark_read_success",
-                )
-            except Exception as e:
-                log_warning(
-                    "Failed to mark message as read",
-                    tenant_id=tenant_id,
-                    chat_id=chat_id,
-                    message_id=msg_id,
-                    error=str(e),
-                    action="ws_mark_read_failed",
-                )
+
+            # Skip mark_as_read and typing for @lid contacts (Evolution API doesn't support them)
+            is_lid_contact = chat_id.endswith("@lid")
+
+            # Mark message as read before processing (show blue checkmarks)
+            # Skip for @lid contacts as Evolution API can't validate them
+            if not is_lid_contact:
+                try:
+                    await evolution_client.mark_as_read(
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        message_id=msg_id
+                    )
+                    log_info(
+                        "Message marked as read (WebSocket)",
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        message_id=msg_id,
+                        action="ws_mark_read_success",
+                    )
+                except Exception as e:
+                    log_warning(
+                        "Failed to mark message as read",
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        message_id=msg_id,
+                        error=str(e),
+                        action="ws_mark_read_failed",
+                    )
 
             # Send typing indicator (composing) before generating reply
-            if TYPING_INDICATOR_ENABLED:
+            # Skip for @lid contacts as Evolution API can't validate them
+            if TYPING_INDICATOR_ENABLED and not is_lid_contact:
                 try:
                     await evolution_client.send_presence(
                         tenant_id=tenant_id,
@@ -292,8 +299,8 @@ async def handle_websocket_message(data: Dict[str, Any]):
                 delay_ms = random.randint(MESSAGE_DELAY_MIN_MS, MESSAGE_DELAY_MAX_MS)
                 delay_seconds = delay_ms / 1000.0
 
-                # Refresh typing indicator during delay
-                if TYPING_INDICATOR_ENABLED:
+                # Refresh typing indicator during delay (skip for @lid contacts)
+                if TYPING_INDICATOR_ENABLED and not is_lid_contact:
                     try:
                         await evolution_client.send_presence(
                             tenant_id=tenant_id,
@@ -320,8 +327,8 @@ async def handle_websocket_message(data: Dict[str, Any]):
                 text=reply_text
             )
 
-            # Stop typing indicator after sending
-            if TYPING_INDICATOR_ENABLED:
+            # Stop typing indicator after sending (skip for @lid contacts)
+            if TYPING_INDICATOR_ENABLED and not is_lid_contact:
                 try:
                     await evolution_client.send_presence(
                         tenant_id=tenant_id,
