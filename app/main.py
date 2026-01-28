@@ -354,6 +354,9 @@ async def evolution_webhook(req: Request):
     # LID format (e.g., "170166654656630@lid") should work with Evolution API
     reply_to = chat_id
 
+    # Check if this is a @lid contact (Evolution API v2.2.x has issues with @lid)
+    is_lid_contact = chat_id.endswith("@lid") if chat_id else False
+
     # connection.update doesn't have key/remoteJid in the same way
     if event == "connection.update":
         return {"ok": True}
@@ -515,33 +518,37 @@ async def evolution_webhook(req: Request):
             # Direct LLM call (MVP mode)
             llm_start_time = time.time()
             try:
+                evolution_client = EvolutionClient()
+
                 # Mark message as read before processing (show blue checkmarks)
-                try:
-                    evolution_client = EvolutionClient()
-                    await evolution_client.mark_as_read(
-                        tenant_id=tenant_id,
-                        chat_id=chat_id,
-                        message_id=msg_id
-                    )
-                    log_info(
-                        "Message marked as read",
-                        tenant_id=tenant_id,
-                        chat_id=chat_id,
-                        message_id=msg_id,
-                        action="mark_read_success",
-                    )
-                except Exception as e:
-                    log_warning(
-                        "Failed to mark message as read",
-                        tenant_id=tenant_id,
-                        chat_id=chat_id,
-                        message_id=msg_id,
-                        error=str(e),
-                        action="mark_read_failed",
-                    )
+                # Skip for @lid contacts as Evolution API can't validate them
+                if not is_lid_contact:
+                    try:
+                        await evolution_client.mark_as_read(
+                            tenant_id=tenant_id,
+                            chat_id=chat_id,
+                            message_id=msg_id
+                        )
+                        log_info(
+                            "Message marked as read",
+                            tenant_id=tenant_id,
+                            chat_id=chat_id,
+                            message_id=msg_id,
+                            action="mark_read_success",
+                        )
+                    except Exception as e:
+                        log_warning(
+                            "Failed to mark message as read",
+                            tenant_id=tenant_id,
+                            chat_id=chat_id,
+                            message_id=msg_id,
+                            error=str(e),
+                            action="mark_read_failed",
+                        )
 
                 # Send typing indicator (composing) before generating reply
-                if TYPING_INDICATOR_ENABLED:
+                # Skip for @lid contacts as Evolution API can't validate them
+                if TYPING_INDICATOR_ENABLED and not is_lid_contact:
                     try:
                         await evolution_client.send_presence(
                             tenant_id=tenant_id,
@@ -604,8 +611,8 @@ async def evolution_webhook(req: Request):
                     delay_ms = random.randint(MESSAGE_DELAY_MIN_MS, MESSAGE_DELAY_MAX_MS)
                     delay_seconds = delay_ms / 1000.0
 
-                    # Refresh typing indicator during delay
-                    if TYPING_INDICATOR_ENABLED:
+                    # Refresh typing indicator during delay (skip for @lid contacts)
+                    if TYPING_INDICATOR_ENABLED and not is_lid_contact:
                         try:
                             await evolution_client.send_presence(
                                 tenant_id=tenant_id,
@@ -634,14 +641,16 @@ async def evolution_webhook(req: Request):
                     action="evolution_send_start",
                 )
 
+                # For @lid contacts, use quoted message to reply (helps bypass number validation)
                 await evolution_client.send_text_message(
                     tenant_id=tenant_id,
                     chat_id=reply_to,  # Use reply_to (sender) for LID format
-                    text=reply_text
+                    text=reply_text,
+                    quoted_message_id=msg_id if is_lid_contact else None
                 )
 
-                # Stop typing indicator after sending
-                if TYPING_INDICATOR_ENABLED:
+                # Stop typing indicator after sending (skip for @lid contacts)
+                if TYPING_INDICATOR_ENABLED and not is_lid_contact:
                     try:
                         await evolution_client.send_presence(
                             tenant_id=tenant_id,

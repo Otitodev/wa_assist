@@ -34,7 +34,8 @@ class EvolutionClient:
         tenant_id: int,
         chat_id: str,
         text: str,
-        instance_name: Optional[str] = None
+        instance_name: Optional[str] = None,
+        quoted_message_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Send a text message via Evolution API.
@@ -44,6 +45,7 @@ class EvolutionClient:
             chat_id: WhatsApp chat ID (e.g., "5511999999999@s.whatsapp.net")
             text: Message text to send
             instance_name: Override instance name (uses tenant's if not provided)
+            quoted_message_id: Optional message ID to reply/quote (helps with @lid contacts)
 
         Returns:
             Evolution API response dict
@@ -88,6 +90,16 @@ class EvolutionClient:
             "number": number,
             "text": text
         }
+
+        # Add quoted message for reply (helps with @lid contacts)
+        if quoted_message_id:
+            payload["quoted"] = {
+                "key": {
+                    "remoteJid": chat_id,
+                    "fromMe": False,
+                    "id": quoted_message_id
+                }
+            }
 
         # Send request - use short timeout since Evolution API may not respond
         # even when message sends successfully (known issue)

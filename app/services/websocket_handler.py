@@ -321,10 +321,12 @@ async def handle_websocket_message(data: Dict[str, Any]):
                 await asyncio.sleep(delay_seconds)
 
             # Send reply via Evolution API
+            # For @lid contacts, use quoted message to reply (helps bypass number validation)
             await evolution_client.send_text_message(
                 tenant_id=tenant_id,
                 chat_id=reply_to,
-                text=reply_text
+                text=reply_text,
+                quoted_message_id=msg_id if is_lid_contact else None
             )
 
             # Stop typing indicator after sending (skip for @lid contacts)
