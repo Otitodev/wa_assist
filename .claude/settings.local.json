@@ -24,7 +24,16 @@
       "Bash(set:*)",
       "Bash(uvicorn:*)",
       "Bash(timeout /t 5 /nobreak)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:evolution-api.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(npx create-next-app@latest frontend --typescript --tailwind --eslint --app --src-dir=false --import-alias=\"@/*\" --yes)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init -y --defaults)",
+      "Bash(npx shadcn@latest add button card input label table badge tabs toast dropdown-menu avatar separator skeleton sheet dialog form select -y)",
+      "Bash(npx shadcn@latest add button card input label table badge tabs sonner dropdown-menu avatar separator skeleton sheet dialog form select -y)",
+      "Bash(npm run build:*)"
     ]
   }
 }

@@ -78,7 +78,28 @@ class AuthService:
                 "is_active": True,
             }
 
-            user_result = self.client.table("users").insert(user_data).execute()
+            log_info(
+                "Attempting to create user profile",
+                auth_user_id=str(auth_user.id),
+                email=email,
+                action="auth_register_profile_start"
+            )
+
+            try:
+                user_result = self.client.table("users").insert(user_data).execute()
+                log_info(
+                    "User insert result",
+                    data=str(user_result.data),
+                    action="auth_register_profile_result"
+                )
+            except Exception as insert_error:
+                log_error(
+                    "User insert exception",
+                    error=str(insert_error),
+                    error_type=type(insert_error).__name__,
+                    action="auth_register_profile_exception"
+                )
+                raise AuthError(f"Failed to create user profile: {str(insert_error)}")
 
             if not user_result.data:
                 # Rollback: This is tricky with Supabase Auth
@@ -192,13 +213,18 @@ class AuthService:
         except AuthError:
             raise
         except Exception as e:
+            error_msg = str(e)
             log_error(
                 "Login failed",
                 email=email,
-                error=str(e),
+                error=error_msg,
+                error_type=type(e).__name__,
                 action="auth_login_error"
             )
-            raise AuthError("Invalid email or password")
+            # Check for specific Supabase errors
+            if "Email not confirmed" in error_msg:
+                raise AuthError("Please confirm your email before logging in")
+            raise AuthError(f"Login failed: {error_msg}")
 
     async def refresh_token(
         self,

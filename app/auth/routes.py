@@ -81,9 +81,10 @@ async def login(data: UserLogin):
         log_error(
             "Login failed via API",
             email=data.email,
+            error=str(e),
             action="api_login_failed"
         )
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(status_code=401, detail=str(e))
 
 
 @router.post("/refresh")
