@@ -85,8 +85,8 @@ export default function DashboardPage() {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] text-muted-foreground">
         <MessageSquare className="h-12 w-12 mb-4" />
-        <p className="text-lg">No instance selected</p>
-        <p className="text-sm">Select an instance to view dashboard</p>
+        <p className="text-lg">No WhatsApp connected</p>
+        <p className="text-sm">Connect a WhatsApp number to view your dashboard</p>
       </div>
     );
   }
@@ -114,10 +114,10 @@ export default function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {/* Active Sessions */}
+        {/* AI Mode Conversations */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
+            <CardTitle className="text-sm font-medium">AI Mode</CardTitle>
             <MessageSquare className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
@@ -126,14 +126,14 @@ export default function DashboardPage() {
             ) : (
               <div className="text-2xl font-bold">{stats?.activeSessions ?? 0}</div>
             )}
-            <p className="text-xs text-muted-foreground">AI is responding</p>
+            <p className="text-xs text-muted-foreground">Conversations with AI responding</p>
           </CardContent>
         </Card>
 
-        {/* Paused Sessions */}
+        {/* Human Mode Conversations */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Paused Sessions</CardTitle>
+            <CardTitle className="text-sm font-medium">Human Mode</CardTitle>
             <Pause className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
@@ -142,7 +142,7 @@ export default function DashboardPage() {
             ) : (
               <div className="text-2xl font-bold">{stats?.pausedSessions ?? 0}</div>
             )}
-            <p className="text-xs text-muted-foreground">Human intervention</p>
+            <p className="text-xs text-muted-foreground">You are handling these</p>
           </CardContent>
         </Card>
 

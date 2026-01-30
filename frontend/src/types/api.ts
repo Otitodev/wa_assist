@@ -19,9 +19,11 @@ export interface Tenant {
   id: number;
   instance_name: string;
   evo_server_url: string;
-  llm_provider: string;
+  evo_api_key?: string;
+  llm_provider?: string;
   system_prompt?: string;
   created_at: string;
+  updated_at?: string;
 }
 
 export interface TenantMembership {

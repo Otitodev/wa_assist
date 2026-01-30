@@ -9,6 +9,7 @@ import {
   Server,
   Settings,
   LogOut,
+  Brain,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
@@ -20,14 +21,19 @@ const navigation = [
     icon: LayoutDashboard,
   },
   {
-    name: 'Sessions',
+    name: 'Conversations',
     href: '/sessions',
     icon: MessageSquare,
   },
   {
-    name: 'Instances',
+    name: 'WhatsApp',
     href: '/instances',
     icon: Server,
+  },
+  {
+    name: 'AI Settings',
+    href: '/knowledge',
+    icon: Brain,
   },
   {
     name: 'Settings',

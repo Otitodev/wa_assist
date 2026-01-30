@@ -1,7 +1,0 @@
-update public.sessions
-set is_paused = false,
-    pause_reason = null,
-    updated_at = now()
-where is_paused = true
-  and last_human_at is not null
-  and last_human_at < (now() - interval '2 hours');

@@ -33,7 +33,14 @@
       "Bash(npx shadcn@latest init -y --defaults)",
       "Bash(npx shadcn@latest add button card input label table badge tabs toast dropdown-menu avatar separator skeleton sheet dialog form select -y)",
       "Bash(npx shadcn@latest add button card input label table badge tabs sonner dropdown-menu avatar separator skeleton sheet dialog form select -y)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)",
+      "Bash($token = \"eyJhbGciOiJFUzI1NiIsImtpZCI6ImE2YjgzNDNlLTM3ZTItNDU1Zi05Yjk2LTY5MTBmOWUzZmNhYSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2VrcnZhb3NlcGl3aXpnc2R5dmZqLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI4MGY4MGI5NC0wMTk0LTQ4ZDQtOTIzYS01MWQ5NTM5NTU4OWEiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzY5NzQxODA0LCJpYXQiOjE3Njk3MzgyMDQsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiODBmODBiOTQtMDE5NC00OGQ0LTkyM2EtNTFkOTUzOTU1ODlhIn0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3Njk3MzgyMDR9XSwic2Vzc2lvbl9pZCI6ImU1MGY0ZGY0LTJlNTgtNDQ4Ny1iZTE0LWFjYjc0NzA2OTlhZCIsImlzX2Fub255bW91cyI6ZmFsc2V9.Fvt7NNLHY6QhfovVgEyOVaUPP0PNR57a9uB-ZVXNciuQ-hEAgIELL4gRRZC8fsEoyQ29H8Ej7rQVUs8FvxUADg\")",
+      "Bash(export:*)",
+      "Bash(pushd:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJFUzI1NiIsImtpZCI6ImE2YjgzNDNlLTM3ZTItNDU1Zi05Yjk2LTY5MTBmOWUzZmNhYSIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2VrcnZhb3NlcGl3aXpnc2R5dmZqLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI4MGY4MGI5NC0wMTk0LTQ4ZDQtOTIzYS01MWQ5NTM5NTU4OWEiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzY5NzQ1NDQ5LCJpYXQiOjE3Njk3NDE4NDksImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiZW1haWxfdmVyamaWVkIjp0cnVlLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6IjgwZjgwYjk0LTAxOTQtNDhkNC05MjNhLTUxZDk1Mzk1NTg5YSJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzY5NzQxODQ5fV0sInNlc3Npb25faWQiOiIzZDU2MTEwMy1mOGZlLTQyNzQtYjA3ZS1lNDcxNjA3ZjNhODgiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.xexyJ4LeuTAgxW8Jw-56ONlIohvB-hqYUt4eJIkkEY6vsgzJpjQ6cJQ96PDlDqeyq33_lJtjuRBk8nx_8LpCFg\")",
+      "Bash(__NEW_LINE_f716d208e0b3febb__ curl -s -X POST http://localhost:8000/api/whatsapp/connect -H \"Content-Type: application/json\" -H \"Authorization: Bearer $TOKEN\" -d '{\"\"instance_name\"\":\"\"test-qr-flow\"\"}')",
+      "Bash(npx shadcn@latest add alert-dialog -y)"
     ]
   }
 }

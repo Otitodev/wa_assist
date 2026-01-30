@@ -12,12 +12,12 @@ interface StatusBadgeProps {
 
 const statusConfig: Record<StatusType, { label: string; className: string; variant: 'default' | 'outline' | 'secondary' | 'destructive' }> = {
   active: {
-    label: 'Active',
+    label: 'AI Mode',
     className: 'bg-green-500 hover:bg-green-600 text-white border-green-500',
     variant: 'default',
   },
   paused: {
-    label: 'Paused',
+    label: 'Human Mode',
     className: 'border-orange-500 text-orange-600 bg-orange-50 hover:bg-orange-100',
     variant: 'outline',
   },

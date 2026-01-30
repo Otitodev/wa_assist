@@ -15,8 +15,10 @@ class EvolutionAPIError(Exception):
 class EvolutionClient:
     """Client for interacting with Evolution API"""
 
-    def __init__(self, timeout: int = 60):
+    def __init__(self, timeout: int = 60, global_server_url: str = None, global_api_key: str = None):
         self.timeout = timeout
+        self.global_server_url = global_server_url
+        self.global_api_key = global_api_key
 
     async def _get_tenant_config(self, tenant_id: int) -> Dict[str, Any]:
         """Fetch tenant Evolution API configuration from database"""
@@ -343,3 +345,206 @@ class EvolutionClient:
                     "status": "failed",
                     "error": str(e)
                 }
+
+    async def create_instance(
+        self,
+        instance_name: str,
+        webhook_url: str = None
+    ) -> Dict[str, Any]:
+        """
+        Create a new WhatsApp instance in Evolution API.
+
+        Args:
+            instance_name: Name for the new instance
+            webhook_url: URL to receive webhook events
+
+        Returns:
+            Evolution API response with instance details
+        """
+        if not self.global_server_url:
+            raise ValueError("Global Evolution server URL not configured")
+
+        endpoint = f"{self.global_server_url}/instance/create"
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        if self.global_api_key:
+            headers["apikey"] = self.global_api_key
+
+        payload = {
+            "instanceName": instance_name,
+            "integration": "WHATSAPP-BAILEYS",
+            "qrcode": True,
+        }
+
+        # Add webhook configuration if provided
+        if webhook_url:
+            payload["webhook"] = {
+                "url": webhook_url,
+                "byEvents": False,
+                "base64": False,
+                "events": [
+                    "MESSAGES_UPSERT",
+                    "CONNECTION_UPDATE",
+                    "MESSAGES_UPDATE"
+                ]
+            }
+
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            try:
+                response = await client.post(
+                    endpoint,
+                    json=payload,
+                    headers=headers
+                )
+                response.raise_for_status()
+                return response.json()
+
+            except httpx.HTTPStatusError as e:
+                error_detail = "Unknown error"
+                try:
+                    error_body = e.response.json()
+                    error_detail = error_body.get("message", str(error_body))
+                except:
+                    error_detail = e.response.text
+                raise EvolutionAPIError(
+                    f"Failed to create instance: HTTP {e.response.status_code}: {error_detail}"
+                ) from e
+
+            except httpx.RequestError as e:
+                raise EvolutionAPIError(
+                    f"Failed to create instance: {str(e)}"
+                ) from e
+
+    async def get_qr_code(
+        self,
+        instance_name: str
+    ) -> Dict[str, Any]:
+        """
+        Get QR code for connecting WhatsApp.
+
+        Args:
+            instance_name: Instance name to get QR for
+
+        Returns:
+            Dict with base64 QR code image or pairingCode
+        """
+        if not self.global_server_url:
+            raise ValueError("Global Evolution server URL not configured")
+
+        endpoint = f"{self.global_server_url}/instance/connect/{instance_name}"
+        headers = {}
+
+        if self.global_api_key:
+            headers["apikey"] = self.global_api_key
+
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            try:
+                response = await client.get(endpoint, headers=headers)
+                response.raise_for_status()
+                return response.json()
+
+            except httpx.HTTPStatusError as e:
+                error_detail = "Unknown error"
+                try:
+                    error_body = e.response.json()
+                    error_detail = error_body.get("message", str(error_body))
+                except:
+                    error_detail = e.response.text
+                raise EvolutionAPIError(
+                    f"Failed to get QR code: HTTP {e.response.status_code}: {error_detail}"
+                ) from e
+
+            except httpx.RequestError as e:
+                raise EvolutionAPIError(
+                    f"Failed to get QR code: {str(e)}"
+                ) from e
+
+    async def get_connection_state(
+        self,
+        instance_name: str
+    ) -> Dict[str, Any]:
+        """
+        Get connection state for an instance.
+
+        Args:
+            instance_name: Instance name to check
+
+        Returns:
+            Dict with connection state (open, close, connecting)
+        """
+        if not self.global_server_url:
+            raise ValueError("Global Evolution server URL not configured")
+
+        endpoint = f"{self.global_server_url}/instance/connectionState/{instance_name}"
+        headers = {}
+
+        if self.global_api_key:
+            headers["apikey"] = self.global_api_key
+
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            try:
+                response = await client.get(endpoint, headers=headers)
+                response.raise_for_status()
+                return response.json()
+
+            except httpx.HTTPStatusError as e:
+                error_detail = "Unknown error"
+                try:
+                    error_body = e.response.json()
+                    error_detail = error_body.get("message", str(error_body))
+                except:
+                    error_detail = e.response.text
+                raise EvolutionAPIError(
+                    f"Failed to get connection state: HTTP {e.response.status_code}: {error_detail}"
+                ) from e
+
+            except httpx.RequestError as e:
+                raise EvolutionAPIError(
+                    f"Failed to get connection state: {str(e)}"
+                ) from e
+
+    async def delete_instance(
+        self,
+        instance_name: str
+    ) -> Dict[str, Any]:
+        """
+        Delete an instance from Evolution API.
+
+        Args:
+            instance_name: Instance name to delete
+
+        Returns:
+            Evolution API response
+        """
+        if not self.global_server_url:
+            raise ValueError("Global Evolution server URL not configured")
+
+        endpoint = f"{self.global_server_url}/instance/delete/{instance_name}"
+        headers = {}
+
+        if self.global_api_key:
+            headers["apikey"] = self.global_api_key
+
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            try:
+                response = await client.delete(endpoint, headers=headers)
+                response.raise_for_status()
+                return response.json()
+
+            except httpx.HTTPStatusError as e:
+                error_detail = "Unknown error"
+                try:
+                    error_body = e.response.json()
+                    error_detail = error_body.get("message", str(error_body))
+                except:
+                    error_detail = e.response.text
+                raise EvolutionAPIError(
+                    f"Failed to delete instance: HTTP {e.response.status_code}: {error_detail}"
+                ) from e
+
+            except httpx.RequestError as e:
+                raise EvolutionAPIError(
+                    f"Failed to delete instance: {str(e)}"
+                ) from e

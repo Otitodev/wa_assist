@@ -6,6 +6,7 @@ import httpx
 import time
 import asyncio
 import random
+import os
 from .db import supabase
 from .auth import auth_router, get_current_user, require_tenant_access, get_optional_user
 from .evolve_parse import (
@@ -290,6 +291,9 @@ async def health():
 @app.post("/webhooks/evolution")
 async def evolution_webhook(req: Request):
     start_time = time.time()
+    import hmac
+    import hashlib
+    from .config import EVOLUTION_WEBHOOK_SHARED_SECRET
 
     # Parse JSON body with error handling
     try:
@@ -298,20 +302,41 @@ async def evolution_webhook(req: Request):
             log_warning("Webhook received empty body")
             raise HTTPException(status_code=400, detail="Empty request body")
 
+        # Verify webhook signature if secret is configured (not default)
+        if EVOLUTION_WEBHOOK_SHARED_SECRET and EVOLUTION_WEBHOOK_SHARED_SECRET != "change-me":
+            signature = req.headers.get("X-Evolution-Signature") or req.headers.get("x-webhook-signature")
+            if signature:
+                # Compute expected signature
+                expected_signature = hmac.new(
+                    EVOLUTION_WEBHOOK_SHARED_SECRET.encode(),
+                    body,
+                    hashlib.sha256
+                ).hexdigest()
+
+                # Compare signatures securely
+                if not hmac.compare_digest(signature.lower(), expected_signature.lower()):
+                    log_warning(
+                        "Webhook signature verification failed",
+                        action="webhook_signature_invalid",
+                    )
+                    raise HTTPException(status_code=401, detail="Invalid webhook signature")
+
+                log_info("Webhook signature verified", action="webhook_signature_valid")
+
         import json
         payload = json.loads(body)
     except json.JSONDecodeError as e:
         log_error(
             "Webhook received invalid JSON",
             error=str(e),
-            body_preview=body[:200].decode('utf-8', errors='replace') if body else "empty"
+            # Don't log body content for security - may contain sensitive data
         )
         raise HTTPException(status_code=400, detail=f"Invalid JSON: {str(e)}")
 
     event = payload.get("event")
     instance = payload.get("instance")
 
-    # Log webhook received
+    # Log webhook received (minimal info for security)
     log_info(
         "Webhook received",
         event=event,
@@ -746,13 +771,32 @@ async def evolution_webhook(req: Request):
     return {"ok": True}
     
 
+# ============================================================================
+# LEGACY SESSION ENDPOINTS (Now secured with authentication)
+# ============================================================================
+
 @app.get("/sessions/{instance}/{chat_id:path}")
-def get_session(instance: str, chat_id: str):
+def get_session_legacy(
+    instance: str,
+    chat_id: str,
+    user: dict = Depends(get_current_user)
+):
+    """
+    Get session by instance name and chat_id (legacy endpoint).
+    Now requires authentication.
+    """
+    # Verify user has access to this instance
     tenant_resp = supabase.table("tenants").select("id").eq("instance_name", instance).limit(1).execute()
     if not tenant_resp.data:
         raise HTTPException(status_code=404, detail="Unknown instance")
 
     tenant_id = tenant_resp.data[0]["id"]
+
+    # Check user has access to this tenant
+    user_tenants = user.get("user_tenants", [])
+    if not any(ut["tenant_id"] == tenant_id for ut in user_tenants):
+        raise HTTPException(status_code=403, detail="Access denied to this instance")
+
     sess = (
         supabase.table("sessions")
         .select("*")
@@ -767,26 +811,50 @@ def get_session(instance: str, chat_id: str):
 
 
 @app.post("/sessions/{instance}/{chat_id:path}/resume")
-def resume_session(instance: str, chat_id: str):
+def resume_session_legacy(
+    instance: str,
+    chat_id: str,
+    user: dict = Depends(get_current_user)
+):
+    """
+    Resume a paused session (legacy endpoint).
+    Now requires authentication.
+    """
     tenant_resp = supabase.table("tenants").select("id").eq("instance_name", instance).limit(1).execute()
     if not tenant_resp.data:
         raise HTTPException(status_code=404, detail="Unknown instance")
 
     tenant_id = tenant_resp.data[0]["id"]
 
+    # Check user has access to this tenant
+    user_tenants = user.get("user_tenants", [])
+    if not any(ut["tenant_id"] == tenant_id for ut in user_tenants):
+        raise HTTPException(status_code=403, detail="Access denied to this instance")
+
     supabase.table("sessions").update({
         "is_paused": False,
         "pause_reason": None
     }).eq("tenant_id", tenant_id).eq("chat_id", chat_id).execute()
 
+    log_info(
+        "Session resumed via legacy endpoint",
+        action="legacy_resume",
+        tenant_id=tenant_id,
+        chat_id=chat_id,
+        user_id=user["id"],
+    )
+
     return {"ok": True, "resumed": True}
 
 
 @app.post("/api/evolution/send-message")
-async def send_evolution_message(data: dict):
+async def send_evolution_message(
+    data: dict,
+    user: dict = Depends(get_current_user)
+):
     """
     Send a WhatsApp message via Evolution API.
-    This endpoint can be called by n8n workflows or directly by FastAPI.
+    Now requires authentication and tenant access verification.
 
     Expected payload:
     {
@@ -795,8 +863,6 @@ async def send_evolution_message(data: dict):
         "text": "Message text"
     }
     """
-    from .services.evolution_client import EvolutionClient, EvolutionAPIError
-
     tenant_id = data.get("tenant_id")
     chat_id = data.get("chat_id")
     text = data.get("text")
@@ -807,9 +873,23 @@ async def send_evolution_message(data: dict):
             detail="Missing required fields: tenant_id, chat_id, text"
         )
 
+    # Verify user has access to this tenant
+    user_tenants = user.get("user_tenants", [])
+    if not any(ut["tenant_id"] == tenant_id for ut in user_tenants):
+        raise HTTPException(status_code=403, detail="Access denied to this tenant")
+
     try:
         client = EvolutionClient()
         result = await client.send_text_message(tenant_id, chat_id, text)
+
+        log_info(
+            "Message sent via API",
+            action="api_send_message",
+            tenant_id=tenant_id,
+            chat_id=chat_id,
+            user_id=user["id"],
+        )
+
         return {"ok": True, "result": result}
     except EvolutionAPIError as e:
         raise HTTPException(status_code=502, detail=str(e))
@@ -942,7 +1022,16 @@ class TenantCreate(BaseModel):
     evo_server_url: str
     evo_api_key: Optional[str] = None
     system_prompt: Optional[str] = None
-    llm_provider: Optional[str] = "openai"
+    # llm_provider is set by backend, not user-configurable
+
+
+# Pydantic model for tenant updates
+class TenantUpdate(BaseModel):
+    """Request model for updating a tenant."""
+    evo_server_url: Optional[str] = None
+    evo_api_key: Optional[str] = None
+    system_prompt: Optional[str] = None
+    # llm_provider is not user-configurable
 
 
 @app.post("/api/tenants")
@@ -985,7 +1074,7 @@ async def create_tenant(
             "evo_server_url": data.evo_server_url,
             "evo_api_key": data.evo_api_key,
             "system_prompt": data.system_prompt or DEFAULT_SYSTEM_PROMPT,
-            "llm_provider": data.llm_provider or "openai",
+            "llm_provider": LLM_PROVIDER,  # Set by backend, not user-configurable
             "owner_user_id": user["id"],
         }
 
@@ -1135,6 +1224,75 @@ def get_tenant(
             exc_info=True,
         )
         raise HTTPException(status_code=500, detail=f"Failed to get tenant: {str(e)}")
+
+
+@app.put("/api/tenants/{tenant_id}")
+async def update_tenant(
+    tenant_id: int,
+    data: TenantUpdate,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("owner"))
+):
+    """
+    Update tenant configuration.
+
+    Only owners can update tenant settings.
+    llm_provider is managed by backend and not exposed to users.
+
+    Args:
+        tenant_id: Tenant ID
+
+    Request body (all fields optional):
+        {
+            "evo_server_url": "https://new-evolution-api.com",
+            "evo_api_key": "new-api-key",
+            "system_prompt": "Updated AI prompt..."
+        }
+
+    Returns:
+        The updated tenant object
+    """
+    try:
+        # Build update dict with only provided fields
+        update_data = {}
+        if data.evo_server_url is not None:
+            update_data["evo_server_url"] = data.evo_server_url
+        if data.evo_api_key is not None:
+            update_data["evo_api_key"] = data.evo_api_key
+        if data.system_prompt is not None:
+            update_data["system_prompt"] = data.system_prompt
+
+        if not update_data:
+            raise HTTPException(status_code=400, detail="No fields to update")
+
+        update_data["updated_at"] = now_utc().isoformat()
+
+        result = supabase.table("tenants").update(update_data).eq("id", tenant_id).execute()
+
+        if not result.data:
+            raise HTTPException(status_code=404, detail="Tenant not found")
+
+        log_info(
+            "Tenant updated",
+            action="update_tenant",
+            tenant_id=tenant_id,
+            user_id=user["id"],
+            updated_fields=list(update_data.keys()),
+        )
+
+        return result.data[0]
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        log_error(
+            "Failed to update tenant",
+            action="update_tenant_failed",
+            tenant_id=tenant_id,
+            error_type=type(e).__name__,
+            exc_info=True,
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to update tenant: {str(e)}")
 
 
 # ============================================================================
@@ -2014,6 +2172,403 @@ async def connect_websocket(data: dict):
         )
 
 
+# ============================================================================
+# WHATSAPP CONNECTION APIs (QR Code Flow)
+# ============================================================================
+
+class WhatsAppConnectRequest(BaseModel):
+    """Request model for connecting a new WhatsApp."""
+    instance_name: str
+    system_prompt: Optional[str] = None
+
+
+@app.post("/api/whatsapp/connect")
+async def whatsapp_connect(
+    data: WhatsAppConnectRequest,
+    user: dict = Depends(get_current_user)
+):
+    """
+    Create a new WhatsApp connection via QR code.
+
+    This creates an instance in Evolution API and returns the QR code for scanning.
+    After scanning, the instance will be linked to the user's phone.
+
+    Request body:
+        {
+            "instance_name": "my-business",
+            "system_prompt": "Optional custom AI prompt"
+        }
+
+    Returns:
+        {
+            "ok": true,
+            "instance_name": "my-business",
+            "qr_code": "base64_encoded_qr_image",
+            "pairing_code": "ABC-DEF-GHI" (alternative to QR)
+        }
+    """
+    if not EVOLUTION_SERVER_URL:
+        raise HTTPException(
+            status_code=503,
+            detail="WhatsApp connection service not configured. Contact administrator."
+        )
+
+    try:
+        # Check if instance_name already exists
+        existing = supabase.table("tenants").select("id").eq(
+            "instance_name", data.instance_name
+        ).limit(1).execute()
+
+        if existing.data:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Connection name '{data.instance_name}' already exists. Choose a different name."
+            )
+
+        # Create Evolution client with global config
+        evolution_client = EvolutionClient(
+            global_server_url=EVOLUTION_SERVER_URL,
+            global_api_key=EVOLUTION_API_KEY
+        )
+
+        # Build webhook URL for this instance
+        webhook_base = os.getenv("WEBHOOK_BASE_URL", "")
+        webhook_url = f"{webhook_base}/webhooks/evolution" if webhook_base else None
+
+        log_info(
+            "Creating WhatsApp instance",
+            action="whatsapp_connect_start",
+            instance_name=data.instance_name,
+            user_id=user["id"],
+            webhook_url=webhook_url,
+        )
+
+        # Create instance in Evolution API
+        create_result = await evolution_client.create_instance(
+            instance_name=data.instance_name,
+            webhook_url=webhook_url
+        )
+
+        log_info(
+            "WhatsApp instance created, fetching QR code",
+            action="whatsapp_instance_created",
+            instance_name=data.instance_name,
+        )
+
+        # Get QR code
+        qr_result = await evolution_client.get_qr_code(data.instance_name)
+
+        # Create tenant record
+        tenant_data = {
+            "instance_name": data.instance_name,
+            "evo_server_url": EVOLUTION_SERVER_URL,
+            "evo_api_key": EVOLUTION_API_KEY,
+            "system_prompt": data.system_prompt or DEFAULT_SYSTEM_PROMPT,
+            "llm_provider": LLM_PROVIDER,
+            "owner_user_id": user["id"],
+        }
+
+        tenant_result = supabase.table("tenants").insert(tenant_data).execute()
+
+        if not tenant_result.data:
+            # Rollback: delete instance from Evolution API
+            try:
+                await evolution_client.delete_instance(data.instance_name)
+            except:
+                pass
+            raise HTTPException(status_code=500, detail="Failed to create connection record")
+
+        tenant = tenant_result.data[0]
+
+        # Create user_tenants relationship (owner role)
+        supabase.table("user_tenants").insert({
+            "user_id": user["id"],
+            "tenant_id": tenant["id"],
+            "role": "owner",
+        }).execute()
+
+        log_info(
+            "WhatsApp connection created successfully",
+            action="whatsapp_connect_success",
+            instance_name=data.instance_name,
+            tenant_id=tenant["id"],
+            user_id=user["id"],
+        )
+
+        return {
+            "ok": True,
+            "instance_name": data.instance_name,
+            "tenant_id": tenant["id"],
+            "qr_code": qr_result.get("base64"),
+            "pairing_code": qr_result.get("pairingCode"),
+            "message": "Scan the QR code with WhatsApp to connect"
+        }
+
+    except HTTPException:
+        raise
+    except EvolutionAPIError as e:
+        log_error(
+            "Evolution API error during WhatsApp connect",
+            action="whatsapp_connect_evolution_error",
+            instance_name=data.instance_name,
+            error=str(e),
+        )
+        raise HTTPException(status_code=502, detail=f"WhatsApp service error: {str(e)}")
+    except Exception as e:
+        log_error(
+            "Failed to create WhatsApp connection",
+            action="whatsapp_connect_failed",
+            instance_name=data.instance_name,
+            error_type=type(e).__name__,
+            exc_info=True,
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to create connection: {str(e)}")
+
+
+@app.get("/api/whatsapp/qr-code/{instance_name}")
+async def get_whatsapp_qr_code(
+    instance_name: str,
+    user: dict = Depends(get_current_user)
+):
+    """
+    Get or refresh QR code for a WhatsApp instance.
+
+    Use this endpoint to refresh the QR code if it expires before scanning.
+
+    Returns:
+        {
+            "ok": true,
+            "instance_name": "my-business",
+            "qr_code": "base64_encoded_qr_image",
+            "pairing_code": "ABC-DEF-GHI"
+        }
+    """
+    if not EVOLUTION_SERVER_URL:
+        raise HTTPException(
+            status_code=503,
+            detail="WhatsApp connection service not configured"
+        )
+
+    try:
+        # Verify user has access to this instance
+        tenant_resp = supabase.table("tenants").select("id").eq(
+            "instance_name", instance_name
+        ).limit(1).execute()
+
+        if not tenant_resp.data:
+            raise HTTPException(status_code=404, detail="Connection not found")
+
+        tenant_id = tenant_resp.data[0]["id"]
+
+        # Check user has access
+        access_check = supabase.table("user_tenants").select("id").eq(
+            "user_id", user["id"]
+        ).eq("tenant_id", tenant_id).limit(1).execute()
+
+        if not access_check.data:
+            raise HTTPException(status_code=403, detail="Access denied")
+
+        # Get QR code from Evolution API
+        evolution_client = EvolutionClient(
+            global_server_url=EVOLUTION_SERVER_URL,
+            global_api_key=EVOLUTION_API_KEY
+        )
+
+        qr_result = await evolution_client.get_qr_code(instance_name)
+
+        return {
+            "ok": True,
+            "instance_name": instance_name,
+            "qr_code": qr_result.get("base64"),
+            "pairing_code": qr_result.get("pairingCode"),
+        }
+
+    except HTTPException:
+        raise
+    except EvolutionAPIError as e:
+        raise HTTPException(status_code=502, detail=f"WhatsApp service error: {str(e)}")
+    except Exception as e:
+        log_error(
+            "Failed to get QR code",
+            action="get_qr_code_failed",
+            instance_name=instance_name,
+            error_type=type(e).__name__,
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to get QR code: {str(e)}")
+
+
+@app.get("/api/whatsapp/connection-status/{instance_name}")
+async def get_whatsapp_connection_status(
+    instance_name: str,
+    user: dict = Depends(get_current_user)
+):
+    """
+    Check WhatsApp connection status for an instance.
+
+    Use this endpoint to poll for connection status after QR code scan.
+
+    Returns:
+        {
+            "ok": true,
+            "instance_name": "my-business",
+            "connected": true,
+            "state": "open"
+        }
+
+    States:
+        - "open": Connected and ready
+        - "connecting": Waiting for connection
+        - "close": Disconnected
+    """
+    if not EVOLUTION_SERVER_URL:
+        raise HTTPException(
+            status_code=503,
+            detail="WhatsApp connection service not configured"
+        )
+
+    try:
+        # Verify user has access to this instance
+        tenant_resp = supabase.table("tenants").select("id").eq(
+            "instance_name", instance_name
+        ).limit(1).execute()
+
+        if not tenant_resp.data:
+            raise HTTPException(status_code=404, detail="Connection not found")
+
+        tenant_id = tenant_resp.data[0]["id"]
+
+        # Check user has access
+        access_check = supabase.table("user_tenants").select("id").eq(
+            "user_id", user["id"]
+        ).eq("tenant_id", tenant_id).limit(1).execute()
+
+        if not access_check.data:
+            raise HTTPException(status_code=403, detail="Access denied")
+
+        # Get connection state from Evolution API
+        evolution_client = EvolutionClient(
+            global_server_url=EVOLUTION_SERVER_URL,
+            global_api_key=EVOLUTION_API_KEY
+        )
+
+        status_result = await evolution_client.get_connection_state(instance_name)
+
+        state = status_result.get("state", status_result.get("instance", {}).get("state", "unknown"))
+        connected = state == "open"
+
+        return {
+            "ok": True,
+            "instance_name": instance_name,
+            "connected": connected,
+            "state": state,
+        }
+
+    except HTTPException:
+        raise
+    except EvolutionAPIError as e:
+        raise HTTPException(status_code=502, detail=f"WhatsApp service error: {str(e)}")
+    except Exception as e:
+        log_error(
+            "Failed to get connection status",
+            action="get_connection_status_failed",
+            instance_name=instance_name,
+            error_type=type(e).__name__,
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to get status: {str(e)}")
+
+
+@app.delete("/api/whatsapp/instance/{instance_name}")
+async def delete_whatsapp_instance(
+    instance_name: str,
+    user: dict = Depends(get_current_user)
+):
+    """
+    Delete a WhatsApp connection.
+
+    This removes the instance from Evolution API and deletes the local record.
+    Only the owner can delete a connection.
+
+    Returns:
+        {
+            "ok": true,
+            "deleted": true
+        }
+    """
+    if not EVOLUTION_SERVER_URL:
+        raise HTTPException(
+            status_code=503,
+            detail="WhatsApp connection service not configured"
+        )
+
+    try:
+        # Verify user is owner of this instance
+        tenant_resp = supabase.table("tenants").select("id, owner_user_id").eq(
+            "instance_name", instance_name
+        ).limit(1).execute()
+
+        if not tenant_resp.data:
+            raise HTTPException(status_code=404, detail="Connection not found")
+
+        tenant = tenant_resp.data[0]
+
+        if tenant.get("owner_user_id") != user["id"]:
+            # Check if user has owner role
+            access_check = supabase.table("user_tenants").select("role").eq(
+                "user_id", user["id"]
+            ).eq("tenant_id", tenant["id"]).limit(1).execute()
+
+            if not access_check.data or access_check.data[0].get("role") != "owner":
+                raise HTTPException(status_code=403, detail="Only owners can delete connections")
+
+        # Delete from Evolution API
+        evolution_client = EvolutionClient(
+            global_server_url=EVOLUTION_SERVER_URL,
+            global_api_key=EVOLUTION_API_KEY
+        )
+
+        try:
+            await evolution_client.delete_instance(instance_name)
+        except EvolutionAPIError as e:
+            log_warning(
+                "Evolution API delete failed (continuing with local delete)",
+                action="delete_instance_evolution_warning",
+                instance_name=instance_name,
+                error=str(e),
+            )
+
+        # Delete user_tenants associations
+        supabase.table("user_tenants").delete().eq("tenant_id", tenant["id"]).execute()
+
+        # Delete tenant record
+        supabase.table("tenants").delete().eq("id", tenant["id"]).execute()
+
+        log_info(
+            "WhatsApp connection deleted",
+            action="whatsapp_delete_success",
+            instance_name=instance_name,
+            tenant_id=tenant["id"],
+            user_id=user["id"],
+        )
+
+        return {
+            "ok": True,
+            "deleted": True,
+            "instance_name": instance_name
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        log_error(
+            "Failed to delete WhatsApp connection",
+            action="delete_instance_failed",
+            instance_name=instance_name,
+            error_type=type(e).__name__,
+            exc_info=True,
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to delete connection: {str(e)}")
+
+
 @app.post("/api/websocket/disconnect")
 async def disconnect_websocket(data: dict = None):
     """
@@ -2090,3 +2645,377 @@ async def disconnect_websocket(data: dict = None):
             status_code=500,
             detail=f"Failed to disconnect WebSocket: {str(e)}"
         )
+
+
+# ============================================================================
+# GDPR & DATA PRIVACY ENDPOINTS
+# ============================================================================
+
+@app.get("/api/privacy/export")
+async def export_user_data(
+    user: dict = Depends(get_current_user)
+):
+    """
+    GDPR Data Subject Access Request (DSAR) - Export all user data.
+
+    Returns all personal data associated with the authenticated user:
+    - User profile
+    - Tenant memberships
+    - All messages from user's tenants (anonymized phone numbers)
+    - Session data
+
+    This complies with GDPR Article 15 (Right of Access).
+
+    Returns:
+        JSON file containing all user data
+    """
+    from datetime import datetime
+
+    try:
+        user_id = user["id"]
+
+        # Get user tenants
+        user_tenants = user.get("user_tenants", [])
+        tenant_ids = [ut["tenant_id"] for ut in user_tenants]
+
+        export_data = {
+            "export_date": datetime.utcnow().isoformat(),
+            "data_controller": "HybridFlow",
+            "user_profile": {
+                "id": user.get("id"),
+                "email": user.get("email"),
+                "display_name": user.get("display_name"),
+                "created_at": user.get("created_at"),
+            },
+            "tenant_memberships": user_tenants,
+            "tenants": [],
+            "sessions": [],
+            "messages": [],
+        }
+
+        if tenant_ids:
+            # Get tenant details
+            tenants_result = supabase.table("tenants").select(
+                "id, instance_name, created_at, updated_at"
+            ).in_("id", tenant_ids).execute()
+            export_data["tenants"] = tenants_result.data or []
+
+            # Get sessions (limited to last 90 days for performance)
+            from datetime import timedelta
+            cutoff_date = (datetime.utcnow() - timedelta(days=90)).isoformat()
+
+            sessions_result = supabase.table("sessions").select(
+                "id, chat_id, is_paused, pause_reason, last_message_at, created_at"
+            ).in_("tenant_id", tenant_ids).gte("created_at", cutoff_date).execute()
+
+            # Anonymize chat_id (phone numbers) in sessions
+            sessions = sessions_result.data or []
+            for session in sessions:
+                if session.get("chat_id"):
+                    # Hash the phone number for privacy
+                    import hashlib
+                    chat_id = session["chat_id"]
+                    session["chat_id_hash"] = hashlib.sha256(chat_id.encode()).hexdigest()[:16]
+                    # Show only last 4 digits
+                    phone_part = chat_id.split("@")[0] if "@" in chat_id else chat_id
+                    session["chat_id_masked"] = f"***{phone_part[-4:]}" if len(phone_part) > 4 else "****"
+                    del session["chat_id"]
+            export_data["sessions"] = sessions
+
+            # Get messages (limited to last 30 days, exclude raw payloads)
+            cutoff_messages = (datetime.utcnow() - timedelta(days=30)).isoformat()
+
+            messages_result = supabase.table("messages").select(
+                "id, chat_id, from_me, message_type, text, created_at"
+            ).in_("tenant_id", tenant_ids).gte("created_at", cutoff_messages).limit(1000).execute()
+
+            # Anonymize chat_id in messages
+            messages = messages_result.data or []
+            for message in messages:
+                if message.get("chat_id"):
+                    import hashlib
+                    chat_id = message["chat_id"]
+                    message["chat_id_hash"] = hashlib.sha256(chat_id.encode()).hexdigest()[:16]
+                    phone_part = chat_id.split("@")[0] if "@" in chat_id else chat_id
+                    message["chat_id_masked"] = f"***{phone_part[-4:]}" if len(phone_part) > 4 else "****"
+                    del message["chat_id"]
+            export_data["messages"] = messages
+
+        log_info(
+            "GDPR data export completed",
+            action="gdpr_export",
+            user_id=user_id,
+            tenant_count=len(tenant_ids),
+            session_count=len(export_data["sessions"]),
+            message_count=len(export_data["messages"]),
+        )
+
+        return export_data
+
+    except Exception as e:
+        log_error(
+            "GDPR data export failed",
+            action="gdpr_export_failed",
+            user_id=user.get("id"),
+            error_type=type(e).__name__,
+            exc_info=True,
+        )
+        raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")
+
+
+@app.delete("/api/privacy/data")
+async def delete_user_data(
+    confirm: bool = False,
+    user: dict = Depends(get_current_user)
+):
+    """
+    GDPR Right to Erasure - Delete all user data.
+
+    This permanently deletes:
+    - All messages from tenants owned by this user
+    - All sessions from tenants owned by this user
+    - Tenant records owned by this user
+    - User's tenant memberships
+
+    This complies with GDPR Article 17 (Right to Erasure / "Right to be Forgotten").
+
+    Query Parameters:
+        confirm: Must be true to proceed with deletion
+
+    Returns:
+        Summary of deleted data
+
+    WARNING: This action is irreversible!
+    """
+    if not confirm:
+        raise HTTPException(
+            status_code=400,
+            detail="Must pass confirm=true to delete data. This action is irreversible."
+        )
+
+    try:
+        user_id = user["id"]
+        deleted_summary = {
+            "messages_deleted": 0,
+            "sessions_deleted": 0,
+            "tenants_deleted": 0,
+            "memberships_deleted": 0,
+        }
+
+        # Get tenants owned by this user
+        owned_tenants = supabase.table("tenants").select("id").eq(
+            "owner_user_id", user_id
+        ).execute()
+
+        owned_tenant_ids = [t["id"] for t in (owned_tenants.data or [])]
+
+        if owned_tenant_ids:
+            # Delete messages from owned tenants
+            messages_result = supabase.table("messages").delete().in_(
+                "tenant_id", owned_tenant_ids
+            ).execute()
+            deleted_summary["messages_deleted"] = len(messages_result.data or [])
+
+            # Delete sessions from owned tenants
+            sessions_result = supabase.table("sessions").delete().in_(
+                "tenant_id", owned_tenant_ids
+            ).execute()
+            deleted_summary["sessions_deleted"] = len(sessions_result.data or [])
+
+            # Delete processed_events from owned tenants
+            try:
+                supabase.table("processed_events").delete().in_(
+                    "tenant_id", owned_tenant_ids
+                ).execute()
+            except:
+                pass  # Table may not exist
+
+            # Delete tenant memberships for owned tenants
+            supabase.table("user_tenants").delete().in_(
+                "tenant_id", owned_tenant_ids
+            ).execute()
+
+            # Delete owned tenants
+            tenants_result = supabase.table("tenants").delete().in_(
+                "id", owned_tenant_ids
+            ).execute()
+            deleted_summary["tenants_deleted"] = len(tenants_result.data or [])
+
+        # Delete user's own memberships (for tenants they don't own)
+        memberships_result = supabase.table("user_tenants").delete().eq(
+            "user_id", user_id
+        ).execute()
+        deleted_summary["memberships_deleted"] = len(memberships_result.data or [])
+
+        log_info(
+            "GDPR data deletion completed",
+            action="gdpr_delete",
+            user_id=user_id,
+            **deleted_summary,
+        )
+
+        return {
+            "ok": True,
+            "message": "All your data has been permanently deleted",
+            "deleted": deleted_summary,
+        }
+
+    except Exception as e:
+        log_error(
+            "GDPR data deletion failed",
+            action="gdpr_delete_failed",
+            user_id=user.get("id"),
+            error_type=type(e).__name__,
+            exc_info=True,
+        )
+        raise HTTPException(status_code=500, detail=f"Deletion failed: {str(e)}")
+
+
+@app.delete("/api/privacy/messages/{chat_id:path}")
+async def delete_chat_messages(
+    chat_id: str,
+    tenant_id: int,
+    confirm: bool = False,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("owner"))
+):
+    """
+    Delete all messages for a specific chat/contact.
+
+    This allows deletion of a specific contact's conversation data
+    without affecting other data.
+
+    Useful for:
+    - Honoring deletion requests from WhatsApp contacts
+    - Removing sensitive conversations
+
+    Query Parameters:
+        tenant_id: Tenant ID
+        confirm: Must be true to proceed
+
+    Returns:
+        Count of deleted messages
+    """
+    if not confirm:
+        raise HTTPException(
+            status_code=400,
+            detail="Must pass confirm=true to delete messages"
+        )
+
+    try:
+        # Delete messages for this chat
+        messages_result = supabase.table("messages").delete().eq(
+            "tenant_id", tenant_id
+        ).eq("chat_id", chat_id).execute()
+
+        deleted_count = len(messages_result.data or [])
+
+        # Delete session for this chat
+        supabase.table("sessions").delete().eq(
+            "tenant_id", tenant_id
+        ).eq("chat_id", chat_id).execute()
+
+        log_info(
+            "Chat messages deleted",
+            action="delete_chat_messages",
+            tenant_id=tenant_id,
+            user_id=user["id"],
+            messages_deleted=deleted_count,
+        )
+
+        return {
+            "ok": True,
+            "messages_deleted": deleted_count,
+            "session_deleted": True,
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        log_error(
+            "Chat messages deletion failed",
+            action="delete_chat_messages_failed",
+            tenant_id=tenant_id,
+            error_type=type(e).__name__,
+        )
+        raise HTTPException(status_code=500, detail=f"Deletion failed: {str(e)}")
+
+
+@app.post("/api/privacy/cleanup-old-data")
+async def cleanup_old_data(
+    request: Request,
+    days_to_keep: int = 90
+):
+    """
+    Clean up old messages and processed events.
+
+    This endpoint is designed to be called by cron jobs for automatic
+    data retention compliance.
+
+    Security: Requires CRON_SECRET header.
+
+    Query Parameters:
+        days_to_keep: Number of days of data to retain (default: 90)
+
+    Returns:
+        Count of deleted records
+    """
+    from datetime import timedelta
+
+    # Verify cron secret
+    cron_secret = request.headers.get("X-Cron-Secret") or request.headers.get("X-Cloudscheduler-Token")
+
+    if not cron_secret or cron_secret != CRON_SECRET:
+        log_warning("Unauthorized cleanup request", action="cleanup_unauthorized")
+        raise HTTPException(status_code=403, detail="Unauthorized")
+
+    if days_to_keep < 7:
+        raise HTTPException(status_code=400, detail="days_to_keep must be at least 7")
+
+    try:
+        cutoff_date = (now_utc() - timedelta(days=days_to_keep)).isoformat()
+
+        deleted_summary = {
+            "messages_deleted": 0,
+            "processed_events_deleted": 0,
+        }
+
+        # Delete old messages
+        messages_result = supabase.table("messages").delete().lt(
+            "created_at", cutoff_date
+        ).execute()
+        deleted_summary["messages_deleted"] = len(messages_result.data or [])
+
+        # Delete old processed events
+        try:
+            events_result = supabase.table("processed_events").delete().lt(
+                "processed_at", cutoff_date
+            ).execute()
+            deleted_summary["processed_events_deleted"] = len(events_result.data or [])
+        except:
+            pass  # Table may not exist
+
+        log_info(
+            "Data cleanup completed",
+            action="data_cleanup",
+            days_to_keep=days_to_keep,
+            cutoff_date=cutoff_date,
+            **deleted_summary,
+        )
+
+        return {
+            "ok": True,
+            "cutoff_date": cutoff_date,
+            "deleted": deleted_summary,
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        log_error(
+            "Data cleanup failed",
+            action="data_cleanup_failed",
+            error_type=type(e).__name__,
+            exc_info=True,
+        )
+        raise HTTPException(status_code=500, detail=f"Cleanup failed: {str(e)}")

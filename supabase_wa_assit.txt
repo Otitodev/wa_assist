@@ -1,4 +1,0 @@
-contacts.update
-chats.update
-
-WA_assist supabase db password- nrew0w2m0kl2pRCp

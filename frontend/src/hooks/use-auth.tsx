@@ -22,6 +22,7 @@ interface AuthContextType {
   register: (email: string, password: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
   setActiveTenant: (tenant: TenantMembership) => void;
+  refreshTenants: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -153,6 +154,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const refreshTenants = useCallback(async () => {
+    try {
+      const tenantList = await tenantsApi.list();
+      const validTenants = Array.isArray(tenantList) ? tenantList : [];
+      setTenants(validTenants);
+
+      // If no active tenant but we have tenants, set the first one
+      if (!activeTenant && validTenants.length > 0) {
+        const firstTenant = validTenants[0];
+        setActiveTenantState(firstTenant);
+        const tenantId = getTenantIdString(firstTenant);
+        if (tenantId) {
+          localStorage.setItem('active_tenant_id', tenantId);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh tenants:', error);
+    }
+  }, [activeTenant]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -164,6 +185,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         register,
         logout,
         setActiveTenant,
+        refreshTenants,
       }}
     >
       {children}

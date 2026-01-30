@@ -73,10 +73,10 @@ export default function SessionDetailPage() {
       // Refetch session data since pause returns status, not session
       const updatedSession = await sessionsApi.get(session.id, activeTenant.tenant_id);
       setSession(updatedSession);
-      toast.success('Session paused');
+      toast.success('Switched to Human Mode');
     } catch (error) {
       console.error('Failed to pause session:', error);
-      toast.error('Failed to pause session');
+      toast.error('Failed to switch mode');
     } finally {
       setActionLoading(false);
     }
@@ -91,10 +91,10 @@ export default function SessionDetailPage() {
       // Refetch session data since resume returns status, not session
       const updatedSession = await sessionsApi.get(session.id, activeTenant.tenant_id);
       setSession(updatedSession);
-      toast.success('Session resumed');
+      toast.success('Switched to AI Mode');
     } catch (error) {
       console.error('Failed to resume session:', error);
-      toast.error('Failed to resume session');
+      toast.error('Failed to switch mode');
     } finally {
       setActionLoading(false);
     }
@@ -127,7 +127,7 @@ export default function SessionDetailPage() {
   if (!session) {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh]">
-        <p className="text-lg text-muted-foreground">Session not found</p>
+        <p className="text-lg text-muted-foreground">Conversation not found</p>
         <Button variant="outline" className="mt-4" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Go back
@@ -153,7 +153,7 @@ export default function SessionDetailPage() {
               <SessionStatusBadge isPaused={session.is_paused} />
             </div>
             <p className="text-sm text-muted-foreground">
-              Session #{session.id}
+              Conversation #{session.id}
             </p>
           </div>
         </div>
@@ -178,7 +178,7 @@ export default function SessionDetailPage() {
               className="bg-green-600 hover:bg-green-700"
             >
               <Play className="h-4 w-4 mr-2" />
-              Resume AI
+              Switch to AI
             </Button>
           ) : (
             <Button
@@ -189,7 +189,7 @@ export default function SessionDetailPage() {
               className="border-orange-500 text-orange-600 hover:bg-orange-50"
             >
               <Pause className="h-4 w-4 mr-2" />
-              Pause AI
+              Switch to Human
             </Button>
           )}
         </div>
@@ -216,7 +216,7 @@ export default function SessionDetailPage() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Session Details</CardTitle>
+              <CardTitle>Conversation Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -243,7 +243,7 @@ export default function SessionDetailPage() {
               <Separator />
 
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Status</p>
+                <p className="text-sm font-medium text-muted-foreground">Mode</p>
                 <div className="mt-1">
                   <SessionStatusBadge isPaused={session.is_paused} />
                 </div>
@@ -272,7 +272,7 @@ export default function SessionDetailPage() {
 
               {session.last_human_at && (
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Last Human Activity</p>
+                  <p className="text-sm font-medium text-muted-foreground">Last Human Reply</p>
                   <p className="text-sm mt-1">
                     {formatDistanceToNow(new Date(session.last_human_at), { addSuffix: true })}
                   </p>

@@ -16,7 +16,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 const columns: ColumnDef<Session>[] = [
   {
     accessorKey: 'chat_id',
-    header: 'Chat ID',
+    header: 'Customer',
     cell: ({ row }) => {
       const chatId = row.getValue('chat_id') as string;
       // Extract phone number from chat_id (e.g., "5511999999999@s.whatsapp.net" -> "5511999999999")
@@ -30,14 +30,14 @@ const columns: ColumnDef<Session>[] = [
   },
   {
     accessorKey: 'is_paused',
-    header: 'Status',
+    header: 'Mode',
     cell: ({ row }) => (
       <SessionStatusBadge isPaused={row.getValue('is_paused')} />
     ),
   },
   {
     accessorKey: 'pause_reason',
-    header: 'Pause Reason',
+    header: 'Reason',
     cell: ({ row }) => {
       const reason = row.getValue('pause_reason') as string | null;
       return reason ? (
@@ -63,7 +63,7 @@ const columns: ColumnDef<Session>[] = [
   },
   {
     accessorKey: 'last_human_at',
-    header: 'Last Human Activity',
+    header: 'Last Human Reply',
     cell: ({ row }) => {
       const timestamp = row.getValue('last_human_at') as string | null;
       if (!timestamp) {
@@ -130,8 +130,8 @@ export default function SessionsPage() {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] text-muted-foreground">
         <MessageSquare className="h-12 w-12 mb-4" />
-        <p className="text-lg">No instance selected</p>
-        <p className="text-sm">Select an instance to view sessions</p>
+        <p className="text-lg">No WhatsApp connected</p>
+        <p className="text-sm">Connect a WhatsApp number to view conversations</p>
       </div>
     );
   }
@@ -141,9 +141,9 @@ export default function SessionsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Sessions</h1>
+          <h1 className="text-2xl font-bold">Conversations</h1>
           <p className="text-muted-foreground">
-            {total} total sessions for {activeTenant?.tenant?.instance_name || 'your instance'}
+            {total} total conversations for {activeTenant?.tenant?.instance_name || 'your connection'}
           </p>
         </div>
         <Button
@@ -161,8 +161,8 @@ export default function SessionsPage() {
       <Tabs value={stateFilter} onValueChange={(v) => setStateFilter(v as StateFilter)}>
         <TabsList>
           <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="active">Active</TabsTrigger>
-          <TabsTrigger value="paused">Paused</TabsTrigger>
+          <TabsTrigger value="active">AI Mode</TabsTrigger>
+          <TabsTrigger value="paused">Human Mode</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -172,7 +172,7 @@ export default function SessionsPage() {
         data={sessions}
         loading={loading}
         searchColumn="chat_id"
-        searchPlaceholder="Search by chat ID..."
+        searchPlaceholder="Search by phone number..."
         onRowClick={handleRowClick}
         pageSize={15}
       />

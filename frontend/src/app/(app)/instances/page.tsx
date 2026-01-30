@@ -1,24 +1,144 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
+import { whatsappApi } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Server, ExternalLink, RefreshCw } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Server, ExternalLink, RefreshCw, Plus, Smartphone, CheckCircle2, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+
+type ConnectionStep = 'name' | 'qrcode' | 'connected';
 
 export default function InstancesPage() {
-  const { tenants, activeTenant, loading: authLoading } = useAuth();
+  const { tenants, activeTenant, loading: authLoading, refreshTenants } = useAuth();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
 
-  const handleRefresh = () => {
+  // Add Instance dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [connectionName, setConnectionName] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [step, setStep] = useState<ConnectionStep>('name');
+  const [qrCode, setQrCode] = useState<string | null>(null);
+  const [pairingCode, setPairingCode] = useState<string | null>(null);
+  const [createdInstanceName, setCreatedInstanceName] = useState<string | null>(null);
+  const [checkingConnection, setCheckingConnection] = useState(false);
+
+  const handleRefresh = async () => {
     setRefreshing(true);
-    // In a real app, we'd refetch tenants here
-    setTimeout(() => setRefreshing(false), 1000);
-    window.location.reload();
+    await refreshTenants();
+    setRefreshing(false);
+  };
+
+  const resetDialog = useCallback(() => {
+    setStep('name');
+    setConnectionName('');
+    setQrCode(null);
+    setPairingCode(null);
+    setCreatedInstanceName(null);
+    setCheckingConnection(false);
+    setSubmitting(false);
+  }, []);
+
+  const handleDialogClose = (open: boolean) => {
+    if (!open) {
+      resetDialog();
+    }
+    setDialogOpen(open);
+  };
+
+  // Poll for connection status when showing QR code
+  useEffect(() => {
+    if (step !== 'qrcode' || !createdInstanceName) return;
+
+    setCheckingConnection(true);
+    const pollInterval = setInterval(async () => {
+      try {
+        const status = await whatsappApi.getConnectionStatus(createdInstanceName);
+        if (status.connected && status.state === 'open') {
+          clearInterval(pollInterval);
+          setCheckingConnection(false);
+          setStep('connected');
+          toast.success('WhatsApp connected successfully!');
+          await refreshTenants();
+        }
+      } catch (error) {
+        console.error('Failed to check connection status:', error);
+      }
+    }, 3000); // Poll every 3 seconds
+
+    // Clean up interval on unmount or step change
+    return () => clearInterval(pollInterval);
+  }, [step, createdInstanceName, refreshTenants]);
+
+  const handleGetQRCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const trimmedName = connectionName.trim().toLowerCase().replace(/\s+/g, '-');
+    if (!trimmedName) {
+      toast.error('Please enter a connection name');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const result = await whatsappApi.connect({
+        instance_name: trimmedName,
+      });
+
+      if (result.ok && result.qr_code) {
+        setQrCode(result.qr_code);
+        setPairingCode(result.pairing_code || null);
+        setCreatedInstanceName(result.instance_name);
+        setStep('qrcode');
+      } else {
+        throw new Error('Failed to get QR code');
+      }
+    } catch (error: unknown) {
+      console.error('Failed to create instance:', error);
+      const message = error instanceof Error ? error.message : 'Failed to connect WhatsApp';
+      toast.error(message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleRefreshQRCode = async () => {
+    if (!createdInstanceName) return;
+
+    setSubmitting(true);
+    try {
+      const result = await whatsappApi.getQRCode(createdInstanceName);
+      if (result.ok && result.qr_code) {
+        setQrCode(result.qr_code);
+        setPairingCode(result.pairing_code || null);
+      }
+    } catch (error) {
+      console.error('Failed to refresh QR code:', error);
+      toast.error('Failed to refresh QR code');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleFinish = async () => {
+    await refreshTenants();
+    handleDialogClose(false);
   };
 
   if (authLoading) {
@@ -40,99 +160,254 @@ export default function InstancesPage() {
   // Ensure tenants is an array
   const tenantList = Array.isArray(tenants) ? tenants : [];
 
-  if (tenantList.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[60vh] text-muted-foreground">
-        <Server className="h-12 w-12 mb-4" />
-        <p className="text-lg">No instances configured</p>
-        <p className="text-sm">Contact support to connect a WhatsApp instance</p>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Instances</h1>
+          <h1 className="text-2xl font-bold">WhatsApp Connections</h1>
           <p className="text-muted-foreground">
-            Manage your WhatsApp instances
+            Manage your connected WhatsApp numbers
           </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleRefresh}
-          disabled={refreshing}
-        >
-          <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={refreshing}
+          >
+            <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+
+          <Dialog open={dialogOpen} onOpenChange={handleDialogClose}>
+            <DialogTrigger asChild>
+              <Button size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                Connect WhatsApp
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              {step === 'name' && (
+                <form onSubmit={handleGetQRCode}>
+                  <DialogHeader>
+                    <DialogTitle>Connect WhatsApp</DialogTitle>
+                    <DialogDescription>
+                      Give your WhatsApp connection a name, then scan the QR code with your phone
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="space-y-4 py-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="connection-name">Connection Name</Label>
+                      <Input
+                        id="connection-name"
+                        placeholder="my-business"
+                        value={connectionName}
+                        onChange={(e) => setConnectionName(e.target.value)}
+                        disabled={submitting}
+                        autoFocus
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        A unique name to identify this WhatsApp number
+                      </p>
+                    </div>
+                  </div>
+
+                  <DialogFooter>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleDialogClose(false)}
+                      disabled={submitting}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={submitting}>
+                      {submitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Creating...
+                        </>
+                      ) : (
+                        <>
+                          <Smartphone className="h-4 w-4 mr-2" />
+                          Get QR Code
+                        </>
+                      )}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              )}
+
+              {step === 'qrcode' && (
+                <>
+                  <DialogHeader>
+                    <DialogTitle>Scan QR Code</DialogTitle>
+                    <DialogDescription>
+                      Open WhatsApp on your phone, go to Settings → Linked Devices → Link a Device
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="flex flex-col items-center py-6 space-y-4">
+                    {qrCode ? (
+                      <div className="bg-white p-4 rounded-lg shadow-inner">
+                        <img
+                          src={`data:image/png;base64,${qrCode}`}
+                          alt="WhatsApp QR Code"
+                          className="w-64 h-64"
+                        />
+                      </div>
+                    ) : (
+                      <Skeleton className="w-64 h-64" />
+                    )}
+
+                    {pairingCode && (
+                      <div className="text-center">
+                        <p className="text-sm text-muted-foreground mb-1">Or use pairing code:</p>
+                        <code className="text-lg font-mono bg-muted px-3 py-1 rounded">
+                          {pairingCode}
+                        </code>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      {checkingConnection ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Waiting for connection...
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className="h-4 w-4" />
+                          QR code will auto-refresh
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <DialogFooter className="flex-col sm:flex-row gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={handleRefreshQRCode}
+                      disabled={submitting}
+                      className="w-full sm:w-auto"
+                    >
+                      {submitting ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <RefreshCw className="h-4 w-4 mr-2" />
+                      )}
+                      Refresh QR Code
+                    </Button>
+                  </DialogFooter>
+                </>
+              )}
+
+              {step === 'connected' && (
+                <>
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <CheckCircle2 className="h-5 w-5 text-green-500" />
+                      Connected!
+                    </DialogTitle>
+                    <DialogDescription>
+                      Your WhatsApp is now connected and ready to receive messages
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="flex flex-col items-center py-8">
+                    <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                      <CheckCircle2 className="h-10 w-10 text-green-600" />
+                    </div>
+                    <p className="text-center text-muted-foreground">
+                      <strong>{createdInstanceName}</strong> is now connected.
+                      <br />
+                      Messages will appear in Conversations.
+                    </p>
+                  </div>
+
+                  <DialogFooter>
+                    <Button onClick={handleFinish} className="w-full">
+                      Done
+                    </Button>
+                  </DialogFooter>
+                </>
+              )}
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
-      {/* Instance Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {tenantList.map((membership) => {
-          const isActive = membership.tenant_id === activeTenant?.tenant_id;
+      {/* Empty State */}
+      {tenantList.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-[60vh] text-muted-foreground">
+          <Server className="h-12 w-12 mb-4" />
+          <p className="text-lg">No WhatsApp numbers connected</p>
+          <p className="text-sm mb-4">Connect your first WhatsApp number to start automating conversations</p>
+          <Button onClick={() => setDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Connect WhatsApp
+          </Button>
+        </div>
+      ) : (
+        /* Instance Grid */
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {tenantList.map((membership) => {
+            const isActive = membership.tenant_id === activeTenant?.tenant_id;
 
-          return (
-            <Card
-              key={membership.tenant_id}
-              className={`cursor-pointer transition-colors hover:border-green-300 ${
-                isActive ? 'border-green-500 bg-green-50/50' : ''
-              }`}
-              onClick={() => router.push(`/instances/${membership.tenant?.instance_name || membership.tenant_id}`)}
-            >
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-lg font-medium">
-                  {membership.tenant?.instance_name || 'Instance'}
-                </CardTitle>
-                <div className="flex items-center gap-2">
-                  {isActive && (
-                    <Badge variant="outline" className="border-green-500 text-green-600">
-                      Active
+            return (
+              <Card
+                key={membership.tenant_id}
+                className={`cursor-pointer transition-colors hover:border-green-300 ${
+                  isActive ? 'border-green-500 bg-green-50/50' : ''
+                }`}
+                onClick={() => router.push(`/instances/${membership.tenant?.instance_name || membership.tenant_id}`)}
+              >
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-lg font-medium">
+                    {membership.tenant?.instance_name || 'Instance'}
+                  </CardTitle>
+                  <div className="flex items-center gap-2">
+                    {isActive && (
+                      <Badge variant="outline" className="border-green-500 text-green-600">
+                        Active
+                      </Badge>
+                    )}
+                    <Badge variant="secondary" className="capitalize">
+                      {membership.role}
                     </Badge>
-                  )}
-                  <Badge variant="secondary" className="capitalize">
-                    {membership.role}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Server URL</p>
-                    <p className="text-sm truncate">
-                      {membership.tenant?.evo_server_url || 'Not configured'}
-                    </p>
                   </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Server URL</p>
+                      <p className="text-sm truncate">
+                        {membership.tenant?.evo_server_url || 'Not configured'}
+                      </p>
+                    </div>
 
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">LLM Provider</p>
-                    <p className="text-sm capitalize">
-                      {membership.tenant?.llm_provider || 'Default'}
-                    </p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-muted-foreground"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(`/instances/${membership.tenant?.instance_name || membership.tenant_id}`);
+                      }}
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      View details
+                    </Button>
                   </div>
-
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="w-full justify-start text-muted-foreground"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.push(`/instances/${membership.tenant?.instance_name || membership.tenant_id}`);
-                    }}
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    View details
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
