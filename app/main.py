@@ -1727,19 +1727,23 @@ def get_session_by_id(
         raise HTTPException(status_code=500, detail=f"Failed to get session: {str(e)}")
 
 
+class SessionActionRequest(BaseModel):
+    """Request body for session pause/resume actions."""
+    tenant_id: int
+
+
 @app.post("/api/sessions/{session_id}/pause")
 def pause_session(
     session_id: int,
-    tenant_id: int,
+    data: SessionActionRequest,
     user: dict = Depends(get_current_user),
-    _: None = Depends(require_tenant_access("member"))
 ):
     """
     Manually pause a session.
 
     Args:
         session_id: Session ID
-        tenant_id: Tenant ID (query parameter for authorization)
+        data.tenant_id: Tenant ID (in request body)
 
     Returns:
         {
@@ -1748,6 +1752,13 @@ def pause_session(
             "session_id": 1
         }
     """
+    tenant_id = data.tenant_id
+
+    # Verify user has access to this tenant
+    user_tenants = user.get("user_tenants", [])
+    if not any(ut["tenant_id"] == tenant_id for ut in user_tenants):
+        raise HTTPException(status_code=403, detail="Access denied to this tenant")
+
     try:
         # Verify session exists and belongs to tenant
         session_check = supabase.table("sessions").select("id, chat_id").eq(
@@ -1806,16 +1817,15 @@ def pause_session(
 @app.post("/api/sessions/{session_id}/resume")
 def resume_session_by_id(
     session_id: int,
-    tenant_id: int,
+    data: SessionActionRequest,
     user: dict = Depends(get_current_user),
-    _: None = Depends(require_tenant_access("member"))
 ):
     """
     Manually resume a paused session.
 
     Args:
         session_id: Session ID
-        tenant_id: Tenant ID (query parameter for authorization)
+        data.tenant_id: Tenant ID (in request body)
 
     Returns:
         {
@@ -1824,6 +1834,13 @@ def resume_session_by_id(
             "session_id": 1
         }
     """
+    tenant_id = data.tenant_id
+
+    # Verify user has access to this tenant
+    user_tenants = user.get("user_tenants", [])
+    if not any(ut["tenant_id"] == tenant_id for ut in user_tenants):
+        raise HTTPException(status_code=403, detail="Access denied to this tenant")
+
     try:
         # Verify session exists and belongs to tenant
         session_check = supabase.table("sessions").select("id, chat_id").eq(
@@ -2176,6 +2193,45 @@ async def connect_websocket(data: dict):
 # WHATSAPP CONNECTION APIs (QR Code Flow)
 # ============================================================================
 
+def extract_qr_code(qr_result: dict) -> Optional[str]:
+    """
+    Extract QR code from Evolution API response.
+
+    Evolution API may return QR code data in different formats:
+    - "base64": raw base64 or with data URL prefix
+    - "qrcode": alternative property name
+    - "code": another alternative
+
+    This function handles all cases and strips any data URL prefix
+    since the frontend adds it.
+    """
+    # Try different property names Evolution API might use
+    qr_data = (
+        qr_result.get("base64") or
+        qr_result.get("qrcode") or
+        qr_result.get("code") or
+        qr_result.get("qr")
+    )
+
+    if not qr_data:
+        # Log for debugging
+        log_warning(
+            "QR code not found in Evolution API response",
+            action="qr_extract_missing",
+            available_keys=list(qr_result.keys()) if qr_result else [],
+        )
+        return None
+
+    # Strip data URL prefix if present (Evolution API may include it)
+    # Frontend adds "data:image/png;base64," so we need raw base64 only
+    if isinstance(qr_data, str) and qr_data.startswith("data:"):
+        # Split at comma to get just the base64 part
+        if "," in qr_data:
+            qr_data = qr_data.split(",", 1)[1]
+
+    return qr_data
+
+
 class WhatsAppConnectRequest(BaseModel):
     """Request model for connecting a new WhatsApp."""
     instance_name: str
@@ -2299,7 +2355,7 @@ async def whatsapp_connect(
             "ok": True,
             "instance_name": data.instance_name,
             "tenant_id": tenant["id"],
-            "qr_code": qr_result.get("base64"),
+            "qr_code": extract_qr_code(qr_result),
             "pairing_code": qr_result.get("pairingCode"),
             "message": "Scan the QR code with WhatsApp to connect"
         }
@@ -2379,7 +2435,7 @@ async def get_whatsapp_qr_code(
         return {
             "ok": True,
             "instance_name": instance_name,
-            "qr_code": qr_result.get("base64"),
+            "qr_code": extract_qr_code(qr_result),
             "pairing_code": qr_result.get("pairingCode"),
         }
 
