@@ -18,7 +18,7 @@ CRON_SECRET = os.getenv("CRON_SECRET", "change-me-cron-secret")
 # Auto-resume configuration
 RESUME_AFTER_HOURS = int(os.getenv("RESUME_AFTER_HOURS", "2"))
 
-# CORS
+# CORS - supports multiple origins comma-separated
 CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
 
 # LLM Provider Configuration

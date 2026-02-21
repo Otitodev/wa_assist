@@ -44,7 +44,8 @@
       "Bash(npm run dev:*)",
       "Bash(venv/Scripts/python -m uvicorn:*)",
       "Bash(timeout:*)",
-      "Bash(ls:*)"
+      "Bash(node --version:*)",
+      "Bash(npm --version:*)"
     ]
   }
 }
