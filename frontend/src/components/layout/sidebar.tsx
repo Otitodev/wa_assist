@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -51,9 +52,13 @@ export function Sidebar() {
       {/* Logo */}
       <div className="flex h-16 items-center border-b px-6">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-green-600 flex items-center justify-center">
-            <span className="text-white font-bold text-sm">HF</span>
-          </div>
+          <Image
+            src="/logo.png"
+            alt="HybridFlow"
+            width={32}
+            height={32}
+            className="rounded-lg"
+          />
           <span className="text-lg font-semibold">HybridFlow</span>
         </Link>
       </div>

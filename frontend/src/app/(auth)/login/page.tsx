@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
@@ -35,9 +36,13 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <div className="flex items-center gap-2 mb-4">
-            <div className="h-10 w-10 rounded-lg bg-green-600 flex items-center justify-center">
-              <span className="text-white font-bold">HF</span>
-            </div>
+            <Image
+              src="/logo.png"
+              alt="HybridFlow"
+              width={40}
+              height={40}
+              className="rounded-lg"
+            />
             <span className="text-2xl font-bold">HybridFlow</span>
           </div>
           <CardTitle className="text-2xl">Sign in</CardTitle>
