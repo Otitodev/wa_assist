@@ -318,8 +318,8 @@ export default function InstancesPage() {
                   </DialogHeader>
 
                   <div className="flex flex-col items-center py-8">
-                    <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                      <CheckCircle2 className="h-10 w-10 text-green-600" />
+                    <div className="h-20 w-20 rounded-full bg-green-500/15 flex items-center justify-center mb-4">
+                      <CheckCircle2 className="h-10 w-10 text-green-400" />
                     </div>
                     <p className="text-center text-muted-foreground">
                       <strong>{createdInstanceName}</strong> is now connected.
@@ -360,8 +360,8 @@ export default function InstancesPage() {
             return (
               <Card
                 key={membership.tenant_id}
-                className={`cursor-pointer transition-colors hover:border-green-300 ${
-                  isActive ? 'border-green-500 bg-green-50/50' : ''
+                className={`cursor-pointer transition-colors hover:border-green-500/40 ${
+                  isActive ? 'border-green-500/50 bg-green-500/8' : ''
                 }`}
                 onClick={() => router.push(`/instances/${membership.tenant?.instance_name || membership.tenant_id}`)}
               >
@@ -371,7 +371,7 @@ export default function InstancesPage() {
                   </CardTitle>
                   <div className="flex items-center gap-2">
                     {isActive && (
-                      <Badge variant="outline" className="border-green-500 text-green-600">
+                      <Badge variant="outline" className="border-green-500/40 text-green-400">
                         Active
                       </Badge>
                     )}

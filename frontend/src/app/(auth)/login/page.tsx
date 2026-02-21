@@ -32,7 +32,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-white p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-950/40 to-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <div className="flex items-center gap-2 mb-4">
@@ -87,7 +87,7 @@ export default function LoginPage() {
             </Button>
             <p className="text-sm text-muted-foreground text-center">
               Don&apos;t have an account?{' '}
-              <Link href="/register" className="text-green-600 hover:underline">
+              <Link href="/register" className="text-green-400 hover:underline">
                 Sign up
               </Link>
             </p>

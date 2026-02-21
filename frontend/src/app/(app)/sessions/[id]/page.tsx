@@ -186,7 +186,7 @@ export default function SessionDetailPage() {
               size="sm"
               onClick={handlePause}
               disabled={actionLoading}
-              className="border-orange-500 text-orange-600 hover:bg-orange-50"
+              className="border-amber-500/40 text-amber-400 hover:bg-amber-500/8"
             >
               <Pause className="h-4 w-4 mr-2" />
               Switch to Human

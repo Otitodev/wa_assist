@@ -274,7 +274,7 @@ export default function SettingsPage() {
           <Separator />
 
           <div>
-            <p className="text-sm font-medium text-red-600">Delete All Data</p>
+            <p className="text-sm font-medium text-red-400">Delete All Data</p>
             <p className="text-sm text-muted-foreground mb-3">
               Permanently delete all your data including messages, conversations,
               and WhatsApp connections. This action cannot be undone.
@@ -306,7 +306,7 @@ export default function SettingsPage() {
                       <li>All session history</li>
                       <li>Your account settings</li>
                     </ul>
-                    <p className="font-medium text-red-600 mt-2">
+                    <p className="font-medium text-red-400 mt-2">
                       This action cannot be undone!
                     </p>
                   </AlertDialogDescription>

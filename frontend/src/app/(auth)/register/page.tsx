@@ -45,7 +45,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-white p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-950/40 to-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <div className="flex items-center gap-2 mb-4">
@@ -125,7 +125,7 @@ export default function RegisterPage() {
             </Button>
             <p className="text-sm text-muted-foreground text-center">
               Already have an account?{' '}
-              <Link href="/login" className="text-green-600 hover:underline">
+              <Link href="/login" className="text-green-400 hover:underline">
                 Sign in
               </Link>
             </p>

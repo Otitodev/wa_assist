@@ -13,28 +13,28 @@ interface StatusBadgeProps {
 const statusConfig: Record<StatusType, { label: string; className: string; variant: 'default' | 'outline' | 'secondary' | 'destructive' }> = {
   active: {
     label: 'AI Mode',
-    className: 'bg-green-500 hover:bg-green-600 text-white border-green-500',
-    variant: 'default',
+    className: 'bg-green-500/15 text-green-400 border border-green-500/30 hover:bg-green-500/20',
+    variant: 'outline',
   },
   paused: {
     label: 'Human Mode',
-    className: 'border-orange-500 text-orange-600 bg-orange-50 hover:bg-orange-100',
+    className: 'bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/15',
     variant: 'outline',
   },
   error: {
     label: 'Error',
-    className: 'bg-red-500 hover:bg-red-600 text-white border-red-500',
-    variant: 'destructive',
+    className: 'bg-red-500/15 text-red-400 border border-red-500/30 hover:bg-red-500/20',
+    variant: 'outline',
   },
   connecting: {
     label: 'Connecting',
-    className: 'bg-gray-400 hover:bg-gray-500 text-white border-gray-400',
-    variant: 'secondary',
+    className: 'bg-zinc-500/15 text-zinc-400 border border-zinc-500/30 hover:bg-zinc-500/20',
+    variant: 'outline',
   },
   disconnected: {
     label: 'Disconnected',
-    className: 'bg-gray-200 text-gray-600 border-gray-300',
-    variant: 'secondary',
+    className: 'bg-zinc-700/20 text-zinc-500 border border-zinc-700/30',
+    variant: 'outline',
   },
 };
 

@@ -146,7 +146,7 @@ If you don't know the answer, politely say so and offer to escalate to a human a
             <div className="flex items-center gap-4">
               <span>{charCount.toLocaleString()} characters</span>
               {hasChanges && (
-                <span className="text-orange-500">Unsaved changes</span>
+                <span className="text-amber-400">Unsaved changes</span>
               )}
             </div>
           </div>
@@ -161,7 +161,7 @@ If you don't know the answer, politely say so and offer to escalate to a human a
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <h4 className="font-medium text-green-600">Do</h4>
+              <h4 className="font-medium text-green-400">Do</h4>
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>- Define a clear role and personality</li>
                 <li>- Specify the tone (formal, friendly, etc.)</li>
@@ -171,7 +171,7 @@ If you don't know the answer, politely say so and offer to escalate to a human a
               </ul>
             </div>
             <div className="space-y-2">
-              <h4 className="font-medium text-red-600">Don&apos;t</h4>
+              <h4 className="font-medium text-red-400">Don&apos;t</h4>
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>- Make the prompt too long or complex</li>
                 <li>- Include sensitive information (passwords, etc.)</li>
