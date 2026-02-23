@@ -51,7 +51,7 @@ export default function LandingPage() {
         .hero-badge { display:inline-flex; align-items:center; gap:8px; padding:6px 14px; background:rgba(22,163,74,0.1); border:1px solid rgba(22,163,74,0.3); border-radius:999px; font-size:0.8rem; font-weight:500; color:var(--green-xl); margin-bottom:2rem; animation:fadeUp .6s ease both; }
         .dot { width:6px; height:6px; border-radius:50%; background:var(--green-hi); animation:pulse-dot 2s ease infinite; }
         @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.7);} }
-        h1 { font-family:var(--font-display); font-size:clamp(2.8rem,7vw,6.5rem); font-weight:800; line-height:1.0; letter-spacing:-0.04em; max-width:900px; animation:fadeUp .7s .1s ease both; }
+        h1 { font-family:var(--font-display); font-size:clamp(2.2rem,7vw,4.5rem); font-weight:800; line-height:1.0; letter-spacing:-0.04em; max-width:900px; animation:fadeUp .7s .1s ease both; }
         .line-green { background:linear-gradient(135deg,var(--green-hi) 0%,var(--green-xl) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
         .hero-sub { margin-top:1.5rem; font-size:clamp(1rem,2vw,1.2rem); color:var(--text-3); max-width:560px; line-height:1.7; font-weight:300; animation:fadeUp .7s .2s ease both; }
         .hero-ctas { margin-top:2.5rem; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:fadeUp .7s .3s ease both; }
@@ -126,14 +126,30 @@ export default function LandingPage() {
         #cta h2 { max-width:700px; margin:0 auto 1rem; }
         #cta p { color:var(--text-3); font-size:1.05rem; max-width:480px; margin:0 auto 2.5rem; font-weight:300; }
         .cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-        footer { border-top:1px solid var(--border); padding:2.5rem clamp(1.5rem,5vw,4rem); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+        footer { border-top:1px solid var(--border-hi); padding:2.5rem clamp(1.5rem,5vw,4rem); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; background:rgba(6,11,6,0.95); }
         .footer-logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
         .footer-logo span { font-family:var(--font-display); font-weight:700; font-size:1rem; }
-        .footer-links { display:flex; gap:1.5rem; list-style:none; }
+        .footer-links { display:flex; gap:1.5rem; list-style:none; align-items:center; }
         .footer-links a { color:var(--text-3); text-decoration:none; font-size:0.875rem; transition:color .2s; }
         .footer-links a:hover { color:var(--text); }
+        .footer-links a.footer-email { color:var(--green-hi); border:1px solid rgba(34,197,94,0.25); padding:3px 10px; border-radius:6px; font-size:0.8rem; transition:all .2s; }
+        .footer-links a.footer-email:hover { background:rgba(34,197,94,0.08); border-color:var(--border-hi); color:var(--green-xl); }
         .footer-copy { color:var(--text-3); font-size:0.8rem; }
         @keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+        @media(max-width:768px){
+          nav{padding:1rem 1.25rem;}
+          .nav-cta .btn-ghost{display:none;}
+          .hero-preview{display:none;}
+          .hero-ctas{flex-direction:column;align-items:stretch;}
+          .hero-ctas .btn{text-align:center;}
+          footer{flex-direction:column;gap:1.5rem;text-align:center;}
+          .footer-links{flex-direction:column;gap:0.75rem;}
+        }
+        @media(max-width:480px){
+          .stats-inner{grid-template-columns:1fr 1fr;}
+          .ps-grid{gap:1rem;}
+          section{padding:clamp(2.5rem,6vw,4rem) clamp(1rem,4vw,2rem);}
+        }
         ::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-track{background:var(--bg);} ::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:3px;}
       `}</style>
 
@@ -334,8 +350,9 @@ export default function LandingPage() {
         <ul className="footer-links">
           <li><a href="#how">How it works</a></li>
           <li><a href="#features">Features</a></li>
-          <Link href="/dashboard"><a>Dashboard</a></Link>
-          <Link href="/register"><a>Sign up</a></Link>
+          <li><Link href="/dashboard">Dashboard</Link></li>
+          <li><Link href="/register">Sign up</Link></li>
+          <li><a href="mailto:otitodrichukwu@gmail.com" className="footer-email">Contact Dev</a></li>
         </ul>
         <span className="footer-copy">© 2026 HybridFlow. All rights reserved.</span>
       </footer>
