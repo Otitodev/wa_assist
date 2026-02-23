@@ -2,12 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { tenantsApi } from '@/lib/api';
+import { tenantsApi, getErrorMessage } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
-import { Brain, Save, RotateCcw, MessageSquare } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Brain, Save, RotateCcw, MessageSquare, Sparkles, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function KnowledgePage() {
@@ -16,6 +24,9 @@ export default function KnowledgePage() {
   const [originalPrompt, setOriginalPrompt] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [generateOpen, setGenerateOpen] = useState(false);
+  const [businessDescription, setBusinessDescription] = useState('');
+  const [generating, setGenerating] = useState(false);
 
   // Fetch current system prompt
   useEffect(() => {
@@ -62,6 +73,22 @@ export default function KnowledgePage() {
     toast.info('Changes discarded');
   };
 
+  const handleGenerate = async () => {
+    if (!businessDescription.trim()) return;
+    setGenerating(true);
+    try {
+      const result = await tenantsApi.generatePrompt(businessDescription);
+      setSystemPrompt(result.system_prompt);
+      setGenerateOpen(false);
+      setBusinessDescription('');
+      toast.success('Prompt generated — review and save when ready');
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   const hasChanges = systemPrompt !== originalPrompt;
   const charCount = systemPrompt.length;
 
@@ -78,8 +105,57 @@ export default function KnowledgePage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-[400px]" />
+        {/* Header skeleton */}
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-4 w-72" />
+          </div>
+          <div className="flex gap-2">
+            <Skeleton className="h-9 w-20" />
+            <Skeleton className="h-9 w-28" />
+          </div>
+        </div>
+
+        {/* System prompt card skeleton */}
+        <div className="rounded-lg border bg-card">
+          <div className="p-6 pb-2 space-y-2">
+            <Skeleton className="h-5 w-40" />
+            <Skeleton className="h-4 w-80" />
+          </div>
+          <div className="px-6 pb-6 space-y-3 pt-4">
+            <Skeleton className="h-[300px] w-full rounded-md" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+        </div>
+
+        {/* Tips card skeleton */}
+        <div className="rounded-lg border bg-card">
+          <div className="p-6 pb-4">
+            <Skeleton className="h-5 w-52" />
+          </div>
+          <div className="px-6 pb-6 space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-8" />
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Skeleton key={i} className="h-4 w-full" />
+                ))}
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-12" />
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Skeleton key={i} className="h-4 w-full" />
+                ))}
+              </div>
+            </div>
+            <Skeleton className="h-px w-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-44" />
+              <Skeleton className="h-[120px] w-full rounded-md" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -95,6 +171,10 @@ export default function KnowledgePage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => setGenerateOpen(true)}>
+            <Sparkles className="h-4 w-4 mr-2" />
+            Generate with AI
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -206,6 +286,37 @@ GUIDELINES:
           </div>
         </CardContent>
       </Card>
+
+      {/* Generate with AI Dialog */}
+      <Dialog open={generateOpen} onOpenChange={setGenerateOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Generate AI Persona</DialogTitle>
+            <DialogDescription>
+              Describe your business in a few sentences. The AI will write a system prompt for you.
+            </DialogDescription>
+          </DialogHeader>
+          <textarea
+            className="w-full min-h-[120px] p-3 text-sm rounded-md border border-input bg-background resize-y"
+            placeholder="e.g. We're a Lagos-based fashion store selling women's clothing. We take orders via WhatsApp, answer questions about sizing, delivery (1-3 days), and accept bank transfer or card payments."
+            value={businessDescription}
+            onChange={(e) => setBusinessDescription(e.target.value)}
+            disabled={generating}
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setGenerateOpen(false)} disabled={generating}>
+              Cancel
+            </Button>
+            <Button onClick={handleGenerate} disabled={generating || !businessDescription.trim()}>
+              {generating ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Generating...</>
+              ) : (
+                <><Sparkles className="h-4 w-4 mr-2" /> Generate</>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

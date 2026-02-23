@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Server, ExternalLink, RefreshCw, Plus, Smartphone, CheckCircle2, Loader2 } from 'lucide-react';
+import { Server, ExternalLink, RefreshCw, Plus, Smartphone, CheckCircle2, Loader2, Wifi, WifiOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 type ConnectionStep = 'name' | 'qrcode' | 'connected';
@@ -38,6 +38,7 @@ export default function InstancesPage() {
   const [pairingCode, setPairingCode] = useState<string | null>(null);
   const [createdInstanceName, setCreatedInstanceName] = useState<string | null>(null);
   const [checkingConnection, setCheckingConnection] = useState(false);
+  const [connectionStatuses, setConnectionStatuses] = useState<Record<string, 'open' | 'connecting' | 'close' | 'unknown'>>({});
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -61,6 +62,18 @@ export default function InstancesPage() {
     }
     setDialogOpen(open);
   };
+
+  // Fetch live connection status for all instances
+  useEffect(() => {
+    const list = Array.isArray(tenants) ? tenants : [];
+    list.forEach((membership) => {
+      const name = membership.tenant?.instance_name;
+      if (!name) return;
+      whatsappApi.getConnectionStatus(name)
+        .then((status) => setConnectionStatuses(prev => ({ ...prev, [name]: status.state })))
+        .catch(() => setConnectionStatuses(prev => ({ ...prev, [name]: 'unknown' })));
+    });
+  }, [tenants]);
 
   // Poll for connection status when showing QR code
   useEffect(() => {
@@ -372,7 +385,7 @@ export default function InstancesPage() {
                   <div className="flex items-center gap-2">
                     {isActive && (
                       <Badge variant="outline" className="border-green-500/40 text-green-400">
-                        Active
+                        Selected
                       </Badge>
                     )}
                     <Badge variant="secondary" className="capitalize">
@@ -387,6 +400,33 @@ export default function InstancesPage() {
                       <p className="text-sm truncate">
                         {membership.tenant?.evo_server_url || 'Not configured'}
                       </p>
+                    </div>
+
+                    <div>
+                      {(() => {
+                        const name = membership.tenant?.instance_name ?? '';
+                        const state = connectionStatuses[name];
+                        if (!state) return (
+                          <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Loader2 className="h-3 w-3 animate-spin" /> Checking...
+                          </span>
+                        );
+                        if (state === 'open') return (
+                          <span className="flex items-center gap-1 text-xs text-green-400">
+                            <Wifi className="h-3 w-3" /> Connected
+                          </span>
+                        );
+                        if (state === 'connecting') return (
+                          <span className="flex items-center gap-1 text-xs text-amber-400">
+                            <Loader2 className="h-3 w-3 animate-spin" /> Connecting
+                          </span>
+                        );
+                        return (
+                          <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <WifiOff className="h-3 w-3" /> Disconnected
+                          </span>
+                        );
+                      })()}
                     </div>
 
                     <Button

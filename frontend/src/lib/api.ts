@@ -2,10 +2,8 @@
  * API Client for HybridFlow Backend
  */
 
+import { authClient } from '@/lib/auth-client';
 import type {
-  AuthResponse,
-  LoginRequest,
-  RegisterRequest,
   User,
   Tenant,
   TenantMembership,
@@ -33,9 +31,13 @@ async function apiClient<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = typeof window !== 'undefined'
-    ? localStorage.getItem('access_token')
-    : null;
+  let token: string | null = null;
+  try {
+    const result = await authClient.getSession();
+    token = result.data?.session?.token ?? null;
+  } catch {
+    // No active session
+  }
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -51,13 +53,8 @@ async function apiClient<T>(
     headers,
   });
 
-  // Handle 401 - Unauthorized
+  // Handle 401 - Unauthorized (throw only; let useRequireAuth handle redirect)
   if (response.status === 401) {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      window.location.href = '/login';
-    }
     throw new ApiClientError('Unauthorized', 401);
   }
 
@@ -81,76 +78,6 @@ async function apiClient<T>(
 
   return JSON.parse(text) as T;
 }
-
-// Auth API
-export const authApi = {
-  login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await apiClient<AuthResponse>('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-
-    // Store tokens
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('access_token', response.access_token);
-      localStorage.setItem('refresh_token', response.refresh_token);
-    }
-
-    return response;
-  },
-
-  register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await apiClient<AuthResponse>('/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-
-    // Store tokens
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('access_token', response.access_token);
-      localStorage.setItem('refresh_token', response.refresh_token);
-    }
-
-    return response;
-  },
-
-  logout: async (): Promise<void> => {
-    try {
-      await apiClient('/api/auth/logout', { method: 'POST' });
-    } finally {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-      }
-    }
-  },
-
-  me: async (): Promise<{ user: User }> => {
-    return apiClient<{ user: User }>('/api/auth/me');
-  },
-
-  refresh: async (): Promise<AuthResponse> => {
-    const refreshToken = typeof window !== 'undefined'
-      ? localStorage.getItem('refresh_token')
-      : null;
-
-    if (!refreshToken) {
-      throw new ApiClientError('No refresh token', 401);
-    }
-
-    const response = await apiClient<AuthResponse>('/api/auth/refresh', {
-      method: 'POST',
-      body: JSON.stringify({ refresh_token: refreshToken }),
-    });
-
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('access_token', response.access_token);
-      localStorage.setItem('refresh_token', response.refresh_token);
-    }
-
-    return response;
-  },
-};
 
 // Tenants API
 export const tenantsApi = {
@@ -202,6 +129,13 @@ export const tenantsApi = {
     return apiClient<Tenant>(`/api/tenants/${tenantId}`, {
       method: 'PUT',
       body: JSON.stringify(data),
+    });
+  },
+
+  generatePrompt: async (description: string): Promise<{ system_prompt: string }> => {
+    return apiClient<{ system_prompt: string }>('/api/generate-prompt', {
+      method: 'POST',
+      body: JSON.stringify({ description }),
     });
   },
 };
@@ -432,3 +366,9 @@ export const whatsappApi = {
 };
 
 export { ApiClientError };
+
+export function getErrorMessage(error: unknown): string {
+  if (error instanceof ApiClientError) return error.detail ?? error.message;
+  if (error instanceof Error) return error.message;
+  return 'Something went wrong';
+}

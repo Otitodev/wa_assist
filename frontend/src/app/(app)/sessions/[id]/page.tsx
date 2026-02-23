@@ -110,15 +110,62 @@ export default function SessionDetailPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Skeleton className="h-10 w-10" />
-          <Skeleton className="h-8 w-64" />
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="md:col-span-2">
-            <Skeleton className="h-[400px]" />
+        {/* Header skeleton */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-10 rounded-md" />
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-8 w-40" />
+                <Skeleton className="h-6 w-20 rounded-full" />
+              </div>
+              <Skeleton className="h-4 w-28" />
+            </div>
           </div>
-          <Skeleton className="h-[400px]" />
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-9 w-24" />
+            <Skeleton className="h-9 w-32" />
+          </div>
+        </div>
+
+        {/* Content grid skeleton */}
+        <div className="grid gap-6 md:grid-cols-3">
+          {/* Timeline card skeleton */}
+          <div className="md:col-span-2 rounded-lg border bg-card">
+            <div className="p-6 pb-4">
+              <Skeleton className="h-5 w-48" />
+            </div>
+            <div className="px-6 pb-6 space-y-5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`flex items-start gap-3 ${i % 2 !== 0 ? 'flex-row-reverse' : ''}`}
+                >
+                  <Skeleton className="h-8 w-8 rounded-full shrink-0" />
+                  <div className={`space-y-1 flex-1 ${i % 2 !== 0 ? 'items-end flex flex-col' : ''}`}>
+                    <Skeleton className="h-3 w-16" />
+                    <Skeleton className={`h-12 rounded-lg ${i % 2 !== 0 ? 'w-2/3' : 'w-3/4'}`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Details card skeleton */}
+          <div className="rounded-lg border bg-card">
+            <div className="p-6 pb-4">
+              <Skeleton className="h-5 w-44" />
+            </div>
+            <div className="px-6 pb-6 space-y-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i}>
+                  <Skeleton className="h-3 w-20 mb-2" />
+                  <Skeleton className="h-5 w-full" />
+                  {i < 4 && <Skeleton className="h-px w-full mt-4" />}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );

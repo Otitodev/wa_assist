@@ -14,6 +14,7 @@ LOG_LEVEL = os.getenv("LOG_LEVEL", "info")
 # Security
 EVOLUTION_WEBHOOK_SHARED_SECRET = os.getenv("EVOLUTION_WEBHOOK_SHARED_SECRET", "change-me")
 CRON_SECRET = os.getenv("CRON_SECRET", "change-me-cron-secret")
+BETTER_AUTH_SECRET = os.getenv("BETTER_AUTH_SECRET", "")
 
 # Auto-resume configuration
 RESUME_AFTER_HOURS = int(os.getenv("RESUME_AFTER_HOURS", "2"))

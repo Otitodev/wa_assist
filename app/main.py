@@ -3075,3 +3075,48 @@ async def cleanup_old_data(
             exc_info=True,
         )
         raise HTTPException(status_code=500, detail=f"Cleanup failed: {str(e)}")
+
+
+@app.post("/api/generate-prompt")
+async def generate_system_prompt(
+    request: Request,
+    user: dict = Depends(get_current_user),
+):
+    """
+    Generate an AI system prompt from a plain-language business description.
+
+    The user describes their business; the backend LLM writes a ready-to-use
+    WhatsApp assistant system prompt. LLM keys never leave the server.
+    """
+    body = await request.json()
+    description = body.get("description", "").strip()
+    if not description:
+        raise HTTPException(status_code=422, detail="description is required")
+
+    meta_prompt = """You are an expert at writing WhatsApp AI assistant system prompts for businesses.
+
+The user will describe their business. Generate a clear, professional system prompt for their WhatsApp AI assistant.
+
+Rules:
+- Write in second person ("You are...")
+- Be specific to their business type
+- Include: role, tone, what to help with, what NOT to do (escalate to human)
+- Keep it under 300 words
+- Output ONLY the system prompt text, no explanation or preamble"""
+
+    try:
+        from .services.llm_client import generate_ai_reply
+        prompt_text = await generate_ai_reply(
+            message=f"Business description: {description}",
+            system_prompt=meta_prompt,
+        )
+    except Exception as e:
+        log_error(
+            "Prompt generation failed",
+            action="generate_prompt_failed",
+            error_type=type(e).__name__,
+            exc_info=True,
+        )
+        raise HTTPException(status_code=500, detail=f"Prompt generation failed: {str(e)}")
+
+    return {"system_prompt": prompt_text.strip()}

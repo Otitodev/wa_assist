@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/use-auth';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Topbar } from '@/components/layout/topbar';
@@ -11,6 +12,7 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   const { loading } = useRequireAuth();
+  const [collapsed, setCollapsed] = useState(false);
 
   if (loading) {
     return (
@@ -26,7 +28,7 @@ export default function AppLayout({
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
 
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">

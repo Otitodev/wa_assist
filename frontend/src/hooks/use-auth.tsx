@@ -4,12 +4,13 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   useCallback,
   type ReactNode,
 } from 'react';
 import { useRouter } from 'next/navigation';
-import { authApi } from '@/lib/api';
+import { authClient } from '@/lib/auth-client';
 import type { User, TenantMembership } from '@/types/api';
 import { tenantsApi } from '@/lib/api';
 
@@ -42,101 +43,105 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [activeTenant, setActiveTenantState] = useState<TenantMembership | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  // Prevents initAuth from clearing user state during post-login navigation
+  const transitioning = useRef(false);
 
-  // Load user and tenants on mount
+  // BetterAuth session hook — reactive, no polling needed
+  const { data: session, isPending } = authClient.useSession();
+
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
+      if (isPending) return;
+
+      if (!session?.user) {
+        // Don't clear state while we're navigating after a successful sign-in
+        if (transitioning.current) return;
+        setUser(null);
+        setTenants([]);
+        setActiveTenantState(null);
         setLoading(false);
         return;
       }
+      transitioning.current = false;
+
+      const baUser = session.user as {
+        id: string;
+        email: string;
+        name: string;
+        display_name?: string;
+        emailVerified: boolean;
+        createdAt: Date | string;
+      };
+
+      setUser({
+        id: baUser.id,
+        email: baUser.email,
+        name: baUser.name,
+        display_name: baUser.display_name,
+        emailVerified: baUser.emailVerified,
+        createdAt: typeof baUser.createdAt === 'string'
+          ? baUser.createdAt
+          : baUser.createdAt.toISOString(),
+      });
 
       try {
-        // Fetch user
-        const { user: currentUser } = await authApi.me();
-        setUser(currentUser);
-
-        // Fetch tenants
         const tenantList = await tenantsApi.list();
         const validTenants = Array.isArray(tenantList) ? tenantList : [];
         setTenants(validTenants);
 
-        // Restore active tenant from localStorage or use first
         const savedTenantId = localStorage.getItem('active_tenant_id');
         if (savedTenantId && validTenants.length > 0) {
-          const savedTenant = validTenants.find(
+          const saved = validTenants.find(
             (t) => getTenantIdString(t) === savedTenantId
           );
-          if (savedTenant) {
-            setActiveTenantState(savedTenant);
-          } else {
-            setActiveTenantState(validTenants[0]);
-          }
+          setActiveTenantState(saved ?? validTenants[0]);
         } else if (validTenants.length > 0) {
           setActiveTenantState(validTenants[0]);
         }
-      } catch (error) {
-        // Token invalid - clear storage
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('active_tenant_id');
+      } catch {
+        // Tenant fetch may fail for brand-new users — not an error
       } finally {
         setLoading(false);
       }
     };
 
     initAuth();
-  }, []);
+  }, [session, isPending]);
 
   const login = useCallback(async (email: string, password: string) => {
-    const response = await authApi.login({ email, password });
-    setUser(response.user);
-
-    // Fetch tenants after login
-    const tenantList = await tenantsApi.list();
-    const validTenants = Array.isArray(tenantList) ? tenantList : [];
-    setTenants(validTenants);
-
-    if (validTenants.length > 0) {
-      const firstTenant = validTenants[0];
-      setActiveTenantState(firstTenant);
-      const tenantId = getTenantIdString(firstTenant);
-      if (tenantId) {
-        localStorage.setItem('active_tenant_id', tenantId);
-      }
+    const result = await authClient.signIn.email({ email, password });
+    if (result.error) {
+      throw new Error(result.error.message ?? 'Login failed');
     }
 
-    router.push('/dashboard');
-  }, [router]);
+    // Mark as transitioning so initAuth doesn't clear state during navigation
+    transitioning.current = true;
+    setLoading(true);
+
+    // Full-page navigation avoids client-side race conditions with useSession
+    window.location.href = '/dashboard';
+  }, []);
 
   const register = useCallback(async (email: string, password: string, displayName: string) => {
-    const response = await authApi.register({ email, password, display_name: displayName });
-    setUser(response.user);
-
-    // New users may not have tenants yet
-    try {
-      const tenantList = await tenantsApi.list();
-      const validTenants = Array.isArray(tenantList) ? tenantList : [];
-      setTenants(validTenants);
-      if (validTenants.length > 0) {
-        const firstTenant = validTenants[0];
-        setActiveTenantState(firstTenant);
-        const tenantId = getTenantIdString(firstTenant);
-        if (tenantId) {
-          localStorage.setItem('active_tenant_id', tenantId);
-        }
-      }
-    } catch {
-      // Ignore - new user has no tenants
+    const result = await authClient.signUp.email({
+      email,
+      password,
+      name: displayName,
+      // @ts-expect-error — additionalFields typed at runtime by BetterAuth
+      display_name: displayName,
+    });
+    if (result.error) {
+      throw new Error(result.error.message ?? 'Registration failed');
     }
 
-    router.push('/dashboard');
-  }, [router]);
+    transitioning.current = true;
+    setLoading(true);
+    window.location.href = '/dashboard';
+  }, []);
 
   const logout = useCallback(async () => {
     try {
-      await authApi.logout();
+      await authClient.signOut();
     } finally {
       setUser(null);
       setTenants([]);
@@ -148,10 +153,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const setActiveTenant = useCallback((tenant: TenantMembership) => {
     setActiveTenantState(tenant);
-    const tenantId = getTenantIdString(tenant);
-    if (tenantId) {
-      localStorage.setItem('active_tenant_id', tenantId);
-    }
+    const id = getTenantIdString(tenant);
+    if (id) localStorage.setItem('active_tenant_id', id);
   }, []);
 
   const refreshTenants = useCallback(async () => {
@@ -160,14 +163,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const validTenants = Array.isArray(tenantList) ? tenantList : [];
       setTenants(validTenants);
 
-      // If no active tenant but we have tenants, set the first one
       if (!activeTenant && validTenants.length > 0) {
-        const firstTenant = validTenants[0];
-        setActiveTenantState(firstTenant);
-        const tenantId = getTenantIdString(firstTenant);
-        if (tenantId) {
-          localStorage.setItem('active_tenant_id', tenantId);
-        }
+        const first = validTenants[0];
+        setActiveTenantState(first);
+        const id = getTenantIdString(first);
+        if (id) localStorage.setItem('active_tenant_id', id);
       }
     } catch (error) {
       console.error('Failed to refresh tenants:', error);
@@ -180,7 +180,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         tenants,
         activeTenant,
-        loading,
+        loading: loading || isPending,
         login,
         register,
         logout,

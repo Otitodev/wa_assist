@@ -1,0 +1,791 @@
+20:08:59.820 Running build in Washington, D.C., USA (East) – iad1
+20:08:59.820 Build machine configuration: 2 cores, 8 GB
+20:08:59.959 Cloning github.com/Otitodev/wa_assist (Branch: main, Commit: 8e1b78f)
+20:08:59.960 Previous build caches not available.
+20:09:00.273 Cloning completed: 313.000ms
+20:09:02.254 Running "vercel build"
+20:09:02.850 Vercel CLI 50.22.0
+20:09:03.151 Installing dependencies...
+20:09:17.006 
+20:09:17.007 added 463 packages in 14s
+20:09:17.007 
+20:09:17.008 152 packages are looking for funding
+20:09:17.008   run `npm fund` for details
+20:09:17.082 Detected Next.js version: 16.1.6
+20:09:17.089 Running "npm run build"
+20:09:17.188 
+20:09:17.189 > frontend@0.1.0 build
+20:09:17.189 > next build
+20:09:17.189 
+20:09:18.096 ⚠ Both `outputFileTracingRoot` and `turbopack.root` are set, but they must have the same value.
+20:09:18.097 Using `outputFileTracingRoot` value: /vercel/path0.
+20:09:18.103 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+20:09:18.104 This information is used to shape Next.js' roadmap and prioritize features.
+20:09:18.104 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+20:09:18.105 https://nextjs.org/telemetry
+20:09:18.105 
+20:09:18.119 ▲ Next.js 16.1.6 (Turbopack)
+20:09:18.119 
+20:09:18.153   Creating an optimized production build ...
+20:09:18.649 ⚠ Both `outputFileTracingRoot` and `turbopack.root` are set, but they must have the same value.
+20:09:18.650 Using `outputFileTracingRoot` value: /vercel/path0.
+20:09:28.758 
+20:09:28.759 > Build error occurred
+20:09:28.765 Error: Turbopack build failed with 26 errors:
+20:09:28.766 ./frontend/src/app/(app)/dashboard/page.tsx:5:1
+20:09:28.766 Module not found: Can't resolve '@/lib/api'
+20:09:28.766 [0m [90m 3 |[39m [36mimport[39m { useEffect[33m,[39m useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+20:09:28.767  [90m 4 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m'@/hooks/use-auth'[39m[33m;[39m
+20:09:28.767 [31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { sessionsApi[33m,[39m healthApi[33m,[39m eventsApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.767  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.769  [90m 6 |[39m [36mimport[39m { [33mCard[39m[33m,[39m [33mCardContent[39m[33m,[39m [33mCardHeader[39m[33m,[39m [33mCardTitle[39m } [36mfrom[39m [32m'@/components/ui/card'[39m[33m;[39m
+20:09:28.769  [90m 7 |[39m [36mimport[39m { [33mSkeleton[39m } [36mfrom[39m [32m'@/components/ui/skeleton'[39m[33m;[39m
+20:09:28.769  [90m 8 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m'@/components/ui/badge'[39m[33m;[39m[0m
+20:09:28.769 
+20:09:28.770 Import map: aliased to relative './src/lib/api' inside of [project]/frontend
+20:09:28.770 
+20:09:28.770 
+20:09:28.770 Import traces:
+20:09:28.770   Client Component Browser:
+20:09:28.770     ./frontend/src/app/(app)/dashboard/page.tsx [Client Component Browser]
+20:09:28.771     ./frontend/src/app/(app)/dashboard/page.tsx [Server Component]
+20:09:28.771 
+20:09:28.771   Client Component SSR:
+20:09:28.771     ./frontend/src/app/(app)/dashboard/page.tsx [Client Component SSR]
+20:09:28.771     ./frontend/src/app/(app)/dashboard/page.tsx [Server Component]
+20:09:28.772 
+20:09:28.772 https://nextjs.org/docs/messages/module-not-found
+20:09:28.772 
+20:09:28.772 
+20:09:28.772 ./frontend/src/app/(app)/instances/[name]/page.tsx:6:1
+20:09:28.772 Module not found: Can't resolve '@/lib/api'
+20:09:28.773 [0m [90m 4 |[39m [36mimport[39m { useParams[33m,[39m useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+20:09:28.773  [90m 5 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m'@/hooks/use-auth'[39m[33m;[39m
+20:09:28.773 [31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { instancesApi[33m,[39m tenantsApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.774  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.774  [90m 7 |[39m [36mimport[39m { [33mCard[39m[33m,[39m [33mCardContent[39m[33m,[39m [33mCardHeader[39m[33m,[39m [33mCardTitle[39m } [36mfrom[39m [32m'@/components/ui/card'[39m[33m;[39m
+20:09:28.775  [90m 8 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m
+20:09:28.775  [90m 9 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m'@/components/ui/badge'[39m[33m;[39m[0m
+20:09:28.775 
+20:09:28.775 Import map: aliased to relative './src/lib/api' inside of [project]/frontend
+20:09:28.776 
+20:09:28.776 
+20:09:28.776 Import traces:
+20:09:28.776   Client Component Browser:
+20:09:28.776     ./frontend/src/app/(app)/instances/[name]/page.tsx [Client Component Browser]
+20:09:28.776     ./frontend/src/app/(app)/instances/[name]/page.tsx [Server Component]
+20:09:28.776 
+20:09:28.777   Client Component SSR:
+20:09:28.777     ./frontend/src/app/(app)/instances/[name]/page.tsx [Client Component SSR]
+20:09:28.777     ./frontend/src/app/(app)/instances/[name]/page.tsx [Server Component]
+20:09:28.777 
+20:09:28.777 https://nextjs.org/docs/messages/module-not-found
+20:09:28.778 
+20:09:28.778 
+20:09:28.778 ./frontend/src/app/(app)/instances/page.tsx:6:1
+20:09:28.778 Module not found: Can't resolve '@/lib/api'
+20:09:28.778 [0m [90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+20:09:28.778  [90m 5 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m'@/hooks/use-auth'[39m[33m;[39m
+20:09:28.779 [31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { whatsappApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.779  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.779  [90m 7 |[39m [36mimport[39m { [33mCard[39m[33m,[39m [33mCardContent[39m[33m,[39m [33mCardHeader[39m[33m,[39m [33mCardTitle[39m } [36mfrom[39m [32m'@/components/ui/card'[39m[33m;[39m
+20:09:28.780  [90m 8 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m
+20:09:28.780  [90m 9 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m'@/components/ui/badge'[39m[33m;[39m[0m
+20:09:28.780 
+20:09:28.780 Import map: aliased to relative './src/lib/api' inside of [project]/frontend
+20:09:28.780 
+20:09:28.781 
+20:09:28.781 Import traces:
+20:09:28.781   Client Component Browser:
+20:09:28.781     ./frontend/src/app/(app)/instances/page.tsx [Client Component Browser]
+20:09:28.781     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.781 
+20:09:28.782   Client Component SSR:
+20:09:28.782     ./frontend/src/app/(app)/instances/page.tsx [Client Component SSR]
+20:09:28.782     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.782 
+20:09:28.782 https://nextjs.org/docs/messages/module-not-found
+20:09:28.783 
+20:09:28.783 
+20:09:28.783 ./frontend/src/app/(app)/knowledge/page.tsx:5:1
+20:09:28.783 Module not found: Can't resolve '@/lib/api'
+20:09:28.783 [0m [90m 3 |[39m [36mimport[39m { useEffect[33m,[39m useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+20:09:28.783  [90m 4 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m'@/hooks/use-auth'[39m[33m;[39m
+20:09:28.783 [31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { tenantsApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.784  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.784  [90m 6 |[39m [36mimport[39m { [33mCard[39m[33m,[39m [33mCardContent[39m[33m,[39m [33mCardHeader[39m[33m,[39m [33mCardTitle[39m[33m,[39m [33mCardDescription[39m } [36mfrom[39m [32m'@/components/ui/card'[39m[33m;[39m
+20:09:28.784  [90m 7 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m
+20:09:28.785  [90m 8 |[39m [36mimport[39m { [33mSkeleton[39m } [36mfrom[39m [32m'@/components/ui/skeleton'[39m[33m;[39m[0m
+20:09:28.785 
+20:09:28.785 Import map: aliased to relative './src/lib/api' inside of [project]/frontend
+20:09:28.785 
+20:09:28.785 
+20:09:28.785 Import traces:
+20:09:28.785   Client Component Browser:
+20:09:28.786     ./frontend/src/app/(app)/knowledge/page.tsx [Client Component Browser]
+20:09:28.786     ./frontend/src/app/(app)/knowledge/page.tsx [Server Component]
+20:09:28.786 
+20:09:28.786   Client Component SSR:
+20:09:28.786     ./frontend/src/app/(app)/knowledge/page.tsx [Client Component SSR]
+20:09:28.786     ./frontend/src/app/(app)/knowledge/page.tsx [Server Component]
+20:09:28.786 
+20:09:28.787 https://nextjs.org/docs/messages/module-not-found
+20:09:28.787 
+20:09:28.787 
+20:09:28.787 ./frontend/src/app/(app)/sessions/[id]/page.tsx:6:1
+20:09:28.787 Module not found: Can't resolve '@/lib/api'
+20:09:28.787 [0m [90m 4 |[39m [36mimport[39m { useParams[33m,[39m useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+20:09:28.787  [90m 5 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m'@/hooks/use-auth'[39m[33m;[39m
+20:09:28.788 [31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { sessionsApi[33m,[39m eventsApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.788  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.789  [90m 7 |[39m [36mimport[39m { [33mTimeline[39m[33m,[39m messageToTimelineEvent } [36mfrom[39m [32m'@/components/shared/timeline'[39m[33m;[39m
+20:09:28.789  [90m 8 |[39m [36mimport[39m { [33mSessionStatusBadge[39m } [36mfrom[39m [32m'@/components/shared/status-badge'[39m[33m;[39m
+20:09:28.789  [90m 9 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m[0m
+20:09:28.789 
+20:09:28.789 Import map: aliased to relative './src/lib/api' inside of [project]/frontend
+20:09:28.789 
+20:09:28.789 
+20:09:28.790 Import traces:
+20:09:28.791   Client Component Browser:
+20:09:28.791     ./frontend/src/app/(app)/sessions/[id]/page.tsx [Client Component Browser]
+20:09:28.791     ./frontend/src/app/(app)/sessions/[id]/page.tsx [Server Component]
+20:09:28.791 
+20:09:28.791   Client Component SSR:
+20:09:28.791     ./frontend/src/app/(app)/sessions/[id]/page.tsx [Client Component SSR]
+20:09:28.792     ./frontend/src/app/(app)/sessions/[id]/page.tsx [Server Component]
+20:09:28.792 
+20:09:28.792 https://nextjs.org/docs/messages/module-not-found
+20:09:28.792 
+20:09:28.792 
+20:09:28.792 ./frontend/src/app/(app)/sessions/page.tsx:6:1
+20:09:28.792 Module not found: Can't resolve '@/lib/api'
+20:09:28.793 [0m [90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+20:09:28.793  [90m 5 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m'@/hooks/use-auth'[39m[33m;[39m
+20:09:28.793 [31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { sessionsApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.793  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.793  [90m 7 |[39m [36mimport[39m { [33mDataTable[39m } [36mfrom[39m [32m'@/components/shared/data-table'[39m[33m;[39m
+20:09:28.793  [90m 8 |[39m [36mimport[39m { [33mSessionStatusBadge[39m } [36mfrom[39m [32m'@/components/shared/status-badge'[39m[33m;[39m
+20:09:28.793  [90m 9 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m[0m
+20:09:28.793 
+20:09:28.793 Import map: aliased to relative './src/lib/api' inside of [project]/frontend
+20:09:28.793 
+20:09:28.793 
+20:09:28.793 Import traces:
+20:09:28.793   Client Component Browser:
+20:09:28.793     ./frontend/src/app/(app)/sessions/page.tsx [Client Component Browser]
+20:09:28.793     ./frontend/src/app/(app)/sessions/page.tsx [Server Component]
+20:09:28.793 
+20:09:28.793   Client Component SSR:
+20:09:28.793     ./frontend/src/app/(app)/sessions/page.tsx [Client Component SSR]
+20:09:28.794     ./frontend/src/app/(app)/sessions/page.tsx [Server Component]
+20:09:28.794 
+20:09:28.794 https://nextjs.org/docs/messages/module-not-found
+20:09:28.794 
+20:09:28.795 
+20:09:28.795 ./frontend/src/app/(app)/settings/page.tsx:4:1
+20:09:28.795 Module not found: Can't resolve '@/lib/api'
+20:09:28.795 [0m [90m 2 |[39m
+20:09:28.795  [90m 3 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m'@/hooks/use-auth'[39m[33m;[39m
+20:09:28.795 [31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { privacyApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.796  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.796  [90m 5 |[39m [36mimport[39m { [33mCard[39m[33m,[39m [33mCardContent[39m[33m,[39m [33mCardHeader[39m[33m,[39m [33mCardTitle[39m[33m,[39m [33mCardDescription[39m } [36mfrom[39m [32m'@/components/ui/card'[39m[33m;[39m
+20:09:28.796  [90m 6 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m
+20:09:28.796  [90m 7 |[39m [36mimport[39m { [33mSeparator[39m } [36mfrom[39m [32m'@/components/ui/separator'[39m[33m;[39m[0m
+20:09:28.796 
+20:09:28.797 Import map: aliased to relative './src/lib/api' inside of [project]/frontend
+20:09:28.797 
+20:09:28.797 
+20:09:28.797 Import traces:
+20:09:28.797   Client Component Browser:
+20:09:28.797     ./frontend/src/app/(app)/settings/page.tsx [Client Component Browser]
+20:09:28.797     ./frontend/src/app/(app)/settings/page.tsx [Server Component]
+20:09:28.798 
+20:09:28.798   Client Component SSR:
+20:09:28.798     ./frontend/src/app/(app)/settings/page.tsx [Client Component SSR]
+20:09:28.798     ./frontend/src/app/(app)/settings/page.tsx [Server Component]
+20:09:28.798 
+20:09:28.798 https://nextjs.org/docs/messages/module-not-found
+20:09:28.799 
+20:09:28.799 
+20:09:28.799 ./frontend/src/hooks/use-auth.tsx:12:1
+20:09:28.799 Module not found: Can't resolve '@/lib/api'
+20:09:28.799 [0m [90m 10 |[39m } [36mfrom[39m [32m'react'[39m[33m;[39m
+20:09:28.799  [90m 11 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+20:09:28.800 [31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { authApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.800  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.801  [90m 13 |[39m [36mimport[39m type { [33mUser[39m[33m,[39m [33mTenantMembership[39m } [36mfrom[39m [32m'@/types/api'[39m[33m;[39m
+20:09:28.801  [90m 14 |[39m [36mimport[39m { tenantsApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.801  [90m 15 |[39m[0m
+20:09:28.801 
+20:09:28.801 Import map: aliased to relative './src/lib/api' inside of [project]/frontend
+20:09:28.802 
+20:09:28.802 
+20:09:28.802 Import traces:
+20:09:28.802   Server Component:
+20:09:28.802     ./frontend/src/hooks/use-auth.tsx
+20:09:28.802     ./frontend/src/app/layout.tsx
+20:09:28.803 
+20:09:28.803   Client Component Browser:
+20:09:28.803     ./frontend/src/hooks/use-auth.tsx [Client Component Browser]
+20:09:28.803     ./frontend/src/app/(app)/layout.tsx [Client Component Browser]
+20:09:28.803     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.803 
+20:09:28.804   Client Component SSR:
+20:09:28.804     ./frontend/src/hooks/use-auth.tsx [Client Component SSR]
+20:09:28.804     ./frontend/src/app/(app)/layout.tsx [Client Component SSR]
+20:09:28.804     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.804 
+20:09:28.804 https://nextjs.org/docs/messages/module-not-found
+20:09:28.804 
+20:09:28.805 
+20:09:28.805 ./frontend/src/hooks/use-auth.tsx:14:1
+20:09:28.805 Module not found: Can't resolve '@/lib/api'
+20:09:28.805 [0m [90m 12 |[39m [36mimport[39m { authApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.805  [90m 13 |[39m [36mimport[39m type { [33mUser[39m[33m,[39m [33mTenantMembership[39m } [36mfrom[39m [32m'@/types/api'[39m[33m;[39m
+20:09:28.805 [31m[1m>[22m[39m[90m 14 |[39m [36mimport[39m { tenantsApi } [36mfrom[39m [32m'@/lib/api'[39m[33m;[39m
+20:09:28.805  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.806  [90m 15 |[39m
+20:09:28.806  [90m 16 |[39m [36minterface[39m [33mAuthContextType[39m {
+20:09:28.806  [90m 17 |[39m   user[33m:[39m [33mUser[39m [33m|[39m [36mnull[39m[33m;[39m[0m
+20:09:28.807 
+20:09:28.807 Import map: aliased to relative './src/lib/api' inside of [project]/frontend
+20:09:28.807 
+20:09:28.807 
+20:09:28.807 Import traces:
+20:09:28.807   Server Component:
+20:09:28.808     ./frontend/src/hooks/use-auth.tsx
+20:09:28.808     ./frontend/src/app/layout.tsx
+20:09:28.808 
+20:09:28.808   Client Component Browser:
+20:09:28.808     ./frontend/src/hooks/use-auth.tsx [Client Component Browser]
+20:09:28.808     ./frontend/src/app/(app)/layout.tsx [Client Component Browser]
+20:09:28.809     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.809 
+20:09:28.809   Client Component SSR:
+20:09:28.809     ./frontend/src/hooks/use-auth.tsx [Client Component SSR]
+20:09:28.809     ./frontend/src/app/(app)/layout.tsx [Client Component SSR]
+20:09:28.809     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.810 
+20:09:28.810 https://nextjs.org/docs/messages/module-not-found
+20:09:28.810 
+20:09:28.810 
+20:09:28.810 ./frontend/src/components/layout/sidebar.tsx:5:1
+20:09:28.810 Module not found: Can't resolve '@/lib/utils'
+20:09:28.810 [0m [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+20:09:28.811  [90m 4 |[39m [36mimport[39m { usePathname } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+20:09:28.811 [31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { cn } [36mfrom[39m [32m'@/lib/utils'[39m[33m;[39m
+20:09:28.811  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.812  [90m 6 |[39m [36mimport[39m {
+20:09:28.812  [90m 7 |[39m   [33mLayoutDashboard[39m[33m,[39m
+20:09:28.812  [90m 8 |[39m   [33mMessageSquare[39m[33m,[39m[0m
+20:09:28.812 
+20:09:28.812 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.813 
+20:09:28.813 
+20:09:28.813 Import traces:
+20:09:28.813   Client Component Browser:
+20:09:28.813     ./frontend/src/components/layout/sidebar.tsx [Client Component Browser]
+20:09:28.813     ./frontend/src/app/(app)/layout.tsx [Client Component Browser]
+20:09:28.813     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.814 
+20:09:28.814   Client Component SSR:
+20:09:28.814     ./frontend/src/components/layout/sidebar.tsx [Client Component SSR]
+20:09:28.814     ./frontend/src/app/(app)/layout.tsx [Client Component SSR]
+20:09:28.814     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.814 
+20:09:28.814 https://nextjs.org/docs/messages/module-not-found
+20:09:28.815 
+20:09:28.815 
+20:09:28.815 ./frontend/src/components/shared/status-badge.tsx:4:1
+20:09:28.815 Module not found: Can't resolve '@/lib/utils'
+20:09:28.815 [0m [90m 2 |[39m
+20:09:28.815  [90m 3 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m'@/components/ui/badge'[39m[33m;[39m
+20:09:28.816 [31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { cn } [36mfrom[39m [32m'@/lib/utils'[39m[33m;[39m
+20:09:28.816  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.816  [90m 5 |[39m
+20:09:28.816  [90m 6 |[39m [36mexport[39m type [33mStatusType[39m [33m=[39m [32m'active'[39m [33m|[39m [32m'paused'[39m [33m|[39m [32m'error'[39m [33m|[39m [32m'connecting'[39m [33m|[39m [32m'disconnected'[39m[33m;[39m
+20:09:28.816  [90m 7 |[39m[0m
+20:09:28.816 
+20:09:28.817 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.817 
+20:09:28.817 
+20:09:28.817 Import traces:
+20:09:28.817   Client Component Browser:
+20:09:28.817     ./frontend/src/components/shared/status-badge.tsx [Client Component Browser]
+20:09:28.817     ./frontend/src/app/(app)/sessions/page.tsx [Client Component Browser]
+20:09:28.818     ./frontend/src/app/(app)/sessions/page.tsx [Server Component]
+20:09:28.818 
+20:09:28.818   Client Component SSR:
+20:09:28.818     ./frontend/src/components/shared/status-badge.tsx [Client Component SSR]
+20:09:28.818     ./frontend/src/app/(app)/sessions/page.tsx [Client Component SSR]
+20:09:28.818     ./frontend/src/app/(app)/sessions/page.tsx [Server Component]
+20:09:28.819 
+20:09:28.819 https://nextjs.org/docs/messages/module-not-found
+20:09:28.819 
+20:09:28.819 
+20:09:28.819 ./frontend/src/components/shared/timeline.tsx:3:1
+20:09:28.820 Module not found: Can't resolve '@/lib/utils'
+20:09:28.820 [0m [90m 1 |[39m [32m'use client'[39m[33m;[39m
+20:09:28.821  [90m 2 |[39m
+20:09:28.821 [31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { cn } [36mfrom[39m [32m'@/lib/utils'[39m[33m;[39m
+20:09:28.821  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.821  [90m 4 |[39m [36mimport[39m { formatDistanceToNow } [36mfrom[39m [32m'date-fns'[39m[33m;[39m
+20:09:28.821  [90m 5 |[39m [36mimport[39m { [33mMessageSquare[39m[33m,[39m [33mBot[39m[33m,[39m [33mUser[39m[33m,[39m [33mAlertCircle[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+20:09:28.821  [90m 6 |[39m [36mimport[39m { [33mSkeleton[39m } [36mfrom[39m [32m'@/components/ui/skeleton'[39m[33m;[39m[0m
+20:09:28.822 
+20:09:28.822 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.822 
+20:09:28.822 
+20:09:28.822 Import traces:
+20:09:28.822   Client Component Browser:
+20:09:28.822     ./frontend/src/components/shared/timeline.tsx [Client Component Browser]
+20:09:28.823     ./frontend/src/app/(app)/sessions/[id]/page.tsx [Client Component Browser]
+20:09:28.823     ./frontend/src/app/(app)/sessions/[id]/page.tsx [Server Component]
+20:09:28.823 
+20:09:28.823   Client Component SSR:
+20:09:28.823     ./frontend/src/components/shared/timeline.tsx [Client Component SSR]
+20:09:28.823     ./frontend/src/app/(app)/sessions/[id]/page.tsx [Client Component SSR]
+20:09:28.824     ./frontend/src/app/(app)/sessions/[id]/page.tsx [Server Component]
+20:09:28.824 
+20:09:28.824 https://nextjs.org/docs/messages/module-not-found
+20:09:28.824 
+20:09:28.824 
+20:09:28.824 ./frontend/src/components/ui/alert-dialog.tsx:6:1
+20:09:28.824 Module not found: Can't resolve '@/lib/utils'
+20:09:28.825 [0m [90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mAlertDialogPrimitive[39m [36mfrom[39m [32m"@radix-ui/react-alert-dialog"[39m
+20:09:28.825  [90m 5 |[39m
+20:09:28.825 [31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.825  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.826  [90m 7 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m
+20:09:28.826  [90m 8 |[39m
+20:09:28.826  [90m 9 |[39m [36mfunction[39m [33mAlertDialog[39m({[0m
+20:09:28.826 
+20:09:28.826 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.827 
+20:09:28.827 
+20:09:28.827 Import traces:
+20:09:28.827   Client Component Browser:
+20:09:28.827     ./frontend/src/components/ui/alert-dialog.tsx [Client Component Browser]
+20:09:28.827     ./frontend/src/app/(app)/settings/page.tsx [Client Component Browser]
+20:09:28.828     ./frontend/src/app/(app)/settings/page.tsx [Server Component]
+20:09:28.828 
+20:09:28.828   Client Component SSR:
+20:09:28.828     ./frontend/src/components/ui/alert-dialog.tsx [Client Component SSR]
+20:09:28.828     ./frontend/src/app/(app)/settings/page.tsx [Client Component SSR]
+20:09:28.828     ./frontend/src/app/(app)/settings/page.tsx [Server Component]
+20:09:28.829 
+20:09:28.829 https://nextjs.org/docs/messages/module-not-found
+20:09:28.829 
+20:09:28.829 
+20:09:28.829 ./frontend/src/components/ui/avatar.tsx:6:1
+20:09:28.829 Module not found: Can't resolve '@/lib/utils'
+20:09:28.829 [0m [90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mAvatarPrimitive[39m [36mfrom[39m [32m"@radix-ui/react-avatar"[39m
+20:09:28.830  [90m 5 |[39m
+20:09:28.830 [31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.830  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.830  [90m 7 |[39m
+20:09:28.830  [90m 8 |[39m [36mfunction[39m [33mAvatar[39m({
+20:09:28.830  [90m 9 |[39m   className[33m,[39m[0m
+20:09:28.831 
+20:09:28.831 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.831 
+20:09:28.831 
+20:09:28.831 Import traces:
+20:09:28.832   Client Component Browser:
+20:09:28.832     ./frontend/src/components/ui/avatar.tsx [Client Component Browser]
+20:09:28.832     ./frontend/src/components/layout/topbar.tsx [Client Component Browser]
+20:09:28.832     ./frontend/src/app/(app)/layout.tsx [Client Component Browser]
+20:09:28.832     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.833 
+20:09:28.833   Client Component SSR:
+20:09:28.833     ./frontend/src/components/ui/avatar.tsx [Client Component SSR]
+20:09:28.833     ./frontend/src/components/layout/topbar.tsx [Client Component SSR]
+20:09:28.833     ./frontend/src/app/(app)/layout.tsx [Client Component SSR]
+20:09:28.834     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.834 
+20:09:28.834 https://nextjs.org/docs/messages/module-not-found
+20:09:28.834 
+20:09:28.834 
+20:09:28.835 ./frontend/src/components/ui/badge.tsx:5:1
+20:09:28.840 Module not found: Can't resolve '@/lib/utils'
+20:09:28.840 [0m [90m 3 |[39m [36mimport[39m { cva[33m,[39m type [33mVariantProps[39m } [36mfrom[39m [32m"class-variance-authority"[39m
+20:09:28.840  [90m 4 |[39m
+20:09:28.840 [31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.840  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.840  [90m 6 |[39m
+20:09:28.840  [90m 7 |[39m [36mconst[39m badgeVariants [33m=[39m cva(
+20:09:28.840  [90m 8 |[39m   [32m"inline-flex items-center justify-center rounded-full border border-transparent px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden"[39m[33m,[39m[0m
+20:09:28.840 
+20:09:28.840 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.840 
+20:09:28.840 
+20:09:28.840 Import traces:
+20:09:28.840   Client Component Browser:
+20:09:28.840     ./frontend/src/components/ui/badge.tsx [Client Component Browser]
+20:09:28.840     ./frontend/src/app/(app)/instances/page.tsx [Client Component Browser]
+20:09:28.840     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.840 
+20:09:28.840   Client Component SSR:
+20:09:28.840     ./frontend/src/components/ui/badge.tsx [Client Component SSR]
+20:09:28.840     ./frontend/src/app/(app)/instances/page.tsx [Client Component SSR]
+20:09:28.840     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.841 
+20:09:28.841 https://nextjs.org/docs/messages/module-not-found
+20:09:28.841 
+20:09:28.841 
+20:09:28.841 ./frontend/src/components/ui/button.tsx:5:1
+20:09:28.841 Module not found: Can't resolve '@/lib/utils'
+20:09:28.841 [0m [90m 3 |[39m [36mimport[39m { cva[33m,[39m type [33mVariantProps[39m } [36mfrom[39m [32m"class-variance-authority"[39m
+20:09:28.841  [90m 4 |[39m
+20:09:28.841 [31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.841  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.841  [90m 6 |[39m
+20:09:28.841  [90m 7 |[39m [36mconst[39m buttonVariants [33m=[39m cva(
+20:09:28.841  [90m 8 |[39m   [32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m[33m,[39m[0m
+20:09:28.841 
+20:09:28.841 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.841 
+20:09:28.841 
+20:09:28.842 Import traces:
+20:09:28.842   Client Component Browser:
+20:09:28.842     ./frontend/src/components/ui/button.tsx [Client Component Browser]
+20:09:28.842     ./frontend/src/app/(app)/instances/page.tsx [Client Component Browser]
+20:09:28.842     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.842 
+20:09:28.842   Client Component SSR:
+20:09:28.842     ./frontend/src/components/ui/button.tsx [Client Component SSR]
+20:09:28.842     ./frontend/src/app/(app)/instances/page.tsx [Client Component SSR]
+20:09:28.842     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.842 
+20:09:28.842 https://nextjs.org/docs/messages/module-not-found
+20:09:28.842 
+20:09:28.842 
+20:09:28.842 ./frontend/src/components/ui/card.tsx:3:1
+20:09:28.842 Module not found: Can't resolve '@/lib/utils'
+20:09:28.842 [0m [90m 1 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mReact[39m [36mfrom[39m [32m"react"[39m
+20:09:28.842  [90m 2 |[39m
+20:09:28.842 [31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.842  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.842  [90m 4 |[39m
+20:09:28.842  [90m 5 |[39m [36mfunction[39m [33mCard[39m({ className[33m,[39m [33m...[39mprops }[33m:[39m [33mReact[39m[33m.[39m[33mComponentProps[39m[33m<[39m[32m"div"[39m[33m>[39m) {
+20:09:28.842  [90m 6 |[39m   [36mreturn[39m ([0m
+20:09:28.842 
+20:09:28.842 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.842 
+20:09:28.842 
+20:09:28.842 Import traces:
+20:09:28.843   Client Component Browser:
+20:09:28.843     ./frontend/src/components/ui/card.tsx [Client Component Browser]
+20:09:28.843     ./frontend/src/app/(app)/dashboard/page.tsx [Client Component Browser]
+20:09:28.843     ./frontend/src/app/(app)/dashboard/page.tsx [Server Component]
+20:09:28.843 
+20:09:28.843   Client Component SSR:
+20:09:28.843     ./frontend/src/components/ui/card.tsx [Client Component SSR]
+20:09:28.843     ./frontend/src/app/(app)/dashboard/page.tsx [Client Component SSR]
+20:09:28.843     ./frontend/src/app/(app)/dashboard/page.tsx [Server Component]
+20:09:28.843 
+20:09:28.843 https://nextjs.org/docs/messages/module-not-found
+20:09:28.843 
+20:09:28.843 
+20:09:28.843 ./frontend/src/components/ui/dialog.tsx:7:1
+20:09:28.843 Module not found: Can't resolve '@/lib/utils'
+20:09:28.843 [0m [90m  5 |[39m [36mimport[39m { [33mXIcon[39m } [36mfrom[39m [32m"lucide-react"[39m
+20:09:28.843  [90m  6 |[39m
+20:09:28.843 [31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.843  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.843  [90m  8 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m
+20:09:28.843  [90m  9 |[39m
+20:09:28.843  [90m 10 |[39m [36mfunction[39m [33mDialog[39m({[0m
+20:09:28.843 
+20:09:28.843 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.845 
+20:09:28.845 
+20:09:28.845 Import traces:
+20:09:28.845   Client Component Browser:
+20:09:28.845     ./frontend/src/components/ui/dialog.tsx [Client Component Browser]
+20:09:28.845     ./frontend/src/app/(app)/instances/page.tsx [Client Component Browser]
+20:09:28.845     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.845 
+20:09:28.845   Client Component SSR:
+20:09:28.845     ./frontend/src/components/ui/dialog.tsx [Client Component SSR]
+20:09:28.845     ./frontend/src/app/(app)/instances/page.tsx [Client Component SSR]
+20:09:28.845     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.845 
+20:09:28.845 https://nextjs.org/docs/messages/module-not-found
+20:09:28.845 
+20:09:28.845 
+20:09:28.845 ./frontend/src/components/ui/dropdown-menu.tsx:7:1
+20:09:28.845 Module not found: Can't resolve '@/lib/utils'
+20:09:28.845 [0m [90m  5 |[39m [36mimport[39m { [33mCheckIcon[39m[33m,[39m [33mChevronRightIcon[39m[33m,[39m [33mCircleIcon[39m } [36mfrom[39m [32m"lucide-react"[39m
+20:09:28.845  [90m  6 |[39m
+20:09:28.845 [31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.845  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.845  [90m  8 |[39m
+20:09:28.845  [90m  9 |[39m [36mfunction[39m [33mDropdownMenu[39m({
+20:09:28.845  [90m 10 |[39m   [33m...[39mprops[0m
+20:09:28.845 
+20:09:28.845 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.845 
+20:09:28.845 
+20:09:28.845 Import traces:
+20:09:28.845   Client Component Browser:
+20:09:28.845     ./frontend/src/components/ui/dropdown-menu.tsx [Client Component Browser]
+20:09:28.845     ./frontend/src/components/layout/topbar.tsx [Client Component Browser]
+20:09:28.845     ./frontend/src/app/(app)/layout.tsx [Client Component Browser]
+20:09:28.845     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.845 
+20:09:28.845   Client Component SSR:
+20:09:28.845     ./frontend/src/components/ui/dropdown-menu.tsx [Client Component SSR]
+20:09:28.846     ./frontend/src/components/layout/topbar.tsx [Client Component SSR]
+20:09:28.846     ./frontend/src/app/(app)/layout.tsx [Client Component SSR]
+20:09:28.846     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.846 
+20:09:28.846 https://nextjs.org/docs/messages/module-not-found
+20:09:28.846 
+20:09:28.846 
+20:09:28.846 ./frontend/src/components/ui/input.tsx:3:1
+20:09:28.846 Module not found: Can't resolve '@/lib/utils'
+20:09:28.846 [0m [90m 1 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mReact[39m [36mfrom[39m [32m"react"[39m
+20:09:28.846  [90m 2 |[39m
+20:09:28.846 [31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.846  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.846  [90m 4 |[39m
+20:09:28.846  [90m 5 |[39m [36mfunction[39m [33mInput[39m({ className[33m,[39m type[33m,[39m [33m...[39mprops }[33m:[39m [33mReact[39m[33m.[39m[33mComponentProps[39m[33m<[39m[32m"input"[39m[33m>[39m) {
+20:09:28.846  [90m 6 |[39m   [36mreturn[39m ([0m
+20:09:28.846 
+20:09:28.846 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.846 
+20:09:28.846 
+20:09:28.846 Import traces:
+20:09:28.846   Client Component Browser:
+20:09:28.846     ./frontend/src/components/ui/input.tsx [Client Component Browser]
+20:09:28.846     ./frontend/src/app/(app)/instances/[name]/page.tsx [Client Component Browser]
+20:09:28.846     ./frontend/src/app/(app)/instances/[name]/page.tsx [Server Component]
+20:09:28.846 
+20:09:28.846   Client Component SSR:
+20:09:28.846     ./frontend/src/components/ui/input.tsx [Client Component SSR]
+20:09:28.846     ./frontend/src/app/(app)/instances/[name]/page.tsx [Client Component SSR]
+20:09:28.846     ./frontend/src/app/(app)/instances/[name]/page.tsx [Server Component]
+20:09:28.846 
+20:09:28.847 https://nextjs.org/docs/messages/module-not-found
+20:09:28.847 
+20:09:28.847 
+20:09:28.847 ./frontend/src/components/ui/label.tsx:6:1
+20:09:28.847 Module not found: Can't resolve '@/lib/utils'
+20:09:28.847 [0m [90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mLabelPrimitive[39m [36mfrom[39m [32m"@radix-ui/react-label"[39m
+20:09:28.847  [90m 5 |[39m
+20:09:28.847 [31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.847  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.847  [90m 7 |[39m
+20:09:28.847  [90m 8 |[39m [36mfunction[39m [33mLabel[39m({
+20:09:28.847  [90m 9 |[39m   className[33m,[39m[0m
+20:09:28.847 
+20:09:28.847 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.847 
+20:09:28.847 
+20:09:28.847 Import traces:
+20:09:28.847   Client Component Browser:
+20:09:28.847     ./frontend/src/components/ui/label.tsx [Client Component Browser]
+20:09:28.847     ./frontend/src/app/(app)/instances/page.tsx [Client Component Browser]
+20:09:28.847     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.847 
+20:09:28.847   Client Component SSR:
+20:09:28.847     ./frontend/src/components/ui/label.tsx [Client Component SSR]
+20:09:28.847     ./frontend/src/app/(app)/instances/page.tsx [Client Component SSR]
+20:09:28.847     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.847 
+20:09:28.847 https://nextjs.org/docs/messages/module-not-found
+20:09:28.847 
+20:09:28.847 
+20:09:28.847 ./frontend/src/components/ui/select.tsx:7:1
+20:09:28.847 Module not found: Can't resolve '@/lib/utils'
+20:09:28.847 [0m [90m  5 |[39m [36mimport[39m { [33mCheckIcon[39m[33m,[39m [33mChevronDownIcon[39m[33m,[39m [33mChevronUpIcon[39m } [36mfrom[39m [32m"lucide-react"[39m
+20:09:28.847  [90m  6 |[39m
+20:09:28.847 [31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.847  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.847  [90m  8 |[39m
+20:09:28.847  [90m  9 |[39m [36mfunction[39m [33mSelect[39m({
+20:09:28.847  [90m 10 |[39m   [33m...[39mprops[0m
+20:09:28.847 
+20:09:28.847 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.847 
+20:09:28.847 
+20:09:28.848 Import traces:
+20:09:28.848   Client Component Browser:
+20:09:28.848     ./frontend/src/components/ui/select.tsx [Client Component Browser]
+20:09:28.848     ./frontend/src/components/layout/tenant-switcher.tsx [Client Component Browser]
+20:09:28.848     ./frontend/src/components/layout/topbar.tsx [Client Component Browser]
+20:09:28.848     ./frontend/src/app/(app)/layout.tsx [Client Component Browser]
+20:09:28.848     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.848 
+20:09:28.848   Client Component SSR:
+20:09:28.848     ./frontend/src/components/ui/select.tsx [Client Component SSR]
+20:09:28.848     ./frontend/src/components/layout/tenant-switcher.tsx [Client Component SSR]
+20:09:28.848     ./frontend/src/components/layout/topbar.tsx [Client Component SSR]
+20:09:28.848     ./frontend/src/app/(app)/layout.tsx [Client Component SSR]
+20:09:28.848     ./frontend/src/app/(app)/layout.tsx [Server Component]
+20:09:28.848 
+20:09:28.848 https://nextjs.org/docs/messages/module-not-found
+20:09:28.848 
+20:09:28.848 
+20:09:28.848 ./frontend/src/components/ui/separator.tsx:6:1
+20:09:28.848 Module not found: Can't resolve '@/lib/utils'
+20:09:28.848 [0m [90m 4 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mSeparatorPrimitive[39m [36mfrom[39m [32m"@radix-ui/react-separator"[39m
+20:09:28.848  [90m 5 |[39m
+20:09:28.848 [31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.848  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.848  [90m 7 |[39m
+20:09:28.848  [90m 8 |[39m [36mfunction[39m [33mSeparator[39m({
+20:09:28.848  [90m 9 |[39m   className[33m,[39m[0m
+20:09:28.848 
+20:09:28.848 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.848 
+20:09:28.848 
+20:09:28.848 Import traces:
+20:09:28.848   Client Component Browser:
+20:09:28.848     ./frontend/src/components/ui/separator.tsx [Client Component Browser]
+20:09:28.848     ./frontend/src/app/(app)/instances/[name]/page.tsx [Client Component Browser]
+20:09:28.848     ./frontend/src/app/(app)/instances/[name]/page.tsx [Server Component]
+20:09:28.848 
+20:09:28.848   Client Component SSR:
+20:09:28.848     ./frontend/src/components/ui/separator.tsx [Client Component SSR]
+20:09:28.848     ./frontend/src/app/(app)/instances/[name]/page.tsx [Client Component SSR]
+20:09:28.848     ./frontend/src/app/(app)/instances/[name]/page.tsx [Server Component]
+20:09:28.848 
+20:09:28.848 https://nextjs.org/docs/messages/module-not-found
+20:09:28.848 
+20:09:28.848 
+20:09:28.848 ./frontend/src/components/ui/skeleton.tsx:1:1
+20:09:28.848 Module not found: Can't resolve '@/lib/utils'
+20:09:28.849 [0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.849  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.849  [90m 2 |[39m
+20:09:28.849  [90m 3 |[39m [36mfunction[39m [33mSkeleton[39m({ className[33m,[39m [33m...[39mprops }[33m:[39m [33mReact[39m[33m.[39m[33mComponentProps[39m[33m<[39m[32m"div"[39m[33m>[39m) {
+20:09:28.849  [90m 4 |[39m   [36mreturn[39m ([0m
+20:09:28.849 
+20:09:28.849 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.849 
+20:09:28.849 
+20:09:28.849 Import traces:
+20:09:28.849   Client Component Browser:
+20:09:28.849     ./frontend/src/components/ui/skeleton.tsx [Client Component Browser]
+20:09:28.849     ./frontend/src/app/(app)/instances/page.tsx [Client Component Browser]
+20:09:28.849     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.850 
+20:09:28.850   Client Component SSR:
+20:09:28.850     ./frontend/src/components/ui/skeleton.tsx [Client Component SSR]
+20:09:28.850     ./frontend/src/app/(app)/instances/page.tsx [Client Component SSR]
+20:09:28.850     ./frontend/src/app/(app)/instances/page.tsx [Server Component]
+20:09:28.850 
+20:09:28.850 https://nextjs.org/docs/messages/module-not-found
+20:09:28.850 
+20:09:28.850 
+20:09:28.850 ./frontend/src/components/ui/table.tsx:5:1
+20:09:28.850 Module not found: Can't resolve '@/lib/utils'
+20:09:28.850 [0m [90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mReact[39m [36mfrom[39m [32m"react"[39m
+20:09:28.850  [90m 4 |[39m
+20:09:28.850 [31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.850  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.850  [90m 6 |[39m
+20:09:28.850  [90m 7 |[39m [36mfunction[39m [33mTable[39m({ className[33m,[39m [33m...[39mprops }[33m:[39m [33mReact[39m[33m.[39m[33mComponentProps[39m[33m<[39m[32m"table"[39m[33m>[39m) {
+20:09:28.851  [90m 8 |[39m   [36mreturn[39m ([0m
+20:09:28.851 
+20:09:28.851 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.851 
+20:09:28.851 
+20:09:28.851 Import traces:
+20:09:28.851   Client Component Browser:
+20:09:28.851     ./frontend/src/components/ui/table.tsx [Client Component Browser]
+20:09:28.851     ./frontend/src/components/shared/data-table.tsx [Client Component Browser]
+20:09:28.851     ./frontend/src/app/(app)/sessions/page.tsx [Client Component Browser]
+20:09:28.851     ./frontend/src/app/(app)/sessions/page.tsx [Server Component]
+20:09:28.851 
+20:09:28.851   Client Component SSR:
+20:09:28.851     ./frontend/src/components/ui/table.tsx [Client Component SSR]
+20:09:28.851     ./frontend/src/components/shared/data-table.tsx [Client Component SSR]
+20:09:28.851     ./frontend/src/app/(app)/sessions/page.tsx [Client Component SSR]
+20:09:28.851     ./frontend/src/app/(app)/sessions/page.tsx [Server Component]
+20:09:28.852 
+20:09:28.852 https://nextjs.org/docs/messages/module-not-found
+20:09:28.852 
+20:09:28.852 
+20:09:28.852 ./frontend/src/components/ui/tabs.tsx:7:1
+20:09:28.852 Module not found: Can't resolve '@/lib/utils'
+20:09:28.853 [0m [90m  5 |[39m [36mimport[39m { cva[33m,[39m type [33mVariantProps[39m } [36mfrom[39m [32m"class-variance-authority"[39m
+20:09:28.853  [90m  6 |[39m
+20:09:28.853 [31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m { cn } [36mfrom[39m [32m"@/lib/utils"[39m
+20:09:28.853  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+20:09:28.853  [90m  8 |[39m
+20:09:28.853  [90m  9 |[39m [36mfunction[39m [33mTabs[39m({
+20:09:28.853  [90m 10 |[39m   className[33m,[39m[0m
+20:09:28.853 
+20:09:28.853 Import map: aliased to relative './src/lib/utils' inside of [project]/frontend
+20:09:28.853 
+20:09:28.853 
+20:09:28.853 Import traces:
+20:09:28.853   Client Component Browser:
+20:09:28.853     ./frontend/src/components/ui/tabs.tsx [Client Component Browser]
+20:09:28.853     ./frontend/src/app/(app)/instances/[name]/page.tsx [Client Component Browser]
+20:09:28.853     ./frontend/src/app/(app)/instances/[name]/page.tsx [Server Component]
+20:09:28.853 
+20:09:28.853   Client Component SSR:
+20:09:28.853     ./frontend/src/components/ui/tabs.tsx [Client Component SSR]
+20:09:28.853     ./frontend/src/app/(app)/instances/[name]/page.tsx [Client Component SSR]
+20:09:28.853     ./frontend/src/app/(app)/instances/[name]/page.tsx [Server Component]
+20:09:28.853 
+20:09:28.854 https://nextjs.org/docs/messages/module-not-found
+20:09:28.854 
+20:09:28.854 
+20:09:28.854     at <unknown> (./frontend/src/app/(app)/dashboard/page.tsx:5:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/app/(app)/instances/[name]/page.tsx:6:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/app/(app)/instances/page.tsx:6:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/app/(app)/knowledge/page.tsx:5:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/app/(app)/sessions/[id]/page.tsx:6:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/app/(app)/sessions/page.tsx:6:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/app/(app)/settings/page.tsx:4:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/hooks/use-auth.tsx:12:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/hooks/use-auth.tsx:14:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/components/layout/sidebar.tsx:5:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/components/shared/status-badge.tsx:4:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/components/shared/timeline.tsx:3:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/components/ui/alert-dialog.tsx:6:1)
+20:09:28.854     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.854     at <unknown> (./frontend/src/components/ui/avatar.tsx:6:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/badge.tsx:5:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/button.tsx:5:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/card.tsx:3:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/dialog.tsx:7:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/dropdown-menu.tsx:7:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/input.tsx:3:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/label.tsx:6:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/select.tsx:7:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/separator.tsx:6:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/skeleton.tsx:1:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/table.tsx:5:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.855     at <unknown> (./frontend/src/components/ui/tabs.tsx:7:1)
+20:09:28.855     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+20:09:28.873 Error: Command "npm run build" exited with 1

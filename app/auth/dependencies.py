@@ -1,11 +1,13 @@
 """
 FastAPI dependencies for authentication and authorization.
 
-These dependencies can be used with FastAPI's Depends() to protect routes
-and validate user access to resources.
+Sessions are issued by BetterAuth (Next.js) and stored in the Supabase
+'session' table. FastAPI validates requests by looking up the session token
+directly in the database — no JWT crypto needed.
 """
 
-from fastapi import Depends, HTTPException, Header
+from datetime import datetime, timezone
+from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Optional, Callable
 
@@ -18,59 +20,64 @@ security = HTTPBearer(auto_error=True)
 optional_security = HTTPBearer(auto_error=False)
 
 
+def _parse_iso(ts: str) -> datetime:
+    """Parse ISO-8601 timestamp to aware datetime (handles both Z and +00:00)."""
+    return datetime.fromisoformat(ts.replace("Z", "+00:00"))
+
+
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ) -> dict:
     """
-    Validate JWT token and return current user with tenant access.
+    Validate BetterAuth session token and return current user with tenant access.
 
-    This dependency:
-    1. Extracts the JWT token from the Authorization header
-    2. Validates the token with Supabase Auth
-    3. Retrieves the user profile with their tenant access
+    The client sends the raw BetterAuth session token (from authClient.getSession())
+    as the Bearer value. We look it up in the 'session' table to get the user ID,
+    then fetch the user profile and tenant memberships.
 
     Args:
-        credentials: JWT token from Authorization header
+        credentials: Session token from Authorization header
 
     Returns:
         User dict with profile data and user_tenants list
 
     Raises:
-        HTTPException 401: If token is invalid or expired
+        HTTPException 401: If token is invalid or session has expired
     """
     token = credentials.credentials
 
     try:
-        # Verify JWT with Supabase Auth
-        user_response = supabase.auth.get_user(token)
+        # Look up session by token
+        session_result = supabase.table("session").select(
+            "userId, expiresAt"
+        ).eq("token", token).limit(1).execute()
 
-        if not user_response or not user_response.user:
-            log_warning(
-                "Invalid or expired token",
-                action="auth_invalid_token"
-            )
-            raise HTTPException(
-                status_code=401,
-                detail="Invalid or expired token"
-            )
+        if not session_result.data:
+            log_warning("Session token not found", action="auth_invalid_token")
+            raise HTTPException(status_code=401, detail="Invalid session token")
 
-        auth_user = user_response.user
+        session_row = session_result.data[0]
 
-        # Get user profile from our users table with tenant access
-        user_result = supabase.table("users").select(
+        # Check expiry
+        expires_at = _parse_iso(session_row["expiresAt"])
+        if expires_at < datetime.now(timezone.utc):
+            log_warning("Session token expired", action="auth_expired_token")
+            raise HTTPException(status_code=401, detail="Session expired")
+
+        user_id = session_row["userId"]
+
+        # Fetch user profile + tenant memberships
+        user_result = supabase.table("user").select(
             "*, user_tenants(tenant_id, role)"
-        ).eq("auth_user_id", str(auth_user.id)).limit(1).execute()
+        ).eq("id", user_id).limit(1).execute()
 
         if not user_result.data:
             log_warning(
                 "User profile not found",
-                auth_user_id=str(auth_user.id),
+                user_id=user_id,
                 action="auth_user_not_found"
             )
-            raise HTTPException(
-                status_code=401,
-                detail="User profile not found"
-            )
+            raise HTTPException(status_code=401, detail="User profile not found")
 
         user = user_result.data[0]
 
@@ -86,11 +93,7 @@ async def get_current_user(
     except HTTPException:
         raise
     except Exception as e:
-        log_error(
-            "Authentication failed",
-            error=str(e),
-            action="auth_error"
-        )
+        log_error("Authentication failed", error=str(e), action="auth_error")
         raise HTTPException(
             status_code=401,
             detail=f"Authentication failed: {str(e)}"
@@ -102,19 +105,9 @@ async def get_optional_user(
 ) -> Optional[dict]:
     """
     Optional authentication - returns None if no token provided.
-
-    Use this for endpoints that work with or without authentication,
-    providing different behavior based on auth status.
-
-    Args:
-        credentials: Optional JWT token from Authorization header
-
-    Returns:
-        User dict if authenticated, None otherwise
     """
     if not credentials:
         return None
-
     try:
         return await get_current_user(credentials)
     except HTTPException:
@@ -127,28 +120,7 @@ def require_tenant_access(required_role: str = "member") -> Callable:
     """
     Factory function that creates a dependency for checking tenant access.
 
-    This validates that the authenticated user has access to the specified
-    tenant with at least the required role level.
-
-    Role hierarchy (highest to lowest):
-    - owner: Full control (delete tenant, transfer ownership)
-    - admin: Management (edit settings, invite/remove users)
-    - member: Operations (view sessions, pause/resume)
-
-    Usage:
-        @app.get("/api/tenants/{tenant_id}/sessions")
-        async def list_sessions(
-            tenant_id: int,
-            user: dict = Depends(get_current_user),
-            _: None = Depends(require_tenant_access("member"))
-        ):
-            ...
-
-    Args:
-        required_role: Minimum role required ("owner", "admin", or "member")
-
-    Returns:
-        Dependency function that checks tenant access
+    Role hierarchy (highest to lowest): owner > admin > member
     """
     async def check_tenant_access(
         tenant_id: int,
@@ -156,7 +128,6 @@ def require_tenant_access(required_role: str = "member") -> Callable:
     ) -> None:
         user_tenants = user.get("user_tenants", [])
 
-        # Find user's access to this specific tenant
         access = next(
             (ut for ut in user_tenants if ut["tenant_id"] == tenant_id),
             None
@@ -174,7 +145,6 @@ def require_tenant_access(required_role: str = "member") -> Callable:
                 detail="You don't have access to this tenant"
             )
 
-        # Check role hierarchy
         role_hierarchy = {"owner": 3, "admin": 2, "member": 1}
         user_level = role_hierarchy.get(access["role"], 0)
         required_level = role_hierarchy.get(required_role, 0)
@@ -207,13 +177,5 @@ def require_tenant_access(required_role: str = "member") -> Callable:
 
 
 def get_user_tenant_ids(user: dict) -> list:
-    """
-    Extract list of tenant IDs the user has access to.
-
-    Args:
-        user: User dict from get_current_user
-
-    Returns:
-        List of tenant IDs
-    """
+    """Extract list of tenant IDs the user has access to."""
     return [ut["tenant_id"] for ut in user.get("user_tenants", [])]

@@ -143,7 +143,11 @@ export default function SessionsPage() {
         <div>
           <h1 className="text-2xl font-bold">Conversations</h1>
           <p className="text-muted-foreground">
-            {total} total conversations for {activeTenant?.tenant?.instance_name || 'your connection'}
+            {loading ? (
+              <span className="inline-block h-4 w-48 bg-muted animate-pulse rounded" />
+            ) : (
+              `${total} total conversations for ${activeTenant?.tenant?.instance_name || 'your connection'}`
+            )}
           </p>
         </div>
         <Button

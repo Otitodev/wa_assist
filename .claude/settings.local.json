@@ -45,7 +45,15 @@
       "Bash(venv/Scripts/python -m uvicorn:*)",
       "Bash(timeout:*)",
       "Bash(node --version:*)",
-      "Bash(npm --version:*)"
+      "Bash(npm --version:*)",
+      "Bash(head:*)",
+      "Bash(npx skills:*)",
+      "Bash(cd /c/Users/USER/wa_assist/frontend && node -e \"require\\('pg'\\); console.log\\('pg ok'\\)\" 2>&1)",
+      "Bash(jobs:*)",
+      "Bash(ls:*)",
+      "Bash(cd /c/Users/USER/wa_assist/frontend && npx shadcn@latest add tooltip --yes 2>&1)",
+      "WebFetch(domain:resend.com)",
+      "Bash(npx playwright:*)"
     ]
   }
 }
