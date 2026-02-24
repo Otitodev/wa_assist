@@ -79,13 +79,13 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           >
             <Image
               src="/logo.png"
-              alt="HybridFlow"
+              alt="Whaply"
               width={32}
               height={32}
               className="rounded-lg shrink-0"
             />
             {!collapsed && (
-              <span className="text-lg font-semibold truncate">HybridFlow</span>
+              <span className="text-lg font-semibold truncate">Whaply</span>
             )}
           </Link>
           <Button

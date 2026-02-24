@@ -1,4 +1,4 @@
--- HybridFlow Database Schema
+-- Whaply Database Schema
 -- Run this in Supabase SQL Editor to create all required tables
 
 -- ============================================================================

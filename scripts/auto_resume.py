@@ -107,7 +107,7 @@ def auto_resume_sessions():
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("HybridFlow Auto-Resume Script")
+    print("Whaply Auto-Resume Script")
     print(f"Timestamp: {datetime.now(timezone.utc).isoformat()}")
     print("=" * 60)
 

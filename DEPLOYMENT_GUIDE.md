@@ -1,6 +1,6 @@
-# HybridFlow Deployment Guide
+# Whaply Deployment Guide
 
-This guide walks through deploying the HybridFlow backend to Railway (or any similar platform).
+This guide walks through deploying the Whaply backend to Railway (or any similar platform).
 
 ---
 

@@ -1,5 +1,5 @@
 """
-Authentication service for HybridFlow.
+Authentication service for Whaply.
 
 This service handles user registration, login, and token management
 using Supabase Auth as the backend.

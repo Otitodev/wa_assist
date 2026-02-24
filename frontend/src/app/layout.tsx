@@ -16,13 +16,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "HybridFlow",
-    template: "%s | HybridFlow",
+    default: "Whaply",
+    template: "%s | Whaply",
   },
   description: "Intelligent WhatsApp automation with human/AI collision detection. Let AI handle conversations, step in when you need to — zero conflicts.",
   keywords: ["WhatsApp automation", "AI chatbot", "WhatsApp business", "customer support automation"],
-  authors: [{ name: "HybridFlow" }],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://hybridflow.app"),
+  authors: [{ name: "Whaply" }],
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://whaply.co"),
   icons: {
     icon: [
       { url: "/logo.png", type: "image/png" },
@@ -34,21 +34,21 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: "HybridFlow",
-    title: "HybridFlow — WhatsApp Automation with Collision Detection",
+    siteName: "Whaply",
+    title: "Whaply — WhatsApp Automation with Collision Detection",
     description: "Intelligent WhatsApp automation with human/AI collision detection. Let AI handle conversations, step in when you need to — zero conflicts.",
     images: [
       {
         url: "/logo.png",
         width: 1092,
         height: 1092,
-        alt: "HybridFlow Logo",
+        alt: "Whaply Logo",
       },
     ],
   },
   twitter: {
     card: "summary",
-    title: "HybridFlow — WhatsApp Automation",
+    title: "Whaply — WhatsApp Automation",
     description: "Intelligent WhatsApp automation with human/AI collision detection.",
     images: ["/logo.png"],
   },

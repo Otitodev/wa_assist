@@ -30,7 +30,7 @@ from .services.websocket_handler import handle_websocket_message, handle_websock
 # Configure logger with settings from config
 configure_logger_from_config()
 
-app = FastAPI(title="HybridFlow Control Plane", version="0.1.0")
+app = FastAPI(title="Whaply Control Plane", version="0.1.0")
 
 # Configure CORS for frontend integration
 app.add_middleware(
@@ -45,7 +45,7 @@ app.add_middleware(
 app.include_router(auth_router)
 
 # Log application startup
-logger.info("HybridFlow Control Plane starting up")
+logger.info("Whaply Control Plane starting up")
 logger.info(f"CORS enabled for origins: {', '.join(CORS_ORIGINS)}")
 
 # Global WebSocket manager (initialized on startup if enabled)
@@ -2736,7 +2736,7 @@ async def export_user_data(
 
         export_data = {
             "export_date": datetime.utcnow().isoformat(),
-            "data_controller": "HybridFlow",
+            "data_controller": "Whaply",
             "user_profile": {
                 "id": user.get("id"),
                 "email": user.get("email"),

@@ -1,5 +1,5 @@
 """
-Authentication module for HybridFlow.
+Authentication module for Whaply.
 
 This module provides user authentication using Supabase Auth,
 including registration, login, token management, and access control.

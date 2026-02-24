@@ -1,4 +1,4 @@
-# HybridFlow Database Schema
+# Whaply Database Schema
 
 This directory contains database schema definitions and migration scripts for Supabase/PostgreSQL.
 

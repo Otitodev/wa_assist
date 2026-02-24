@@ -1,5 +1,5 @@
 """
-Structured logging configuration for HybridFlow.
+Structured logging configuration for Whaply.
 Outputs JSON-formatted logs with contextual information.
 """
 
@@ -66,7 +66,7 @@ class JSONFormatter(logging.Formatter):
 
 
 def setup_logger(
-    name: str = "hybridflow",
+    name: str = "whaply",
     level: str = "INFO",
     enable_json: bool = True
 ) -> logging.Logger:
@@ -111,7 +111,7 @@ def setup_logger(
 
 # Create default logger instance
 # Log level will be set from config when imported
-logger = logging.getLogger("hybridflow")
+logger = logging.getLogger("whaply")
 
 
 def configure_logger_from_config():

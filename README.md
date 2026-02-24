@@ -1,8 +1,8 @@
-# HybridFlow (WA Assist)
+# Whaply (WA Assist)
 
 **Intelligent WhatsApp Automation with Collision Detection**
 
-HybridFlow is a WhatsApp automation platform that prevents message conflicts when business owners manually intervene in AI-automated conversations. Built with FastAPI, Supabase, and Claude/GPT.
+Whaply is a WhatsApp automation platform that prevents message conflicts when business owners manually intervene in AI-automated conversations. Built with FastAPI, Supabase, and Claude/GPT.
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-green.svg)](https://fastapi.tiangolo.com/)

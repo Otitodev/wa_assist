@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'HybridFlow — WhatsApp AI That Knows When to Step Aside',
+  title: 'Whaply — WhatsApp AI That Knows When to Step Aside',
   description: 'AI handles your WhatsApp conversations. You step in when needed. Zero conflicts, zero missed messages.',
 };
 
@@ -161,8 +161,8 @@ export default function LandingPage() {
       {/* NAV */}
       <nav>
         <Link href="/" className="nav-logo">
-          <Image src="/logo.png" alt="HybridFlow" width={32} height={32} style={{borderRadius:8}} />
-          <span>HybridFlow</span>
+          <Image src="/logo.png" alt="Whaply" width={32} height={32} style={{borderRadius:8}} />
+          <span>Whaply</span>
         </Link>
         <ul className="nav-links">
           <li><a href="#how">How it works</a></li>
@@ -180,7 +180,7 @@ export default function LandingPage() {
         <div className="grid-lines" />
         <div className="hero-badge"><span className="dot" />Now live — WhatsApp AI with Collision Detection</div>
         <h1>AI replies.<br /><span className="line-green">You take over.</span><br />Zero conflicts.</h1>
-        <p className="hero-sub">HybridFlow&apos;s Invisible Mute automatically pauses your AI the moment you step into a conversation — and resumes it when you&apos;re done. No double messages. No confusion.</p>
+        <p className="hero-sub">Whaply&apos;s Invisible Mute automatically pauses your AI the moment you step into a conversation — and resumes it when you&apos;re done. No double messages. No confusion.</p>
         <div className="hero-ctas">
           <Link href="/register" className="btn btn-primary btn-xl">Start Free <ArrowRight size={16} /></Link>
           <Link href="/dashboard" className="btn btn-ghost btn-xl">View Dashboard</Link>
@@ -189,7 +189,7 @@ export default function LandingPage() {
           <div className="preview-window">
             <div className="preview-bar">
               <span className="preview-dot r" /><span className="preview-dot y" /><span className="preview-dot g" />
-              <span className="preview-url">app.hybridflow.io/dashboard</span>
+              <span className="preview-url">app.whaply.co/dashboard</span>
               <span style={{width:60}} />
             </div>
             <div className="preview-inner">
@@ -236,7 +236,7 @@ export default function LandingPage() {
         <p className="section-sub">Every WhatsApp automation platform has the same fatal flaw — when you reply, your AI keeps replying too.</p>
         <div className="ps-grid">
           <div className="ps-card problem">
-            <span className="ps-label">Without HybridFlow</span>
+            <span className="ps-label">Without Whaply</span>
             <h3>Message chaos</h3>
             <p>You step in to handle a sensitive customer, and your AI sends three more replies before you can finish typing.</p>
             <ul className="ps-list">
@@ -247,7 +247,7 @@ export default function LandingPage() {
             </ul>
           </div>
           <div className="ps-card solution">
-            <span className="ps-label">With HybridFlow</span>
+            <span className="ps-label">With Whaply</span>
             <h3>Invisible Mute™</h3>
             <p>The moment you send a message, AI pauses silently. Resumes automatically after 2 hours of your inactivity.</p>
             <ul className="ps-list">
@@ -282,7 +282,7 @@ export default function LandingPage() {
             <div className="step">
               <div className="step-num">03</div>
               <h3>Step in anytime</h3>
-              <p>Reply from your phone as normal. HybridFlow detects it and mutes the AI — no dashboard required. It resumes itself.</p>
+              <p>Reply from your phone as normal. Whaply detects it and mutes the AI — no dashboard required. It resumes itself.</p>
               <span className="step-mono">fromMe=true → pause()</span>
             </div>
           </div>
@@ -344,8 +344,8 @@ export default function LandingPage() {
       {/* FOOTER */}
       <footer>
         <Link href="/" className="footer-logo">
-          <Image src="/logo.png" alt="HybridFlow" width={28} height={28} style={{borderRadius:7}} />
-          <span>HybridFlow</span>
+          <Image src="/logo.png" alt="Whaply" width={28} height={28} style={{borderRadius:7}} />
+          <span>Whaply</span>
         </Link>
         <ul className="footer-links">
           <li><a href="#how">How it works</a></li>
@@ -354,7 +354,7 @@ export default function LandingPage() {
           <li><Link href="/register">Sign up</Link></li>
           <li><a href="mailto:otitodrichukwu@gmail.com" className="footer-email">Contact Dev</a></li>
         </ul>
-        <span className="footer-copy">© 2026 HybridFlow. All rights reserved.</span>
+        <span className="footer-copy">© 2026 Whaply. All rights reserved.</span>
       </footer>
     </>
   );

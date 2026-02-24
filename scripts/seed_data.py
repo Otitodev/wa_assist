@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Seed Data Script for HybridFlow
+Seed Data Script for Whaply
 
 This script populates the database with sample data for development and testing.
 
@@ -383,7 +383,7 @@ def main():
     args = parser.parse_args()
 
     print("=" * 50)
-    print("🌱 HybridFlow Seed Data Script")
+    print("🌱 Whaply Seed Data Script")
     print("=" * 50)
 
     # Initialize Supabase client

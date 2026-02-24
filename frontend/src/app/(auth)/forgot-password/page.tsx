@@ -57,12 +57,12 @@ export default function ForgotPasswordPage() {
             <div className="flex items-center gap-2 mb-4">
               <Image
                 src="/logo.png"
-                alt="HybridFlow"
+                alt="Whaply"
                 width={40}
                 height={40}
                 className="rounded-lg"
               />
-              <span className="text-2xl font-bold">HybridFlow</span>
+              <span className="text-2xl font-bold">Whaply</span>
             </div>
             <CardTitle className="text-2xl">Forgot password</CardTitle>
             <CardDescription>

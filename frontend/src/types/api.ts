@@ -1,4 +1,4 @@
-// API Types for HybridFlow Frontend
+// API Types for Whaply Frontend
 
 export interface User {
   id: string;

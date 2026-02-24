@@ -1,4 +1,4 @@
-# HybridFlow Scripts
+# Whaply Scripts
 
 This directory contains standalone scripts for scheduled tasks, maintenance, and development.
 
@@ -154,7 +154,7 @@ Check logs for:
 Example output:
 ```
 ============================================================
-HybridFlow Auto-Resume Script
+Whaply Auto-Resume Script
 Timestamp: 2026-01-23T14:00:00.000000+00:00
 ============================================================
 Auto-resuming sessions paused before 2026-01-23T12:00:00.000000+00:00 (2 hours ago)

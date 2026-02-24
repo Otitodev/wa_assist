@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**HybridFlow** (WA Assist) - A full-stack SaaS platform for WhatsApp automation with intelligent human/AI collision detection. The system consists of:
+**Whaply** (WA Assist) - A full-stack SaaS platform for WhatsApp automation with intelligent human/AI collision detection. The system consists of:
 - **Backend (FastAPI)**: Webhook ingestion, session state machine, multi-tenant persistence
 - **Frontend (Next.js)**: Operational dashboard for monitoring sessions, managing knowledge base, and controlling automation
 - **Core Value**: "Invisible Mute" - automatically pauses AI when business owners intervene, prevents message conflicts
@@ -79,7 +79,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - TanStack Table for data tables
 - Zod for API response validation
 
-**Design System: "HybridFlow UI"**
+**Design System: "Whaply UI"**
 - WhatsApp-inspired but professional (not a clone)
 - Brand colors: Deep green (primary), teal/emerald (secondary)
 - Visual principles: Operational product feel, fast scanning, clear state indicators
@@ -328,7 +328,7 @@ The system prevents AI/human message conflicts:
 
 **Frontend: Not Yet Started**
 - ⏳ Next.js project bootstrap with App Router
-- ⏳ shadcn/ui setup and HybridFlow theme
+- ⏳ shadcn/ui setup and Whaply theme
 - ⏳ Global layout shell (sidebar, topbar)
 - ⏳ Authentication UI
 - ⏳ Core pages: Dashboard, Instances, Sessions (critical), Knowledge, Alerts, Settings
@@ -369,7 +369,7 @@ Frontend (Start After Backend APIs Ready):
 
 **Frontend**
 - **shadcn/ui is the primary component source**: Don't build from scratch what shadcn provides
-- **HybridFlow theme tokens**: Use CSS variables defined in `theme.css`, don't hardcode colors
+- **Whaply theme tokens**: Use CSS variables defined in `theme.css`, don't hardcode colors
 - **Session page is mission-critical**: This is where users monitor and control the collision detection
 - **API contract must match backend**: Coordinate endpoint shapes before implementing UI
 - **Multi-tenant context**: Always include `tenantId` in API requests; use tenant switcher to change context

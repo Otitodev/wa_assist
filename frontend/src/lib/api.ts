@@ -1,5 +1,5 @@
 /**
- * API Client for HybridFlow Backend
+ * API Client for Whaply Backend
  */
 
 import { authClient } from '@/lib/auth-client';
