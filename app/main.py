@@ -1125,11 +1125,15 @@ def list_tenants(user: dict = Depends(get_current_user)):
         {
             "tenants": [
                 {
-                    "id": 1,
-                    "instance_name": "demo-instance",
-                    "evo_server_url": "https://evolution-api.com",
-                    "created_at": "2026-01-23T...",
-                    "updated_at": "2026-01-23T..."
+                    "tenant_id": 1,
+                    "role": "owner",
+                    "tenant": {
+                        "id": 1,
+                        "instance_name": "demo-instance",
+                        "evo_server_url": "https://evolution-api.com",
+                        "created_at": "2026-01-23T...",
+                        "updated_at": "2026-01-23T..."
+                    }
                 },
                 ...
             ]
@@ -1138,9 +1142,10 @@ def list_tenants(user: dict = Depends(get_current_user)):
     Requires: Valid access token in Authorization header
     """
     try:
-        # Get tenant IDs user has access to
+        # Get tenant IDs and roles user has access to
         user_tenants = user.get("user_tenants", [])
         tenant_ids = [ut["tenant_id"] for ut in user_tenants]
+        role_map = {ut["tenant_id"]: ut.get("role", "member") for ut in user_tenants}
 
         if not tenant_ids:
             log_info(
@@ -1155,14 +1160,23 @@ def list_tenants(user: dict = Depends(get_current_user)):
             "id, instance_name, evo_server_url, llm_provider, created_at, updated_at"
         ).in_("id", tenant_ids).execute()
 
+        # Enrich with user's role for each tenant
+        tenants_with_roles = []
+        for t in (result.data or []):
+            tenants_with_roles.append({
+                "tenant_id": t["id"],
+                "role": role_map.get(t["id"], "member"),
+                "tenant": t,
+            })
+
         log_info(
             "Listed tenants",
             action="list_tenants",
             user_id=user["id"],
-            tenant_count=len(result.data) if result.data else 0,
+            tenant_count=len(tenants_with_roles),
         )
 
-        return {"tenants": result.data or []}
+        return {"tenants": tenants_with_roles}
 
     except Exception as e:
         log_error(
