@@ -31,6 +31,43 @@ def extract_message_type(payload: dict) -> Optional[str]:
     return data.get("messageType")
 
 
+MEDIA_MESSAGE_TYPES = (
+    "imageMessage", "videoMessage", "audioMessage", "pttMessage",
+    "documentMessage", "stickerMessage",
+)
+
+
+def extract_media_url(payload: dict) -> Optional[str]:
+    """Extract the hosted media URL from a media message payload."""
+    data = payload.get("data") or {}
+    msg = data.get("message") or {}
+    for key in MEDIA_MESSAGE_TYPES:
+        if key in msg and isinstance(msg[key], dict):
+            return msg[key].get("url")
+    return None
+
+
+def extract_media_caption(payload: dict) -> Optional[str]:
+    """Extract optional caption text sent alongside a media message."""
+    data = payload.get("data") or {}
+    msg = data.get("message") or {}
+    for key in MEDIA_MESSAGE_TYPES:
+        if key in msg and isinstance(msg[key], dict):
+            caption = msg[key].get("caption")
+            return caption if caption else None
+    return None
+
+
+def extract_media_mimetype(payload: dict) -> Optional[str]:
+    """Extract MIME type (e.g. image/jpeg, audio/ogg) from a media message."""
+    data = payload.get("data") or {}
+    msg = data.get("message") or {}
+    for key in MEDIA_MESSAGE_TYPES:
+        if key in msg and isinstance(msg[key], dict):
+            return msg[key].get("mimetype")
+    return None
+
+
 def extract_push_name(payload: dict) -> Optional[str]:
     """Extract sender's display name."""
     data = payload.get("data") or {}

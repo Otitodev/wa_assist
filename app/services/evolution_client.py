@@ -548,3 +548,54 @@ class EvolutionClient:
                 raise EvolutionAPIError(
                     f"Failed to delete instance: {str(e)}"
                 ) from e
+
+    async def download_media(
+        self,
+        tenant_id: int,
+        message_data: dict,
+        instance_name: Optional[str] = None,
+    ) -> Optional[bytes]:
+        """
+        Download media bytes from Evolution API using the getBase64FromMediaMessage endpoint.
+
+        Evolution API handles WhatsApp CDN decryption internally and returns base64-encoded media.
+
+        Args:
+            tenant_id: Tenant ID for configuration lookup
+            message_data: The 'data' portion of the Evolution webhook payload
+            instance_name: Override instance name (uses tenant's if not provided)
+
+        Returns:
+            Raw media bytes, or None if download fails
+        """
+        import base64 as _base64
+
+        tenant_config = await self._get_tenant_config(tenant_id)
+        evo_url = tenant_config["evo_server_url"]
+        evo_api_key = tenant_config.get("evo_api_key")
+        instance = instance_name or tenant_config["instance_name"]
+
+        endpoint = f"{evo_url}/chat/getBase64FromMediaMessage/{instance}"
+        headers = {"Content-Type": "application/json"}
+        if evo_api_key:
+            headers["apikey"] = evo_api_key
+
+        # Evolution API expects the message object (not the full payload)
+        body = {"message": message_data.get("message", {}), "convertToMp4": False}
+
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            try:
+                response = await client.post(endpoint, headers=headers, json=body)
+                response.raise_for_status()
+                result = response.json()
+                # Response: {"base64": "...", "mediaType": "image"}
+                b64 = result.get("base64", "")
+                if not b64:
+                    return None
+                # Strip data URL prefix if present
+                if "," in b64:
+                    b64 = b64.split(",", 1)[1]
+                return _base64.b64decode(b64)
+
+            except Exception:
+                return None

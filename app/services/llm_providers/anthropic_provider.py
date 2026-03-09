@@ -51,16 +51,25 @@ class AnthropicProvider(BaseLLMProvider):
         context: Optional[List[Dict[str, str]]] = None,
         max_tokens: Optional[int] = None,
         temperature: float = 0.7,
+        image_url: Optional[str] = None,
+        image_base64: Optional[str] = None,
+        image_mimetype: str = "image/jpeg",
     ) -> str:
         """
-        Generate a reply using Claude.
+        Generate a reply using Claude, with optional vision support.
+
+        When image_url or image_base64 is provided, the user message is sent
+        as a multimodal content block (image + text) using the Anthropic Vision API.
 
         Args:
-            message: The user's message
+            message: The user's message or audio transcription
             system_prompt: System prompt
             context: Previous conversation messages
             max_tokens: Maximum tokens (default: 1024)
             temperature: Sampling temperature
+            image_url: Public URL of an image for Claude Vision
+            image_base64: Base64-encoded image (used if image_url not provided)
+            image_mimetype: MIME type of the image
 
         Returns:
             Generated response text
@@ -72,27 +81,43 @@ class AnthropicProvider(BaseLLMProvider):
 
         # Add context if provided
         if context:
-            # Filter and validate context messages
             for msg in context:
                 if "role" in msg and "content" in msg:
-                    # Claude expects "user" or "assistant" roles
                     if msg["role"] in ["user", "assistant"]:
                         messages.append({
                             "role": msg["role"],
                             "content": msg["content"]
                         })
 
-        # Add current message
-        messages.append({
-            "role": "user",
-            "content": message
-        })
+        # Build user content — plain text or multimodal (image + text)
+        if image_url or image_base64:
+            # Vision: build image block
+            if image_url:
+                image_block = {
+                    "type": "image",
+                    "source": {"type": "url", "url": image_url},
+                }
+            else:
+                image_block = {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": image_mimetype,
+                        "data": image_base64,
+                    },
+                }
+            user_content = [
+                image_block,
+                {"type": "text", "text": message or "What do you see in this image?"},
+            ]
+        else:
+            user_content = message
 
-        # Ensure messages alternate and start with user
-        if messages and messages[0]["role"] != "user":
-            # Remove leading assistant messages
-            while messages and messages[0]["role"] == "assistant":
-                messages.pop(0)
+        messages.append({"role": "user", "content": user_content})
+
+        # Ensure messages start with user
+        while messages and messages[0]["role"] == "assistant":
+            messages.pop(0)
 
         try:
             response = await self.client.messages.create(
@@ -103,7 +128,6 @@ class AnthropicProvider(BaseLLMProvider):
                 messages=messages,
             )
 
-            # Extract text from response
             if response.content and len(response.content) > 0:
                 return response.content[0].text
             else:

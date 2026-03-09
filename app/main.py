@@ -1,5 +1,9 @@
-from fastapi import FastAPI, HTTPException, Request, Depends
+from fastapi import FastAPI, HTTPException, Request, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from pydantic import BaseModel
 from typing import Optional
 import httpx
@@ -7,6 +11,9 @@ import time
 import asyncio
 import random
 import os
+import json
+from datetime import datetime, timezone, timedelta
+from collections import defaultdict
 from .db import supabase
 from .auth import auth_router, get_current_user, require_tenant_access, get_optional_user
 from .evolve_parse import (
@@ -16,12 +23,14 @@ from .evolve_parse import (
 from .services.collision import should_pause_on_event, now_utc
 from .services.llm_client import get_llm_provider
 from .services.evolution_client import EvolutionClient, EvolutionAPIError
+from .services.media_handler import process_media_message
+from .evolve_parse import MEDIA_MESSAGE_TYPES
 from .config import (
     N8N_ENABLED, N8N_WEBHOOK_URL, N8N_API_KEY,
     DEFAULT_SYSTEM_PROMPT, LLM_PROVIDER, LOG_LEVEL, CRON_SECRET, CORS_ORIGINS,
     WEBSOCKET_ENABLED, WEBSOCKET_MODE, EVOLUTION_SERVER_URL, EVOLUTION_API_KEY,
     MESSAGE_DELAY_ENABLED, MESSAGE_DELAY_MIN_MS, MESSAGE_DELAY_MAX_MS,
-    TYPING_INDICATOR_ENABLED
+    TYPING_INDICATOR_ENABLED, MEDIA_PROCESSING_ENABLED, CONTEXT_MESSAGES,
 )
 from .logger import logger, log_info, log_warning, log_error, configure_logger_from_config
 from .services.evolution_websocket import EvolutionWebSocket, EvolutionWebSocketManager
@@ -31,6 +40,11 @@ from .services.websocket_handler import handle_websocket_message, handle_websock
 configure_logger_from_config()
 
 app = FastAPI(title="Whaply Control Plane", version="0.1.0")
+
+# Rate limiting
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Configure CORS for frontend integration
 app.add_middleware(
@@ -479,9 +493,21 @@ async def evolution_webhook(req: Request):
 
     # 6) If inbound message and not paused → generate AI reply
     if from_me is False and event == "messages.upsert":
-        # Skip if no message text
+        # Non-text message (image, audio, video, etc.) — route to media pipeline
         if not text or text.strip() == "":
-            return {"ok": True, "action": "no_text", "chat_id": chat_id}
+            if MEDIA_PROCESSING_ENABLED and msg_type in MEDIA_MESSAGE_TYPES:
+                return await process_media_message(
+                    tenant_id=tenant_id,
+                    chat_id=chat_id,
+                    msg_id=msg_id,
+                    msg_type=msg_type,
+                    payload=payload,
+                    tenant=tenant,
+                    is_lid_contact=is_lid_contact,
+                    event=event,
+                    source="webhook",
+                )
+            return {"ok": True, "action": "no_text_ignored", "chat_id": chat_id}
 
         # Migration path: Check if n8n orchestration is enabled
         if N8N_ENABLED:
@@ -609,11 +635,24 @@ async def evolution_webhook(req: Request):
                     action="ai_generate_start",
                 )
 
+                # Fetch conversation history for context
+                _history = supabase.table("messages").select(
+                    "from_me, text"
+                ).eq("tenant_id", tenant_id).eq("chat_id", chat_id).not_.is_(
+                    "text", "null"
+                ).order("created_at", desc=True).limit(CONTEXT_MESSAGES).execute()
+                context = [
+                    {"role": "assistant" if m["from_me"] else "user", "content": m["text"]}
+                    for m in reversed(_history.data or [])
+                    if m.get("text")
+                ]
+
                 # Generate AI reply
                 llm_provider = get_llm_provider(provider_name)
                 reply_text = await llm_provider.generate_reply(
                     message=text,
                     system_prompt=system_prompt,
+                    context=context,
                 )
 
                 llm_duration = int((time.time() - llm_start_time) * 1000)
@@ -1632,18 +1671,34 @@ def list_sessions(
         result = query.execute()
 
         total_count = result.count if hasattr(result, 'count') else len(result.data)
+        sessions_data = result.data or []
+
+        # Batch-fetch last message text for each session
+        if sessions_data:
+            chat_ids = [s["chat_id"] for s in sessions_data]
+            last_msgs = supabase.table("messages").select(
+                "chat_id, text, created_at"
+            ).in_("chat_id", chat_ids).eq("tenant_id", tenant_id).not_.is_(
+                "text", "null"
+            ).order("created_at", desc=True).limit(len(chat_ids) * 2).execute()
+            last_msg_map: dict = {}
+            for msg in (last_msgs.data or []):
+                if msg["chat_id"] not in last_msg_map:
+                    last_msg_map[msg["chat_id"]] = msg["text"]
+            for s in sessions_data:
+                s["last_message_text"] = last_msg_map.get(s["chat_id"])
 
         log_info(
             "Listed sessions",
             action="list_sessions",
             tenant_id=tenant_id,
-            session_count=len(result.data) if result.data else 0,
+            session_count=len(sessions_data),
             page=page,
             limit=limit,
         )
 
         return {
-            "sessions": result.data or [],
+            "sessions": sessions_data,
             "page": page,
             "limit": limit,
             "total": total_count
@@ -1894,6 +1949,114 @@ def resume_session_by_id(
             exc_info=True,
         )
         raise HTTPException(status_code=500, detail=f"Failed to resume session: {str(e)}")
+
+
+# ============================================================================
+# REAL-TIME SSE ENDPOINTS
+# ============================================================================
+
+@app.get("/api/stream/sessions/{tenant_id}")
+async def stream_sessions(
+    tenant_id: int,
+    token: str = Query(..., description="BetterAuth session token"),
+):
+    """
+    Server-Sent Events stream that pushes session state every 5 seconds.
+
+    EventSource doesn't support custom headers, so the auth token is passed
+    as the `token` query parameter instead of Authorization: Bearer.
+    """
+    # Validate token inline (same logic as get_current_user)
+    try:
+        session_result = supabase.table("session").select(
+            "userId, expiresAt"
+        ).eq("token", token).limit(1).execute()
+
+        if not session_result.data:
+            raise HTTPException(status_code=401, detail="Invalid session token")
+
+        session_row = session_result.data[0]
+        expires_at = datetime.fromisoformat(session_row["expiresAt"].replace("Z", "+00:00"))
+        if expires_at < datetime.now(timezone.utc):
+            raise HTTPException(status_code=401, detail="Session expired")
+
+        user_id = session_row["userId"]
+        user_result = supabase.table("user").select(
+            "id, user_tenants(tenant_id)"
+        ).eq("id", user_id).limit(1).execute()
+
+        if not user_result.data:
+            raise HTTPException(status_code=401, detail="User not found")
+
+        user_tenants = user_result.data[0].get("user_tenants", [])
+        allowed_ids = [ut["tenant_id"] for ut in user_tenants]
+        if tenant_id not in allowed_ids:
+            raise HTTPException(status_code=403, detail="No access to this tenant")
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Auth failed: {str(e)}")
+
+    async def event_generator():
+        while True:
+            try:
+                result = supabase.table("sessions").select(
+                    "id, chat_id, is_paused, pause_reason, last_message_at"
+                ).eq("tenant_id", tenant_id).order("last_message_at", desc=True).execute()
+                payload = json.dumps({"sessions": result.data or []})
+                yield f"data: {payload}\n\n"
+            except Exception:
+                yield "data: {}\n\n"
+            await asyncio.sleep(5)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
+
+
+# ============================================================================
+# ANALYTICS APIs
+# ============================================================================
+
+@app.get("/api/analytics/activity")
+def get_analytics_activity(
+    tenant_id: int,
+    days: int = 7,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member"))
+):
+    """
+    Return daily message and human-takeover counts for the last N days.
+
+    Returns:
+        {"data": [{"date": "YYYY-MM-DD", "messages": N, "collisions": N}, ...]}
+    """
+    try:
+        cutoff = (datetime.utcnow() - timedelta(days=days)).isoformat()
+        result = supabase.table("messages").select(
+            "created_at, from_me"
+        ).eq("tenant_id", tenant_id).gte("created_at", cutoff).execute()
+
+        daily: dict = defaultdict(lambda: {"messages": 0, "collisions": 0})
+        for m in (result.data or []):
+            date = m["created_at"][:10]
+            daily[date]["messages"] += 1
+            if m["from_me"]:
+                daily[date]["collisions"] += 1
+
+        return {"data": [{"date": k, **v} for k, v in sorted(daily.items())]}
+
+    except Exception as e:
+        log_error(
+            "Failed to get analytics activity",
+            action="analytics_activity_failed",
+            tenant_id=tenant_id,
+            error_type=type(e).__name__,
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to get analytics: {str(e)}")
 
 
 # ============================================================================
@@ -3078,6 +3241,7 @@ async def cleanup_old_data(
 
 
 @app.post("/api/generate-prompt")
+@limiter.limit("5/minute")
 async def generate_system_prompt(
     request: Request,
     user: dict = Depends(get_current_user),

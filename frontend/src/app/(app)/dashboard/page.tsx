@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { sessionsApi, healthApi, eventsApi } from '@/lib/api';
+import { authClient } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
@@ -15,7 +16,19 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from 'recharts';
 import type { Session, Message } from '@/types/api';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 interface DashboardStats {
   activeSessions: number;
@@ -28,9 +41,11 @@ export default function DashboardPage() {
   const { activeTenant } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentEvents, setRecentEvents] = useState<Message[]>([]);
+  const [activityData, setActivityData] = useState<Array<{ date: string; messages: number; collisions: number }>>([]);
   const [healthStatus, setHealthStatus] = useState<'healthy' | 'error' | 'loading'>('loading');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const esRef = useRef<EventSource | null>(null);
 
   const loadData = async () => {
     // Check both activeTenant and tenant_id exist
@@ -43,21 +58,27 @@ export default function DashboardPage() {
 
     try {
       // Fetch sessions (both active and paused)
-      const [activeResult, pausedResult, events, health] = await Promise.all([
+      const [activeResult, pausedResult, events, health, activity] = await Promise.all([
         sessionsApi.list({ tenant_id: tenantId, state: 'active', per_page: 1 }),
         sessionsApi.list({ tenant_id: tenantId, state: 'paused', per_page: 1 }),
         eventsApi.list({ tenant_id: tenantId, limit: 10 }),
         healthApi.check().catch(() => ({ status: 'error', database: 'error' })),
+        fetch(`${API_URL}/api/analytics/activity?tenant_id=${tenantId}&days=7`, {
+          headers: {
+            Authorization: `Bearer ${(await authClient.getSession()).data?.session?.token ?? ''}`,
+          },
+        }).then((r) => r.ok ? r.json() : { data: [] }).catch(() => ({ data: [] })),
       ]);
 
       setStats({
         activeSessions: activeResult.total,
         pausedSessions: pausedResult.total,
-        totalMessages: events.length, // Placeholder
+        totalMessages: events.length,
         lastEventTime: events.length > 0 ? events[0].created_at : null,
       });
 
       setRecentEvents(events);
+      setActivityData(activity.data ?? []);
       setHealthStatus(health.status === 'healthy' ? 'healthy' : 'error');
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
@@ -70,10 +91,46 @@ export default function DashboardPage() {
 
   useEffect(() => {
     loadData();
+  }, [activeTenant?.tenant_id]);
 
-    // Poll every 30 seconds
-    const interval = setInterval(loadData, 30000);
-    return () => clearInterval(interval);
+  // SSE: real-time session counts (replaces 30s polling for session stats)
+  useEffect(() => {
+    if (!activeTenant?.tenant_id) return;
+
+    let cancelled = false;
+
+    authClient.getSession().then((result) => {
+      if (cancelled) return;
+      const token = result.data?.session?.token;
+      if (!token) return;
+
+      const es = new EventSource(
+        `${API_URL}/api/stream/sessions/${activeTenant.tenant_id}?token=${encodeURIComponent(token)}`
+      );
+      esRef.current = es;
+
+      es.onmessage = (e) => {
+        try {
+          const { sessions } = JSON.parse(e.data) as { sessions: Session[] };
+          if (!sessions) return;
+          const active = sessions.filter((s) => !s.is_paused).length;
+          const paused = sessions.filter((s) => s.is_paused).length;
+          setStats((prev) => prev ? { ...prev, activeSessions: active, pausedSessions: paused } : null);
+        } catch {
+          // ignore parse errors
+        }
+      };
+
+      es.onerror = () => {
+        es.close();
+      };
+    });
+
+    return () => {
+      cancelled = true;
+      esRef.current?.close();
+      esRef.current = null;
+    };
   }, [activeTenant?.tenant_id]);
 
   const handleRefresh = () => {
@@ -187,6 +244,37 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Activity Chart */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Activity — Last 7 Days</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <Skeleton className="h-48 w-full" />
+          ) : activityData.length === 0 ? (
+            <div className="flex items-center justify-center h-48 text-muted-foreground text-sm">
+              No activity data yet
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={activityData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
+                <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
+                <Tooltip
+                  contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 6, fontSize: 12 }}
+                  labelStyle={{ color: 'hsl(var(--popover-foreground))' }}
+                />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Bar dataKey="messages" name="Messages" fill="hsl(var(--primary))" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="collisions" name="Human takeovers" fill="hsl(38 92% 50%)" radius={[3, 3, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Recent Activity */}
       <Card>

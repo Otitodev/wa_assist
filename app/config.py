@@ -52,3 +52,14 @@ MESSAGE_DELAY_ENABLED = os.getenv("MESSAGE_DELAY_ENABLED", "true").lower() == "t
 MESSAGE_DELAY_MIN_MS = int(os.getenv("MESSAGE_DELAY_MIN_MS", "1000"))  # Minimum delay in ms
 MESSAGE_DELAY_MAX_MS = int(os.getenv("MESSAGE_DELAY_MAX_MS", "3000"))  # Maximum delay in ms
 TYPING_INDICATOR_ENABLED = os.getenv("TYPING_INDICATOR_ENABLED", "true").lower() == "true"
+
+# Media Processing Configuration (images via Claude Vision, audio via Whisper)
+MEDIA_PROCESSING_ENABLED = os.getenv("MEDIA_PROCESSING_ENABLED", "true").lower() == "true"
+CF_R2_ACCOUNT_ID = os.getenv("CF_R2_ACCOUNT_ID", "")
+CF_R2_ACCESS_KEY_ID = os.getenv("CF_R2_ACCESS_KEY_ID", "")
+CF_R2_SECRET_ACCESS_KEY = os.getenv("CF_R2_SECRET_ACCESS_KEY", "")
+CF_R2_BUCKET_NAME = os.getenv("CF_R2_BUCKET_NAME", "whaply-media")
+CF_R2_PUBLIC_URL = os.getenv("CF_R2_PUBLIC_URL", "")  # e.g. https://pub-xxxx.r2.dev or custom domain
+
+# Conversation context — number of previous messages to include in LLM calls
+CONTEXT_MESSAGES = int(os.getenv("CONTEXT_MESSAGES", "10"))

@@ -50,47 +50,55 @@ class OpenAIProvider(BaseLLMProvider):
         context: Optional[List[Dict[str, str]]] = None,
         max_tokens: Optional[int] = None,
         temperature: float = 0.7,
+        image_url: Optional[str] = None,
+        image_base64: Optional[str] = None,
+        image_mimetype: str = "image/jpeg",
     ) -> str:
         """
-        Generate a reply using OpenAI GPT.
+        Generate a reply using OpenAI GPT, with optional vision support (gpt-4o).
+
+        When image_url or image_base64 is provided, the message is sent as a
+        multimodal content block using the OpenAI Vision API format.
 
         Args:
-            message: The user's message
+            message: The user's message or audio transcription
             system_prompt: System prompt
             context: Previous conversation messages
             max_tokens: Maximum tokens (default: 1024)
             temperature: Sampling temperature
+            image_url: Public URL of an image for vision processing
+            image_base64: Base64-encoded image (fallback when URL not available)
+            image_mimetype: MIME type of the image
 
         Returns:
             Generated response text
         """
         from ...config import LLM_MAX_TOKENS
 
-        # Build messages array
-        messages = []
+        messages = [{"role": "system", "content": system_prompt}]
 
-        # Add system message
-        messages.append({
-            "role": "system",
-            "content": system_prompt
-        })
-
-        # Add context if provided
         if context:
             for msg in context:
                 if "role" in msg and "content" in msg:
-                    # OpenAI expects "user", "assistant", or "system" roles
                     if msg["role"] in ["user", "assistant", "system"]:
-                        messages.append({
-                            "role": msg["role"],
-                            "content": msg["content"]
-                        })
+                        messages.append({"role": msg["role"], "content": msg["content"]})
 
-        # Add current message
-        messages.append({
-            "role": "user",
-            "content": message
-        })
+        # Build user content — plain text or multimodal (image + text)
+        if image_url:
+            user_content = [
+                {"type": "image_url", "image_url": {"url": image_url}},
+                {"type": "text", "text": message or "What do you see in this image?"},
+            ]
+        elif image_base64:
+            data_url = f"data:{image_mimetype};base64,{image_base64}"
+            user_content = [
+                {"type": "image_url", "image_url": {"url": data_url}},
+                {"type": "text", "text": message or "What do you see in this image?"},
+            ]
+        else:
+            user_content = message
+
+        messages.append({"role": "user", "content": user_content})
 
         try:
             response = await self.client.chat.completions.create(
@@ -100,7 +108,6 @@ class OpenAIProvider(BaseLLMProvider):
                 messages=messages,
             )
 
-            # Extract text from response
             if response.choices and len(response.choices) > 0:
                 return response.choices[0].message.content or ""
             else:

@@ -13,15 +13,16 @@ from typing import Optional, Dict, Any
 from ..db import supabase
 from ..evolve_parse import (
     extract_chat_id, extract_message_id, extract_from_me,
-    extract_text, extract_message_type
+    extract_text, extract_message_type, MEDIA_MESSAGE_TYPES,
 )
 from ..services.collision import should_pause_on_event, now_utc
 from ..services.llm_client import get_llm_provider
 from ..services.evolution_client import EvolutionClient, EvolutionAPIError
+from ..services.media_handler import process_media_message
 from ..config import (
     DEFAULT_SYSTEM_PROMPT, LLM_PROVIDER,
     MESSAGE_DELAY_ENABLED, MESSAGE_DELAY_MIN_MS, MESSAGE_DELAY_MAX_MS,
-    TYPING_INDICATOR_ENABLED
+    TYPING_INDICATOR_ENABLED, MEDIA_PROCESSING_ENABLED, CONTEXT_MESSAGES,
 )
 from ..logger import log_info, log_warning, log_error
 
@@ -211,11 +212,26 @@ async def handle_websocket_message(data: Dict[str, Any]):
 
     # 7) Generate AI reply for inbound messages
     if from_me is False:
+        is_lid_contact = chat_id.endswith("@lid")
+
+        # Non-text message (image, audio, etc.) — route to media pipeline
+        if not text or text.strip() == "":
+            if MEDIA_PROCESSING_ENABLED and msg_type in MEDIA_MESSAGE_TYPES:
+                return await process_media_message(
+                    tenant_id=tenant_id,
+                    chat_id=chat_id,
+                    msg_id=msg_id,
+                    msg_type=msg_type,
+                    payload=payload,
+                    tenant=tenant,
+                    is_lid_contact=is_lid_contact,
+                    event=event,
+                    source="websocket",
+                )
+            return {"ok": True, "action": "no_text_ignored", "chat_id": chat_id}
+
         try:
             evolution_client = EvolutionClient()
-
-            # Skip mark_as_read and typing for @lid contacts (Evolution API doesn't support them)
-            is_lid_contact = chat_id.endswith("@lid")
 
             # Mark message as read before processing (show blue checkmarks)
             # Skip for @lid contacts as Evolution API can't validate them
@@ -279,11 +295,24 @@ async def handle_websocket_message(data: Dict[str, Any]):
                 action="ws_ai_generate_start",
             )
 
+            # Fetch conversation history for context
+            _history = supabase.table("messages").select(
+                "from_me, text"
+            ).eq("tenant_id", tenant_id).eq("chat_id", chat_id).not_.is_(
+                "text", "null"
+            ).order("created_at", desc=True).limit(CONTEXT_MESSAGES).execute()
+            context = [
+                {"role": "assistant" if m["from_me"] else "user", "content": m["text"]}
+                for m in reversed(_history.data or [])
+                if m.get("text")
+            ]
+
             # Generate AI reply
             llm_provider = get_llm_provider(provider_name)
             reply_text = await llm_provider.generate_reply(
                 message=text,
                 system_prompt=system_prompt,
+                context=context,
             )
 
             log_info(

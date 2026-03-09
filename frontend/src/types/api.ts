@@ -35,6 +35,7 @@ export interface Session {
   last_message_at: string;
   last_human_at: string | null;
   created_at: string;
+  last_message_text?: string | null;
 }
 
 export interface Message {

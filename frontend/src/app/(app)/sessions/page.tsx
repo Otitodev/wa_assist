@@ -1,17 +1,20 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { sessionsApi } from '@/lib/api';
+import { authClient } from '@/lib/auth-client';
 import { DataTable } from '@/components/shared/data-table';
 import { SessionStatusBadge } from '@/components/shared/status-badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { formatDistanceToNow } from 'date-fns';
-import { RefreshCw, MessageSquare } from 'lucide-react';
+import { RefreshCw, MessageSquare, Play } from 'lucide-react';
 import type { Session } from '@/types/api';
-import type { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 const columns: ColumnDef<Session>[] = [
   {
@@ -25,6 +28,18 @@ const columns: ColumnDef<Session>[] = [
         <div className="font-mono text-sm">
           {displayId.length > 15 ? `${displayId.slice(0, 15)}...` : displayId}
         </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'last_message_text',
+    header: 'Preview',
+    cell: ({ row }) => {
+      const text = row.original.last_message_text;
+      return (
+        <span className="text-muted-foreground text-sm truncate max-w-[200px] block">
+          {text ?? '—'}
+        </span>
       );
     },
   },
@@ -88,6 +103,9 @@ export default function SessionsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [stateFilter, setStateFilter] = useState<StateFilter>('all');
   const [total, setTotal] = useState(0);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [bulkResuming, setBulkResuming] = useState(false);
+  const esRef = useRef<EventSource | null>(null);
 
   const loadSessions = useCallback(async () => {
     if (!activeTenant?.tenant_id) {
@@ -117,6 +135,49 @@ export default function SessionsPage() {
     loadSessions();
   }, [loadSessions]);
 
+  // SSE: live session updates (replaces 30s polling)
+  useEffect(() => {
+    if (!activeTenant?.tenant_id) return;
+
+    let cancelled = false;
+
+    authClient.getSession().then((result) => {
+      if (cancelled) return;
+      const token = result.data?.session?.token;
+      if (!token) return;
+
+      const es = new EventSource(
+        `${API_URL}/api/stream/sessions/${activeTenant.tenant_id}?token=${encodeURIComponent(token)}`
+      );
+      esRef.current = es;
+
+      es.onmessage = (e) => {
+        try {
+          const { sessions: streamedSessions } = JSON.parse(e.data) as { sessions: Session[] };
+          if (!streamedSessions) return;
+          // Merge is_paused state into existing sessions to reflect live changes
+          setSessions((prev) => {
+            const map = new Map(streamedSessions.map((s) => [s.id, s]));
+            return prev.map((s) => {
+              const updated = map.get(s.id);
+              return updated ? { ...s, is_paused: updated.is_paused, pause_reason: updated.pause_reason } : s;
+            });
+          });
+        } catch {
+          // ignore
+        }
+      };
+
+      es.onerror = () => es.close();
+    });
+
+    return () => {
+      cancelled = true;
+      esRef.current?.close();
+      esRef.current = null;
+    };
+  }, [activeTenant?.tenant_id]);
+
   const handleRefresh = () => {
     setRefreshing(true);
     loadSessions();
@@ -124,6 +185,25 @@ export default function SessionsPage() {
 
   const handleRowClick = (session: Session) => {
     router.push(`/sessions/${session.id}`);
+  };
+
+  const handleBulkResume = async () => {
+    if (!activeTenant?.tenant_id) return;
+    const selectedIndices = Object.keys(rowSelection).map(Number);
+    const selectedSessions = selectedIndices.map((i) => sessions[i]).filter(Boolean);
+    if (!selectedSessions.length) return;
+    setBulkResuming(true);
+    try {
+      await Promise.all(
+        selectedSessions.map((s) => sessionsApi.resume(s.id, activeTenant.tenant_id))
+      );
+      setRowSelection({});
+      loadSessions();
+    } catch (error) {
+      console.error('Bulk resume failed:', error);
+    } finally {
+      setBulkResuming(false);
+    }
   };
 
   if (!activeTenant?.tenant_id) {
@@ -161,14 +241,26 @@ export default function SessionsPage() {
         </Button>
       </div>
 
-      {/* Filters */}
-      <Tabs value={stateFilter} onValueChange={(v) => setStateFilter(v as StateFilter)}>
-        <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="active">AI Mode</TabsTrigger>
-          <TabsTrigger value="paused">Human Mode</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      {/* Filters + Bulk Actions */}
+      <div className="flex items-center justify-between gap-4">
+        <Tabs value={stateFilter} onValueChange={(v) => { setStateFilter(v as StateFilter); setRowSelection({}); }}>
+          <TabsList>
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="active">AI Mode</TabsTrigger>
+            <TabsTrigger value="paused">Human Mode</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        {Object.keys(rowSelection).length > 0 && (
+          <Button
+            size="sm"
+            onClick={handleBulkResume}
+            disabled={bulkResuming}
+          >
+            <Play className="h-4 w-4 mr-2" />
+            {bulkResuming ? 'Resuming…' : `Resume ${Object.keys(rowSelection).length} selected`}
+          </Button>
+        )}
+      </div>
 
       {/* Table */}
       <DataTable
@@ -179,6 +271,9 @@ export default function SessionsPage() {
         searchPlaceholder="Search by phone number..."
         onRowClick={handleRowClick}
         pageSize={15}
+        enableRowSelection
+        rowSelection={rowSelection}
+        onRowSelectionChange={setRowSelection}
       />
     </div>
   );

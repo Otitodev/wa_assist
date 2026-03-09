@@ -4,378 +4,182 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Whaply** (WA Assist) - A full-stack SaaS platform for WhatsApp automation with intelligent human/AI collision detection. The system consists of:
-- **Backend (FastAPI)**: Webhook ingestion, session state machine, multi-tenant persistence
-- **Frontend (Next.js)**: Operational dashboard for monitoring sessions, managing knowledge base, and controlling automation
-- **Core Value**: "Invisible Mute" - automatically pauses AI when business owners intervene, prevents message conflicts
+**Whaply** – A full-stack SaaS platform for WhatsApp automation with intelligent human/AI collision detection. The core value is **"Invisible Mute"**: the AI automatically pauses when a business owner takes over a chat, preventing message conflicts.
+
+- **Backend**: FastAPI at `app/` – webhook ingestion, session state machine, LLM reply pipeline, multi-tenant persistence
+- **Frontend**: Next.js 16 at `frontend/` – operational dashboard for monitoring sessions, instances, and knowledge base
+- **Database**: Supabase/Postgres (schema at `database/schema.sql`)
+- **Deployment target**: Railway (backend), Vercel (frontend); `Procfile` and `runtime.txt` present
 
 ## Architecture
 
-### Core Components
+### Message Flow
+```
+WhatsApp User → Evolution API → POST /webhook/{instance}
+                                       ↓
+                              Idempotency check (processed_events)
+                                       ↓
+                              Tenant lookup by instance_name
+                              Message stored in messages table
+                              Session upserted
+                                       ↓
+                         fromMe=true? → Pause session (collision detection)
+                         fromMe=false + not paused? → LLM reply pipeline
+                                       ↓
+                              LLM generate (Anthropic/OpenAI)
+                              Optional message delay (anti-ban)
+                              Optional typing indicator
+                              Evolution API send
+```
 
-**Webhook Ingestion Flow** (`app/main.py`)
-- `POST /webhooks/evolution` - Primary webhook receiver for Evolution API events
-- Resolves tenant by instance name
-- Extracts message metadata via `evolve_parse.py` helpers
-- Upserts session state on every inbound message
-- Applies collision detection rules via `services/collision.py`
+**Alternative ingestion**: WebSocket mode (`WEBSOCKET_ENABLED=true`) connects directly to Evolution API instead of using webhooks.
 
-**Session State Machine** (database-driven)
-- Sessions auto-create on first message per chat
-- `is_paused=true` set immediately when business owner sends message (`fromMe=true`)
-- AI replies blocked while paused
-- Auto-resume after 2 hours of inactivity (via cronjob, see `cronjob.txt`)
+### Auth Architecture (Two-Layer)
+Authentication is split between Next.js and FastAPI:
 
-**Data Flow**
-1. Evolution API webhook → `/webhooks/evolution`
-2. Tenant lookup by `instance_name` in `tenants` table
-3. Message stored in `messages` table (deduped by `tenant_id + message_id`)
-4. Session upserted in `sessions` table with `last_message_at` timestamp
-5. Collision rule evaluated: if `fromMe=true` → pause session
-6. If not paused and inbound message → placeholder returns `enqueue_ai` (AI reply pipeline not yet implemented)
+1. **BetterAuth (Next.js)** – `frontend/src/lib/auth.ts` handles signup, login, password reset via `/api/auth/*` routes. Uses direct Postgres connection (`DATABASE_URL`). Email via Resend.
+2. **FastAPI session validation** – `app/auth/dependencies.py` validates requests by looking up the BetterAuth session token in the `session` table (Supabase). No JWT crypto — it reads `session.token → session.userId → user + user_tenants`.
+3. **Tenant RBAC** – `require_tenant_access(role)` dependency factory enforces `owner > admin > member` role hierarchy per tenant.
 
-### Module Responsibilities
+### Module Map
 
-**`app/config.py`**
-- Loads environment variables via `python-dotenv`
-- Required: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
-- Optional: `API_PORT` (default 8000), `LOG_LEVEL` (default info)
+| File | Responsibility |
+|---|---|
+| `app/main.py` | FastAPI app, all routes, webhook handler, startup/shutdown |
+| `app/config.py` | All env var loading — read this to know what's configurable |
+| `app/db.py` | Supabase client singleton (service role key, bypasses RLS) |
+| `app/evolve_parse.py` | Extracts `chat_id`, `message_id`, `fromMe`, `text` from Evolution payloads |
+| `app/services/collision.py` | `should_pause_on_event()` – returns `True` for `messages.upsert` with `fromMe=true` |
+| `app/services/evolution_client.py` | `EvolutionClient` – `send_text_message()`, `get_instance_status()` |
+| `app/services/llm_client.py` | Factory: returns Anthropic or OpenAI provider based on `LLM_PROVIDER` |
+| `app/services/llm_providers/` | `base.py` (abstract), `anthropic_provider.py`, `openai_provider.py` |
+| `app/services/evolution_websocket.py` | WebSocket client for Evolution API (alternative to webhooks) |
+| `app/services/websocket_handler.py` | Handles messages received via WebSocket connection |
+| `app/logger.py` | Structured JSON logging with context fields (`tenant_id`, `chat_id`, etc.) |
+| `app/auth/` | `routes.py` (`GET /api/auth/me`), `dependencies.py` (session validation), `service.py` |
+| `scripts/auto_resume.py` | Standalone cron script — calls `/cron/auto-resume` |
+| `database/schema.sql` | Full Postgres schema — run in Supabase SQL Editor to initialize |
 
-**`app/db.py`**
-- Initializes Supabase client with service role key
-- Raises `RuntimeError` if credentials missing
+### Database Schema (4 tables)
 
-**`app/evolve_parse.py`**
-- Extracts fields from Evolution API webhook payloads
-- Handles nested structure: `payload.data.key.{remoteJid, id, fromMe}`
-- Message text extraction supports `conversation` and `extendedTextMessage` types
+- **`tenants`** – `instance_name` (unique), `evo_server_url`, `evo_api_key`, `system_prompt`, `llm_provider`
+- **`sessions`** – `(tenant_id, chat_id)` unique; `is_paused`, `pause_reason`, `last_message_at`, `last_human_at`
+- **`messages`** – `(tenant_id, message_id)` unique; `from_me`, `message_type`, `text`, `raw` (JSONB)
+- **`processed_events`** – `(tenant_id, message_id, event_type)` unique; idempotency tracking; action logged as `paused | ai_replied | ai_failed | ignored_paused`
 
-**`app/services/collision.py`**
-- `should_pause_on_event()` - Returns `true` if `messages.upsert` with `fromMe=true`
-- `now_utc()` - Helper for consistent UTC timestamps
+BetterAuth creates its own tables (`user`, `session`, `account`) in the same Postgres database.
 
-**`app/models.py`**
-- Currently scaffolded with `BaseModel` (SQLAlchemy base with common fields)
-- Not actively used; persistence handled via Supabase client directly
+### Frontend Structure
 
-### Database Schema
-
-**Tables (Supabase/Postgres)**
-- `tenants` - Maps `instance_name` to tenant config (includes `evo_server_url`)
-- `sessions` - Tracks conversation state: `tenant_id`, `chat_id`, `is_paused`, `last_message_at`, `last_human_at`, `pause_reason`
-- `messages` - Stores all inbound messages with `raw` JSON payload, deduped by `(tenant_id, message_id)`
-
-**Constraints**
-- Sessions: unique on `(tenant_id, chat_id)`
-- Messages: unique on `(tenant_id, message_id)`
-
-### Frontend Architecture (Next.js Dashboard)
-
-**Tech Stack**
-- Next.js 14+ with App Router
-- TypeScript
-- Tailwind CSS
-- shadcn/ui component library
-- TanStack Table for data tables
-- Zod for API response validation
-
-**Design System: "Whaply UI"**
-- WhatsApp-inspired but professional (not a clone)
-- Brand colors: Deep green (primary), teal/emerald (secondary)
-- Visual principles: Operational product feel, fast scanning, clear state indicators
-- Trust cues: System health indicators, last event timestamps, webhook status
-
-**Core Pages & Routes**
-- `/dashboard` - KPI cards (Active/Paused chats, AI replies, interference rate), health status, recent activity feed
-- `/instances` - List view of WhatsApp instances with status, webhook config, last seen
-  - `/instances/[name]` - Detail view with tabs (Overview, Webhooks, Logs), test webhook button
-- `/sessions` - **Critical page**: Table of all chat sessions with Active/Paused state, filters, search
-  - `/sessions/[id]` - **State machine view**: Timeline of messages/events, manual pause/resume controls, debug panel
-- `/knowledge` - Upload PDF/DOC/TXT, edit persona/prompt, version history
-- `/alerts` - Rules builder for sentiment thresholds, keyword triggers, escalations
-- `/settings` - Tenant config, API keys management, webhook endpoints
-
-**Key UI Components**
-- `StatusBadge` - Standardized badges for Active/Paused/Error/Connecting states
-- `DataTableKit` - TanStack Table wrapper with column visibility, sticky headers, skeleton loading
-- `TimelineComponent` - Event feed showing inbound/outbound messages, state changes, errors
-- `HealthPill` - Shows webhook health, last event age, error rates
-
-**Frontend ↔ Backend API Contract**
-
-Sessions API:
-- `GET /api/sessions?tenantId=&instance=&state=&q=&page=` - List sessions with filters
-- `GET /api/sessions/:sessionId?tenantId=` - Get session details
-- `POST /api/sessions/:sessionId/pause` - Manually pause session
-- `POST /api/sessions/:sessionId/resume` - Manually resume session
-
-Instances API:
-- `GET /api/instances?tenantId=` - List WhatsApp instances
-- `GET /api/instances/:instanceName?tenantId=` - Get instance details
-- `POST /api/instances/:instanceName/test-webhook` - Test webhook connectivity
-
-Tenants API:
-- `GET /api/tenants` - List tenants for current user
-- `GET /api/tenants/:tenantId` - Get tenant details
-
-Events API:
-- `GET /api/events?tenantId=&instance=&sessionId=&limit=` - Get event timeline
-
-Knowledge API:
-- `POST /api/knowledge/upload` - Upload knowledge base files
-- `PUT /api/knowledge/prompt` - Update AI persona/prompt
-- `GET /api/knowledge/versions` - List prompt versions
-
-Alerts API:
-- `GET/POST/PUT/DELETE /api/alerts-rules` - CRUD for alert rules
-
-**Frontend State Management**
-- Tenant context: Active tenant selected via topbar switcher, persisted to localStorage
-- Auth state: Route guards redirect unauthed users to `/login`
-- API client: Centralized fetch wrapper with Zod validation, consistent error handling
+```
+frontend/src/
+  app/
+    (app)/          # Authenticated route group
+      dashboard/
+      instances/    # [name]/ sub-route for detail
+      sessions/     # [id]/ sub-route for detail
+      knowledge/
+      settings/
+    (auth)/         # Unauthenticated route group
+      login/ register/ forgot-password/ reset-password/
+    api/auth/       # BetterAuth Next.js API handler
+  components/
+    layout/         # Sidebar, topbar, shell
+    shared/         # data-table.tsx, status-badge.tsx, timeline.tsx
+    ui/             # shadcn/ui generated components
+  lib/
+    api.ts          # Centralized API client (fetch wrapper + Zod validation)
+    auth.ts         # BetterAuth server config (Postgres pool + Resend)
+    auth-client.ts  # BetterAuth React client
+    utils.ts
+  hooks/
+  types/
+```
 
 ## Development Commands
 
-### Backend (FastAPI)
-
-**Environment Setup**
+### Backend
 ```bash
-# Create virtual environment
+# Setup
 python -m venv venv
-
-# Activate (Windows)
-venv\Scripts\activate
-
-# Activate (Unix)
-source venv/bin/activate
-
-# Install dependencies
+source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
+cp .env.example .env      # Fill in SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, LLM keys
 
-# Copy environment template
-cp .env.example .env
-# Then edit .env with actual Supabase credentials
-```
-
-**Running the Backend**
-```bash
-# Run FastAPI server with hot reload
+# Run
 uvicorn app.main:app --reload --port 8000
 
-# Health check
-curl http://localhost:8000/health
-
-# View API docs
-# Navigate to http://localhost:8000/docs (Swagger UI)
-```
-
-**Testing Backend Endpoints**
-```bash
-# Get session status
-curl http://localhost:8000/sessions/{instance_name}/{chat_id}
-
-# Manually resume a paused session
-curl -X POST http://localhost:8000/sessions/{instance_name}/{chat_id}/resume
-
-# Test webhook (send sample Evolution API payload)
-curl -X POST http://localhost:8000/webhooks/evolution \
-  -H "Content-Type: application/json" \
-  -d '{"event":"messages.upsert","instance":"test","data":{...}}'
-```
-
-**Code Quality (Backend)**
-```bash
-# Format code
-black app/
-
-# Lint
-flake8 app/
-
-# Type checking
-mypy app/
-
-# Run tests
+# Test
 pytest
-
-# Run specific test file
 pytest tests/test_collision.py
+
+# Lint/Format/Types
+black app/
+flake8 app/
+mypy app/
 ```
 
-### Frontend (Next.js)
-
-**Setup**
+### Frontend
 ```bash
-# Navigate to frontend directory (when created)
 cd frontend
-
-# Install dependencies
 npm install
-# or
-pnpm install
+# Set DATABASE_URL, BETTER_AUTH_SECRET, RESEND_API_KEY, NEXT_PUBLIC_APP_URL in .env.local
 
-# Copy environment template
-cp .env.local.example .env.local
-# Configure NEXT_PUBLIC_API_URL to point to FastAPI backend
-```
-
-**Running the Frontend**
-```bash
-# Development server with hot reload
-npm run dev
-# Typically runs on http://localhost:3000
-
-# Production build
+npm run dev    # localhost:3000
 npm run build
-
-# Start production server
-npm run start
-```
-
-**Code Quality (Frontend)**
-```bash
-# Lint
 npm run lint
-
-# Format with Prettier
-npm run format
-
-# Type check
-npm run type-check
-
-# Run tests
-npm run test
 ```
 
-**shadcn/ui Commands**
+### Add shadcn components
 ```bash
-# Add new shadcn component
-npx shadcn@latest add button
-npx shadcn@latest add table
-npx shadcn@latest add dialog
-
-# Add multiple components at once
-npx shadcn@latest add button input label card
+cd frontend
+npx shadcn@latest add <component-name>
 ```
 
-## Key Implementation Patterns
+## Key Environment Variables
 
-### Collision Detection (Core Value Prop)
-The system prevents AI/human message conflicts:
-- **Pause trigger**: `messages.upsert` event where `fromMe=true`
-- **Pause effect**: Session `is_paused` set to `true`, `last_human_at` updated
-- **AI gate**: Before generating reply, check `is_paused` status
-- **Auto-resume**: Cron runs SQL in `cronjob.txt` every N minutes to unpause sessions idle >2 hours
+**Backend** (`.env`):
+```
+SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+EVOLUTION_WEBHOOK_SHARED_SECRET, CRON_SECRET
+LLM_PROVIDER=anthropic|openai, ANTHROPIC_API_KEY, OPENAI_API_KEY
+CORS_ORIGINS=http://localhost:3000,...
+RESUME_AFTER_HOURS=2
+WEBSOCKET_ENABLED=false, WEBSOCKET_MODE=global, EVOLUTION_SERVER_URL, EVOLUTION_API_KEY
+MESSAGE_DELAY_ENABLED=true, MESSAGE_DELAY_MIN_MS=1000, MESSAGE_DELAY_MAX_MS=3000
+TYPING_INDICATOR_ENABLED=true
+N8N_ENABLED=false, N8N_WEBHOOK_URL, N8N_API_KEY
+```
 
-### Idempotency
-- Message deduplication via `message_id` prevents duplicate processing on webhook retries
-- Session upserts use `on_conflict` to avoid errors
+**Frontend** (`.env.local`):
+```
+DATABASE_URL=postgresql://...   # Direct Postgres (BetterAuth)
+BETTER_AUTH_SECRET=...
+RESEND_API_KEY=...
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8000  # FastAPI backend
+```
 
-### Multi-Tenancy
-- All queries filter by `tenant_id` resolved from Evolution `instance` name
-- Each tenant can have separate Evolution server URL and credentials
+## Key Implementation Notes
 
-### Frontend UX Patterns
+**Collision detection is the core invariant**: `fromMe=true` on any `messages.upsert` event immediately sets `is_paused=true`. Before every LLM call, `is_paused` is re-checked. Never skip this check.
 
-**Loading Strategy (Skeleton-First)**
-- Use skeleton states for cards, tables, and timelines
-- Prevent layout shifts during data fetching
-- Show loading state immediately on navigation
+**Idempotency**: At the start of webhook processing, the `processed_events` table is checked. If `(tenant_id, message_id, event_type)` already exists, return early. This prevents duplicate LLM calls on Evolution API webhook retries.
 
-**Empty States**
-- Every empty state must have a clear next action CTA
-- Examples:
-  - No instances → "Connect WhatsApp" button
-  - No knowledge base → "Upload knowledge" button
-  - Paused sessions exist → "Review paused chats" link
+**Message delays**: `MESSAGE_DELAY_ENABLED` adds a human-like random delay before sending to avoid WhatsApp bans. Configurable via `MESSAGE_DELAY_MIN_MS`/`MESSAGE_DELAY_MAX_MS`.
 
-**Status Indication**
-- Active sessions: Filled green badge
-- Paused sessions: Outlined yellow/orange badge
-- Error states: Red badge with error icon
-- Connection states: Neutral gray badge with spinner
+**n8n migration path**: Set `N8N_ENABLED=true` to route the AI reply step through an n8n workflow instead of the built-in LLM pipeline. The webhook handler has conditional branching for this.
 
-**Session Detail Page (Most Critical UI)**
-- Timeline shows complete conversation history with state changes
-- Manual pause/resume controls prominent at top
-- Debug panel shows raw session JSON and webhook payloads
-- Real-time updates when session state changes
+**Tenant system prompt**: Each tenant in the `tenants` table has its own `system_prompt`. `DEFAULT_SYSTEM_PROMPT` from config is the fallback.
 
-**Table Design (Compact, Scannable)**
-- Sticky headers for long tables
-- Column sorting on key fields (state, lastSeen, lastMessage)
-- Filter chips for quick filtering (state, instance, time range)
-- Row click opens detail view
-- Pagination or infinite scroll for large datasets
+**Auto-resume**: `/cron/auto-resume` endpoint (secured with `CRON_SECRET`) resumes sessions where `last_human_at` is older than `RESUME_AFTER_HOURS`. Schedule `scripts/auto_resume.py` every 15 minutes (Railway cron or equivalent).
 
-## Current State & Next Steps
+**Frontend auth flow**: The frontend gets a session token from `authClient.getSession()` and sends it as `Authorization: Bearer <token>` to FastAPI. FastAPI validates it against the `session` table — not JWTs.
 
-**Backend: Implemented (MVP Core)**
-- ✅ Webhook ingestion for Evolution API (`/webhooks/evolution`)
-- ✅ Tenant resolution by instance name
-- ✅ Session state tracking with pause/resume
-- ✅ Pause-on-human-intervention logic (collision detection)
-- ✅ Message persistence with deduplication
-- ✅ Manual resume endpoint
-- ✅ Session status endpoint
+## Current Status
 
-**Backend: Not Yet Implemented**
-- ⏳ AI reply generation pipeline (placeholder returns `enqueue_ai`)
-- ⏳ Outbound message sending via Evolution API
-- ⏳ Webhook authentication/signature verification
-- ⏳ Async job queue (Redis/Celery for AI processing)
-- ⏳ Auto-resume cronjob deployment (SQL ready in `cronjob.txt`)
-- ⏳ Additional API endpoints for frontend dashboard (instances, events, knowledge, alerts)
+**Backend** (~90% complete): All core endpoints implemented. Remaining: run `database/schema.sql` in Supabase, deploy to Railway, end-to-end testing.
 
-**Frontend: Not Yet Started**
-- ⏳ Next.js project bootstrap with App Router
-- ⏳ shadcn/ui setup and Whaply theme
-- ⏳ Global layout shell (sidebar, topbar)
-- ⏳ Authentication UI
-- ⏳ Core pages: Dashboard, Instances, Sessions (critical), Knowledge, Alerts, Settings
-- ⏳ Reusable components: StatusBadge, DataTableKit, TimelineComponent
-- ⏳ API client with Zod validation
+**Frontend**: Built with all core pages (dashboard, instances, sessions, knowledge, settings) and auth flows. Shared components: `StatusBadge`, `DataTableKit` (TanStack Table), `TimelineComponent`.
 
-**Recommended Build Order**
-
-Backend (Next 2 Sprints):
-1. HF-040, HF-041 - Outbound messaging + AI reply pipeline
-2. Extend API endpoints for dashboard (sessions list, instances list, events)
-3. Deploy auto-resume cronjob
-
-Frontend (Start After Backend APIs Ready):
-1. UI-001, UI-002, UI-003 - Project setup, layout, theme
-2. UI-200, UI-201 - Core components (StatusBadge, DataTableKit)
-3. UI-100 - Dashboard overview
-4. UI-110, UI-111 - Instances pages
-5. UI-120, UI-121, UI-202 - Sessions pages + timeline (most important)
-6. UI-130 - Knowledge base
-7. UI-150 - Settings
-8. UI-140 - Alerts
-
-**Reference Documents**
-- `be_tasks.txt` - Backend engineering tickets (HF-001 through HF-071)
-- `fe_tasks.txt` - Frontend engineering tickets (UI-001 through UI-402)
-- `plan.md` - High-level project roadmap
-- `cronjob.txt` - SQL for auto-resume logic (needs scheduling in production)
-
-## Important Notes
-
-**Backend**
-- **Session state is source of truth**: Always query `sessions` table to determine if AI should reply
-- **fromMe detection is critical**: Evolution API uses `fromMe=true` to indicate business owner sent the message
-- **Supabase service role key required**: App bypasses RLS policies; ensure key is properly secured
-- **Chat IDs from Evolution**: Format is `{phone_number}@s.whatsapp.net` for individual chats, different for groups
-- **Webhook idempotency**: Use `message_id` for deduplication; Evolution may retry failed webhooks
-
-**Frontend**
-- **shadcn/ui is the primary component source**: Don't build from scratch what shadcn provides
-- **Whaply theme tokens**: Use CSS variables defined in `theme.css`, don't hardcode colors
-- **Session page is mission-critical**: This is where users monitor and control the collision detection
-- **API contract must match backend**: Coordinate endpoint shapes before implementing UI
-- **Multi-tenant context**: Always include `tenantId` in API requests; use tenant switcher to change context
-- **Real-time considerations**: Session state changes may need polling or WebSocket updates for live dashboard
-
-**Integration**
-- Backend currently on port 8000, frontend will typically run on port 3000 in development
-- CORS must be configured in FastAPI to allow frontend origin
-- Frontend API client should use `NEXT_PUBLIC_API_URL` environment variable
+**Reference docs**: `IMPLEMENTATION_STATUS.md`, `be_tasks.txt`, `fe_tasks.txt`, `plan.md`, `database/README.md`

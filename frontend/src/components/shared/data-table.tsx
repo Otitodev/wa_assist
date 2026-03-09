@@ -10,6 +10,7 @@ import {
   getSortedRowModel,
   ColumnFiltersState,
   getFilteredRowModel,
+  RowSelectionState,
 } from '@tanstack/react-table';
 import { useState } from 'react';
 
@@ -24,6 +25,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
@@ -34,6 +36,9 @@ interface DataTableProps<TData, TValue> {
   searchColumn?: string;
   onRowClick?: (row: TData) => void;
   pageSize?: number;
+  enableRowSelection?: boolean;
+  rowSelection?: RowSelectionState;
+  onRowSelectionChange?: (selection: RowSelectionState) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -44,14 +49,45 @@ export function DataTable<TData, TValue>({
   searchColumn,
   onRowClick,
   pageSize = 10,
+  enableRowSelection = false,
+  rowSelection: externalRowSelection,
+  onRowSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const [internalRowSelection, setInternalRowSelection] = useState<RowSelectionState>({});
+
+  const rowSelection = externalRowSelection ?? internalRowSelection;
+  const setRowSelection = onRowSelectionChange ?? setInternalRowSelection;
+
+  const selectionColumn: ColumnDef<TData, unknown> = {
+    id: '_select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+        onClick={(e) => e.stopPropagation()}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+        onClick={(e) => e.stopPropagation()}
+      />
+    ),
+  };
+
+  const effectiveColumns = enableRowSelection
+    ? [selectionColumn, ...columns] as ColumnDef<TData, TValue>[]
+    : columns;
 
   const table = useReactTable({
     data,
-    columns,
+    columns: effectiveColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -59,10 +95,13 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onGlobalFilterChange: setGlobalFilter,
+    enableRowSelection,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       globalFilter,
+      rowSelection,
     },
     initialState: {
       pagination: {
