@@ -13,6 +13,7 @@ import {
   Brain,
   ChevronLeft,
   ChevronRight,
+  CreditCard,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,32 +25,13 @@ import {
 import { useAuth } from '@/hooks/use-auth';
 
 const navigation = [
-  {
-    name: 'Dashboard',
-    href: '/dashboard',
-    icon: LayoutDashboard,
-  },
-  {
-    name: 'Conversations',
-    href: '/sessions',
-    icon: MessageSquare,
-  },
-  {
-    name: 'WhatsApp',
-    href: '/instances',
-    icon: Server,
-  },
-  {
-    name: 'AI Settings',
-    href: '/knowledge',
-    icon: Brain,
-  },
-  {
-    name: 'Settings',
-    href: '/settings',
-    icon: Settings,
-  },
-];
+  { name: 'Dashboard',     href: '/dashboard',        icon: LayoutDashboard },
+  { name: 'Conversations', href: '/sessions',          icon: MessageSquare },
+  { name: 'WhatsApp',      href: '/instances',         icon: Server },
+  { name: 'AI Settings',   href: '/knowledge',         icon: Brain },
+  { name: 'Settings',      href: '/settings',          icon: Settings, exact: true },
+  { name: 'Billing',       href: '/settings/billing',  icon: CreditCard },
+] as const;
 
 interface SidebarProps {
   collapsed: boolean;
@@ -106,8 +88,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         {/* Navigation */}
         <nav className="flex-1 space-y-1 px-2 py-4">
           {navigation.map((item) => {
-            const isActive =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const isActive = 'exact' in item && item.exact
+              ? pathname === item.href
+              : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
             if (collapsed) {
               return (

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { sessionsApi, healthApi, eventsApi } from '@/lib/api';
+import { sessionsApi, healthApi, eventsApi, billingApi } from '@/lib/api';
 import { authClient } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -26,7 +26,9 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
-import type { Session, Message } from '@/types/api';
+import type { Session, Message, Subscription } from '@/types/api';
+import { Progress } from '@/components/ui/progress';
+import Link from 'next/link';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -43,6 +45,7 @@ export default function DashboardPage() {
   const [recentEvents, setRecentEvents] = useState<Message[]>([]);
   const [activityData, setActivityData] = useState<Array<{ date: string; messages: number; collisions: number }>>([]);
   const [healthStatus, setHealthStatus] = useState<'healthy' | 'error' | 'loading'>('loading');
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const esRef = useRef<EventSource | null>(null);
@@ -58,7 +61,7 @@ export default function DashboardPage() {
 
     try {
       // Fetch sessions (both active and paused)
-      const [activeResult, pausedResult, events, health, activity] = await Promise.all([
+      const [activeResult, pausedResult, events, health, activity, sub] = await Promise.all([
         sessionsApi.list({ tenant_id: tenantId, state: 'active', per_page: 1 }),
         sessionsApi.list({ tenant_id: tenantId, state: 'paused', per_page: 1 }),
         eventsApi.list({ tenant_id: tenantId, limit: 10 }),
@@ -68,6 +71,7 @@ export default function DashboardPage() {
             Authorization: `Bearer ${(await authClient.getSession()).data?.session?.token ?? ''}`,
           },
         }).then((r) => r.ok ? r.json() : { data: [] }).catch(() => ({ data: [] })),
+        billingApi.getSubscription(tenantId).catch(() => null),
       ]);
 
       setStats({
@@ -80,6 +84,7 @@ export default function DashboardPage() {
       setRecentEvents(events);
       setActivityData(activity.data ?? []);
       setHealthStatus(health.status === 'healthy' ? 'healthy' : 'error');
+      setSubscription(sub);
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
       setHealthStatus('error');
@@ -275,6 +280,50 @@ export default function DashboardPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Usage Widget */}
+      {subscription && (
+        <Card className={
+          subscription.max_conversations_per_month !== -1 &&
+          subscription.conversations_used >= subscription.max_conversations_per_month
+            ? 'border-red-500/50'
+            : subscription.max_conversations_per_month !== -1 &&
+              subscription.conversations_used / subscription.max_conversations_per_month >= 0.8
+            ? 'border-yellow-500/50'
+            : ''
+        }>
+          <CardHeader className="pb-2 flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-sm font-medium">AI Conversations — {subscription.plan_display_name} Plan</CardTitle>
+            </div>
+            <Link href="/settings/billing" className="text-xs text-muted-foreground hover:text-foreground underline-offset-4 hover:underline">
+              {subscription.plan_name !== 'agency' ? 'Upgrade' : 'Manage billing'} →
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <div className="flex justify-between text-sm mb-1.5">
+              <span className="text-muted-foreground">Used this month</span>
+              <span className="font-medium">
+                {subscription.max_conversations_per_month === -1
+                  ? `${subscription.conversations_used} / Unlimited`
+                  : `${subscription.conversations_used} / ${subscription.max_conversations_per_month.toLocaleString()}`}
+              </span>
+            </div>
+            {subscription.max_conversations_per_month !== -1 && (
+              <Progress
+                value={Math.min(100, Math.round((subscription.conversations_used / subscription.max_conversations_per_month) * 100))}
+                className={`h-2 ${
+                  subscription.conversations_used >= subscription.max_conversations_per_month
+                    ? '[&>div]:bg-red-500'
+                    : subscription.conversations_used / subscription.max_conversations_per_month >= 0.8
+                    ? '[&>div]:bg-yellow-500'
+                    : '[&>div]:bg-green-500'
+                }`}
+              />
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Recent Activity */}
       <Card>

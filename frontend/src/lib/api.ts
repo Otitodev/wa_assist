@@ -9,6 +9,8 @@ import type {
   TenantMembership,
   Session,
   Message,
+  Plan,
+  Subscription,
   PaginatedResponse,
   SessionsQueryParams,
   MessagesQueryParams,
@@ -362,6 +364,18 @@ export const whatsappApi = {
     return apiClient<{ ok: boolean; deleted: boolean }>(`/api/whatsapp/instance/${instanceName}`, {
       method: 'DELETE',
     });
+  },
+};
+
+// Billing API
+export const billingApi = {
+  listPlans: async (): Promise<Plan[]> => {
+    const response = await apiClient<{ plans: Plan[] }>('/api/billing/plans');
+    return response.plans || [];
+  },
+
+  getSubscription: async (tenantId: number): Promise<Subscription> => {
+    return apiClient<Subscription>(`/api/billing/subscription?tenant_id=${tenantId}`);
   },
 };
 

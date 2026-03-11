@@ -17,13 +17,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Copy, Check, User, Server, Shield, Download, Trash2, AlertTriangle, Loader2 } from 'lucide-react';
+import { User, Server, Shield, Download, Trash2, AlertTriangle, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function SettingsPage() {
   const { user, activeTenant, tenants } = useAuth();
-  const [copied, setCopied] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -66,14 +65,6 @@ export default function SettingsPage() {
       setDeleting(false);
     }
   };
-
-  const handleCopy = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(field);
-    setTimeout(() => setCopied(null), 2000);
-  };
-
-  const webhookUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/webhooks/evolution`;
 
   return (
     <div className="space-y-6">
@@ -143,39 +134,6 @@ export default function SettingsPage() {
               </Badge>
             </div>
 
-            <Separator />
-
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Webhook URL</p>
-              <p className="text-sm text-muted-foreground mb-2">
-                Use this URL in Evolution API settings
-              </p>
-              <div className="flex items-center gap-2">
-                <code className="text-sm bg-muted px-3 py-2 rounded flex-1 truncate">
-                  {webhookUrl}
-                </code>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleCopy(webhookUrl, 'webhook')}
-                >
-                  {copied === 'webhook' ? (
-                    <Check className="h-4 w-4 text-green-500" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Evolution Server</p>
-              <p className="text-sm font-mono">
-                {activeTenant?.tenant?.evo_server_url || 'Not configured'}
-              </p>
-            </div>
 
           </CardContent>
         </Card>

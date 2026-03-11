@@ -80,6 +80,42 @@ export interface ApiError {
   status_code?: number;
 }
 
+export interface Plan {
+  id: number;
+  name: 'free' | 'starter' | 'growth' | 'agency';
+  display_name: string;
+  price_usd: number;
+  price_ngn: number;
+  price_usd_annual: number;
+  price_ngn_annual: number;
+  max_instances: number;
+  max_conversations_per_month: number; // -1 = unlimited
+  features: {
+    typing_indicator?: boolean;
+    media_processing?: boolean;
+    context_memory?: boolean;
+    analytics?: boolean;
+    white_label?: boolean;
+    priority_support?: boolean;
+  };
+}
+
+export interface Subscription {
+  plan_name: string;
+  plan_display_name: string;
+  status: 'active' | 'paused' | 'cancelled' | 'past_due';
+  billing_cycle: 'monthly' | 'annual';
+  currency: 'USD' | 'NGN';
+  processor: 'free' | 'paystack' | 'lemonsqueezy' | 'flutterwave';
+  max_instances: number;
+  max_conversations_per_month: number; // -1 = unlimited
+  conversations_used: number;
+  conversations_remaining: number;     // -1 = unlimited
+  current_period_end: string | null;
+  cancel_at_period_end: boolean;
+  features: Plan['features'];
+}
+
 export interface SessionsQueryParams {
   tenant_id: number;
   state?: 'active' | 'paused' | 'all';

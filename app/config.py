@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 # Database
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
@@ -63,3 +63,12 @@ CF_R2_PUBLIC_URL = os.getenv("CF_R2_PUBLIC_URL", "")  # e.g. https://pub-xxxx.r2
 
 # Conversation context — number of previous messages to include in LLM calls
 CONTEXT_MESSAGES = int(os.getenv("CONTEXT_MESSAGES", "10"))
+
+# Billing — Paystack (Nigerian/African customers)
+PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "")
+PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY", "")
+
+# Billing — Lemonsqueezy (International customers, handles VAT)
+LEMONSQUEEZY_API_KEY = os.getenv("LEMONSQUEEZY_API_KEY", "")
+LEMONSQUEEZY_WEBHOOK_SECRET = os.getenv("LEMONSQUEEZY_WEBHOOK_SECRET", "")
+LEMONSQUEEZY_STORE_ID = os.getenv("LEMONSQUEEZY_STORE_ID", "")

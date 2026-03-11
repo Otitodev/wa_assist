@@ -35,6 +35,11 @@ from .config import (
 from .logger import logger, log_info, log_warning, log_error, configure_logger_from_config
 from .services.evolution_websocket import EvolutionWebSocket, EvolutionWebSocketManager
 from .services.websocket_handler import handle_websocket_message, handle_websocket_connection_update
+from .services.billing import (
+    get_active_plan, is_within_conversation_limit, increment_conversation_count,
+    get_subscription_summary, handle_paystack_webhook, handle_lemonsqueezy_webhook,
+)
+from .config import PAYSTACK_SECRET_KEY, LEMONSQUEEZY_WEBHOOK_SECRET
 
 # Configure logger with settings from config
 configure_logger_from_config()
@@ -635,6 +640,17 @@ async def evolution_webhook(req: Request):
                     action="ai_generate_start",
                 )
 
+                # Check plan conversation limit before generating AI reply
+                if not await is_within_conversation_limit(tenant_id):
+                    log_warning(
+                        "Conversation limit reached — skipping AI reply",
+                        tenant_id=tenant_id,
+                        chat_id=chat_id,
+                        action="billing_limit_reached",
+                    )
+                    record_processed_event(tenant_id, msg_id, event, "billing_limit_reached")
+                    return {"ok": True, "action": "billing_limit_reached", "chat_id": chat_id}
+
                 # Fetch conversation history for context
                 _history = supabase.table("messages").select(
                     "from_me, text"
@@ -756,6 +772,12 @@ async def evolution_webhook(req: Request):
 
                 # Record this event as processed
                 record_processed_event(tenant_id, msg_id, event, "ai_replied")
+
+                # Increment conversation usage counter for billing
+                try:
+                    await increment_conversation_count(tenant_id)
+                except Exception:
+                    pass  # Non-critical; don't fail reply if usage tracking errors
 
                 return {
                     "ok": True,
@@ -3284,3 +3306,98 @@ Rules:
         raise HTTPException(status_code=500, detail=f"Prompt generation failed: {str(e)}")
 
     return {"system_prompt": prompt_text.strip()}
+
+
+# ============================================================================
+# BILLING APIs
+# ============================================================================
+
+@app.get("/api/billing/plans")
+async def list_plans():
+    """Return all active subscription plans (public — no auth required)."""
+    result = supabase.table("plans").select("*").eq("is_active", True).order("price_usd").execute()
+    return {"plans": result.data or []}
+
+
+@app.get("/api/billing/subscription")
+async def get_billing_subscription(
+    tenant_id: int,
+    user: dict = Depends(get_current_user),
+    _: None = Depends(require_tenant_access("member")),
+):
+    """Return current plan, usage, and subscription details for a tenant."""
+    try:
+        summary = await get_subscription_summary(tenant_id)
+        return summary
+    except Exception as e:
+        log_error("Failed to get subscription summary", action="billing_get_sub_failed",
+                  tenant_id=tenant_id, error_type=type(e).__name__, exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Failed to get subscription: {str(e)}")
+
+
+@app.post("/api/billing/webhook/paystack")
+async def paystack_webhook(request: Request):
+    """
+    Receives Paystack webhook events.
+    Paystack signs every event with a HMAC-SHA512 signature using your secret key.
+    """
+    import hmac, hashlib
+
+    body = await request.body()
+    signature = request.headers.get("x-paystack-signature", "")
+
+    if PAYSTACK_SECRET_KEY:
+        expected = hmac.new(
+            PAYSTACK_SECRET_KEY.encode(), body, hashlib.sha512
+        ).hexdigest()
+        if not hmac.compare_digest(expected, signature):
+            log_warning("Paystack webhook signature mismatch", action="paystack_webhook_invalid_sig")
+            raise HTTPException(status_code=401, detail="Invalid webhook signature")
+
+    try:
+        payload = json.loads(body)
+        event_type = payload.get("event", "")
+        data = payload.get("data", {})
+        action = await handle_paystack_webhook(event_type, data)
+        log_info("Paystack webhook processed", action="paystack_webhook", event=event_type, result=action)
+        return {"ok": True, "action": action}
+    except HTTPException:
+        raise
+    except Exception as e:
+        log_error("Paystack webhook processing failed", action="paystack_webhook_failed",
+                  error_type=type(e).__name__, exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/billing/webhook/lemonsqueezy")
+async def lemonsqueezy_webhook(request: Request):
+    """
+    Receives Lemonsqueezy webhook events.
+    Lemonsqueezy signs events with a SHA256 HMAC using your webhook signing secret.
+    """
+    import hmac, hashlib
+
+    body = await request.body()
+    signature = request.headers.get("x-signature", "")
+
+    if LEMONSQUEEZY_WEBHOOK_SECRET:
+        expected = hmac.new(
+            LEMONSQUEEZY_WEBHOOK_SECRET.encode(), body, hashlib.sha256
+        ).hexdigest()
+        if not hmac.compare_digest(expected, signature):
+            log_warning("Lemonsqueezy webhook signature mismatch", action="ls_webhook_invalid_sig")
+            raise HTTPException(status_code=401, detail="Invalid webhook signature")
+
+    try:
+        payload = json.loads(body)
+        event_type = payload.get("meta", {}).get("event_name", "")
+        data = payload.get("data", {})
+        action = await handle_lemonsqueezy_webhook(event_type, data)
+        log_info("Lemonsqueezy webhook processed", action="ls_webhook", event=event_type, result=action)
+        return {"ok": True, "action": action}
+    except HTTPException:
+        raise
+    except Exception as e:
+        log_error("Lemonsqueezy webhook processing failed", action="ls_webhook_failed",
+                  error_type=type(e).__name__, exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
